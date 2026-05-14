@@ -4,10 +4,10 @@ import { Outlet } from "react-router-dom";
 
 const ClientRoutes = () => {
   return (
-    <main className="min-h-screen overflow-x-hidden bg-[radial-gradient(circle_at_top,#fff8f3_0%,#f7f5f0_36%,#f3f0ea_100%)]">
+    <main className="min-h-screen overflow-x-hidden bg-[#F7F7F5]">
       <Navbar />
 
-      <section className="mx-auto w-full max-w-[1440px] px-4 pt-5 sm:px-6 sm:pt-6 lg:px-8 lg:pt-7">
+      <section className="mx-auto w-full max-w-360 px-4 pt-5 sm:px-6 sm:pt-6 md:pt-25 lg:px-8 lg:pt-20">
         <Outlet />
       </section>
     </main>
