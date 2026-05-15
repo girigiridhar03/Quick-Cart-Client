@@ -49,3 +49,11 @@ const ProductCard = () => {
 };
 
 export default ProductCard;
+
+export const FilterCard = ({ name }) => {
+  return (
+    <button className="text-[#8A8A8A] transition-all w-full px-4 py-2.5 flex items-center font-bold text-[.9rem] leading-tight bg-white rounded-xl border hover:border-[#FF6B35] cursor-pointer">
+      {name}
+    </button>
+  );
+};
