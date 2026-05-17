@@ -1,14 +1,17 @@
 import React from "react";
 import ProductCard from "./ProductCard";
 
-const ProductsGrid = () => {
+const ProductsGrid = ({
+  productLoading,
+  products,
+  setSelectedProduct,
+  productPagination,
+}) => {
   return (
-    <div className="grid grid-cols-4 gap-8">
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
+    <div className="grid grid-cols-4 gap-6">
+      {products?.map((product) => (
+        <ProductCard key={product._id} product={product} />
+      ))}
     </div>
   );
 };

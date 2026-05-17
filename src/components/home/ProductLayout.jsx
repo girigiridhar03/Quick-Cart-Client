@@ -1,8 +1,12 @@
 import React from "react";
 import ProductsGrid from "./ProductsGrid";
 import { FilterCard } from "./ProductCard";
+import useProduct from "@/hooks/useProduct";
 
-const ProductLayout = () => {
+const ProductLayout = ({ selectedCategory }) => {
+  const { productLoading, products, setSelectedProduct, productPagination } =
+    useProduct();
+
   return (
     <div className="flex flex-row gap-4 shrink-0">
       <aside className="w-72">
@@ -20,12 +24,19 @@ const ProductLayout = () => {
       <section className="flex-1">
         <div className="space-y-8">
           <div>
-            <h2 className="text-2xl font-bold">All Products</h2>
-            <p className="text-[.9rem] font-semibold text-[#8A8A8A]">
-              28 RESULTS FOUND
+            <h2 className="text-2xl font-bold capitalize">
+              {selectedCategory?.name ?? "All Products"}
+            </h2>
+            <p className="text-[.8rem] font-semibold text-[#8A8A8A]">
+              {productPagination?.total ?? 0} RESULTS FOUND
             </p>
           </div>
-          <ProductsGrid />
+          <ProductsGrid
+            productLoading={productLoading}
+            products={products}
+            productPagination={productPagination}
+            setSelectedProduct={setSelectedProduct}
+          />
         </div>
       </section>
     </div>

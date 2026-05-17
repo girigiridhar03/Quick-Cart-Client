@@ -1,4 +1,4 @@
-import useAuth from "@/hooks/auth/useAuth";
+import useAuth from "@/hooks/useAuth";
 import { Info } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
