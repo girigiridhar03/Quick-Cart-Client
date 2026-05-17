@@ -1,20 +1,34 @@
 import React from "react";
 import ProductsGrid from "./ProductsGrid";
 import useProduct from "@/hooks/useProduct";
-import { Brands, PriceRange, SortCard, SubCategoriesTypes } from "./FilterCards";
+import {
+  Brands,
+  PriceRange,
+  SortCard,
+  SubCategoriesTypes,
+} from "./FilterCards";
 
-const ProductLayout = ({ selectedCategory }) => {
-  const { productLoading, products, setSelectedProduct, productPagination } =
-    useProduct();
+const ProductLayout = ({ selectedCategory, subCategories }) => {
+  const {
+    productLoading,
+    brandsLoading,
+    products,
+    brands,
+    setSelectedProduct,
+    productPagination,
+  } = useProduct();
 
   return (
     <div className="flex flex-row gap-10 shrink-0">
       <aside className="w-72 sticky top-0">
-        <div className="space-y-10" >
+        <div className="space-y-10">
           <SortCard />
           <PriceRange />
-          <SubCategoriesTypes />  
-          <Brands />
+          {subCategories?.length > 0 && (
+            <SubCategoriesTypes subCategories={subCategories} />
+          )}
+
+          <Brands brandsLoading={brandsLoading} brands={brands} />
         </div>
       </aside>
       <section className="flex-1">

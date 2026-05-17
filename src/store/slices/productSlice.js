@@ -1,10 +1,12 @@
-import { getAllProducts } from "@/api/product.api";
+import { getAllBrands, getAllProducts } from "@/api/product.api";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   productLoading: false,
+  brandsLoading: false,
   error: null,
   products: [],
+  brands: [],
   productPagination: {},
   selectedProductId: null,
 };
@@ -31,6 +33,19 @@ const productSlice = createSlice({
       })
       .addCase(getAllProducts.rejected, (state, { payload }) => {
         state.productLoading = false;
+        state.error = payload;
+      })
+      .addCase(getAllBrands.pending, (state) => {
+        state.brandsLoading = true;
+        state.error = null;
+      })
+      .addCase(getAllBrands.fulfilled, (state, { payload }) => {
+        state.brandsLoading = false;
+        state.brands = payload.data;
+        state.error = null;
+      })
+      .addCase(getAllBrands.rejected, (state, { payload }) => {
+        state.brandsLoading = false;
         state.error = payload;
       }),
 });

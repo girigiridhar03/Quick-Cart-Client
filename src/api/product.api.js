@@ -24,7 +24,20 @@ export const getAllProducts = createAsyncThunk(
       const response = await axiosInstance.get(endPoint);
       return response?.data;
     } catch (error) {
-      console.log(error);
+      return rejectWithValue(
+        error?.response?.data?.message || "Something went wrong",
+      );
+    }
+  },
+);
+
+export const getAllBrands = createAsyncThunk(
+  "product/brands",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get("/product/brands");
+      return response?.data;
+    } catch (error) {
       return rejectWithValue(
         error?.response?.data?.message || "Something went wrong",
       );

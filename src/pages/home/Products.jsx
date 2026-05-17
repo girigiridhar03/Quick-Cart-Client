@@ -8,6 +8,7 @@ const Products = () => {
     categories,
     loading,
     selectedCategory,
+    subCategories,
     setSelectectedCategoryId,
     fetchAllSubCategories,
   } = useCategory();
@@ -20,7 +21,7 @@ const Products = () => {
         setSelectectedCategoryId={setSelectectedCategoryId}
         fetchAllSubCategories={fetchAllSubCategories}
       />
-      <ProductLayout selectedCategory={selectedCategory} />
+      <ProductLayout selectedCategory={selectedCategory} subCategories={subCategories} />
     </section>
   );
 };

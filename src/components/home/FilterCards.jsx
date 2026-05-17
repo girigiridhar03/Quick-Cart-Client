@@ -18,7 +18,7 @@ export const SortCard = () => {
           "Price: High to Low",
           "Newest",
         ].map((item) => (
-          <CustomButton text={item} />
+          <CustomButton key={item} text={item} />
         ))}
       </CardContent>
     </Card>
@@ -58,7 +58,7 @@ export const PriceRange = () => {
   );
 };
 
-export const Brands = () => {
+export const Brands = ({ brandsLoading, brands }) => {
   return (
     <Card className="py-5 gap-5 rounded-3xl">
       <CardHeader className="flex items-center gap-2  py-0 px-4 justify-between">
@@ -68,8 +68,9 @@ export const Brands = () => {
       </CardHeader>
       <CardContent className="flex flex-wrap gap-1.5 max-h-50 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-200">
         <CustomBrandButton text={"All"} />
-        <CustomBrandButton text={"AMUL"} />
-        <CustomBrandButton text={"BOAT"} />
+        {brands?.map((brand) => (
+          <CustomBrandButton key={brand?._id} text={brand?.brand} />
+        ))}
       </CardContent>
     </Card>
   );
@@ -83,7 +84,7 @@ const CustomBrandButton = ({ text }) => {
   );
 };
 
-export const SubCategoriesTypes = () => {
+export const SubCategoriesTypes = ({ subCategories }) => {
   return (
     <Card className="py-5 gap-5 rounded-3xl">
       <CardHeader className="flex items-center gap-2  py-0 px-4 justify-between">
@@ -93,17 +94,11 @@ export const SubCategoriesTypes = () => {
       </CardHeader>
       <CardContent className="py-0 flex flex-col px-4 max-h-70 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-200">
         <SubCategoryButton text="All items" />
-        <SubCategoryButton text="All items" />
-        <SubCategoryButton text="All items" />
-        <SubCategoryButton text="All items" />
-        <SubCategoryButton text="All items" />
-        <SubCategoryButton text="All items" />
-        <SubCategoryButton text="All items" />
-        <SubCategoryButton text="All items" />
-        <SubCategoryButton text="All items" />
-        <SubCategoryButton text="All items" />
-        <SubCategoryButton text="All items" />
-        <SubCategoryButton text="All items" />
+        {subCategories?.map((category) => {
+          return (
+            <SubCategoryButton key={category?._id} text={category?.name} />
+          );
+        })}
       </CardContent>
     </Card>
   );
@@ -111,7 +106,7 @@ export const SubCategoriesTypes = () => {
 
 const SubCategoryButton = ({ text }) => {
   return (
-    <button className="text-[#8a8a8a] font-semibold text-[0.75rem] text-left transition-all hover:bg-gray-50 hover:text-black px-4 py-2 rounded-lg cursor-pointer">
+    <button className="text-[#8a8a8a] font-semibold text-[0.75rem] text-left transition-all hover:bg-gray-50 hover:text-black px-4 py-2 rounded-lg cursor-pointer capitalize">
       {text}
     </button>
   );
