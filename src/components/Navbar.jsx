@@ -5,7 +5,6 @@ import {
   ShoppingCart,
   Sparkles,
 } from "lucide-react";
-import React from "react";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 
 const Navbar = () => {

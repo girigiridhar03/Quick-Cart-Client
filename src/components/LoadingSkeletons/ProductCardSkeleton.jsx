@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Skeleton } from "../ui/skeleton";
 
@@ -9,7 +8,7 @@ const ProductCardSkeleton = () => {
         <Skeleton className="w-full h-40 rounded-2xl" />
       </CardHeader>
       <CardContent className="px-4 py-0">
-        <div className="space-y-2" >
+        <div className="space-y-2">
           <Skeleton className="w-[70%] h-5" />
           <Skeleton className="w-[90%] h-5" />
           <Skeleton className="w-[30%] h-5" />

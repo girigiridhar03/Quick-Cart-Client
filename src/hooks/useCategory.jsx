@@ -35,6 +35,7 @@ const useCategory = () => {
 
   const setSelectectedCategoryId = (obj) => {
     dispatch(setSelectedCategory(obj));
+    dispatch(setSelectedSubCategory(null));
   };
 
   const setSelectedSubCategoryId = (obj) => {

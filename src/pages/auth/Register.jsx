@@ -1,5 +1,3 @@
-import React from "react";
-
 const Register = () => {
   return (
     <main className="min-h-screen grid lg:grid-cols-2">

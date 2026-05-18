@@ -10,6 +10,7 @@ const initialState = {
   productPagination: {},
   selectedProductId: null,
   selectedBrand: "All",
+  selectedSort: "newest",
 };
 
 const productSlice = createSlice({
@@ -21,6 +22,9 @@ const productSlice = createSlice({
     },
     setSelectedBrandName: (state, { payload }) => {
       state.selectedBrand = payload;
+    },
+    setSelectedSort: (state, { payload }) => {
+      state.selectedSort = payload;
     },
     resetBrandStates: (state) => {
       state.selectedBrand = "All";
@@ -59,7 +63,11 @@ const productSlice = createSlice({
       }),
 });
 
-export const { setSelectedProductId, setSelectedBrandName, resetBrandStates } =
-  productSlice.actions;
+export const {
+  setSelectedProductId,
+  setSelectedBrandName,
+  resetBrandStates,
+  setSelectedSort,
+} = productSlice.actions;
 
 export default productSlice.reducer;

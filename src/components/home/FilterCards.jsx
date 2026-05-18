@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from "../ui/card";
 import { Slider } from "../ui/slider";
 import { ButtonSkeleton } from "../LoadingSkeletons/ButtonSkeleton";
 
-export const SortCard = () => {
+export const SortCard = ({ selectedSort, setSelectedSort }) => {
   return (
     <Card className="py-5 gap-1 rounded-3xl">
       <CardHeader className="flex items-center gap-2 text-[#8a8a8a] text-[10px] tracking-[0.2em] mb-4 uppercase font-semibold py-0 px-4">
@@ -14,21 +14,38 @@ export const SortCard = () => {
       </CardHeader>
       <CardContent className="py-0 flex flex-col px-4">
         {[
-          "Popularity",
-          "Price: Low to Hight",
-          "Price: High to Low",
-          "Newest",
+          {
+            label: "Newest",
+            value: "newest",
+          },
+          {
+            label: "Price: Low to High",
+            value: "price_asc",
+          },
+          {
+            label: "Price: High to Low",
+            value: "price_desc",
+          },
         ].map((item) => (
-          <CustomButton key={item} text={item} />
+          <CustomButton
+            key={item.value}
+            text={item.label}
+            value={item.value}
+            selectedSort={selectedSort}
+            setSelectedSort={setSelectedSort}
+          />
         ))}
       </CardContent>
     </Card>
   );
 };
 
-const CustomButton = ({ text }) => {
+const CustomButton = ({ text, value, selectedSort, setSelectedSort }) => {
   return (
-    <button className="text-[#8a8a8a] font-semibold text-[0.75rem] text-left transition-all hover:bg-gray-50 hover:text-black px-4 py-2 rounded-lg cursor-pointer">
+    <button
+      className={` ${selectedSort === value ? "bg-[#FF6B35] text-white" : "text-[#8a8a8a] hover:bg-gray-50 hover:text-black"} font-semibold text-[0.75rem] text-left transition-all px-4 py-2 rounded-xl cursor-pointer`}
+      onClick={() => setSelectedSort(value)}
+    >
       {text}
     </button>
   );

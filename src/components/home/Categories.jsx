@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import React from "react";
 
 const Categories = ({
   categories,
@@ -9,10 +8,8 @@ const Categories = ({
   fetchAllSubCategories,
   resetStates,
 }) => {
-  let timer;
-
   return (
-    <div className="hidden lg:block sticky top-18 z-30 bg-bg/80 backdrop-blur-md pb-6">
+    <div className="hidden lg:block sticky top-18 z-30 bg-bg/80 backdrop-blur-md pb-6 my-4">
       <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide py-2">
         <button
           onClick={() => {
@@ -33,9 +30,7 @@ const Categories = ({
             onClick={() => {
               setSelectectedCategoryId({ id: cat._id, name: cat.name });
               clearTimeout(timer);
-              timer = setTimeout(() => {
-                fetchAllSubCategories(cat._id);
-              }, 500);
+              fetchAllSubCategories(cat._id);
             }}
             style={
               selectedCategory?.id === cat._id

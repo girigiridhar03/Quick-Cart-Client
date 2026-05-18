@@ -1,6 +1,6 @@
 import Login from "@/pages/auth/Login";
 import Register from "@/pages/auth/Register";
-import React from "react";
+
 import { Route, Routes } from "react-router-dom";
 import ClientRoutes from "./ClientRoutes";
 import Products from "@/pages/home/Products";

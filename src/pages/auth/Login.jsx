@@ -1,6 +1,6 @@
 import useAuth from "@/hooks/useAuth";
 import { Info } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const Login = () => {
   const { loading, error, login } = useAuth();

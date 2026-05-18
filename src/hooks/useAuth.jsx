@@ -14,7 +14,8 @@ const useAuth = () => {
   const register = async (formData) => {
     try {
       const result = await dispatch(authRegister(formData)).unwrap();
-      const { accessTokenExpiresAt, refreshTokenExpiresAt } = result?.data;
+      const accessTokenExpiresAt = result?.data?.accessTokenExpiresAt;
+      const refreshTokenExpiresAt = result?.data?.refreshTokenExpiresAt;
       scheduleTokenRefresh(accessTokenExpiresAt);
       localStorage.setItem(ACCESS_EXPIRES_KEY, accessTokenExpiresAt);
       localStorage.setItem(REFRESH_EXPIRES_KEY, refreshTokenExpiresAt);

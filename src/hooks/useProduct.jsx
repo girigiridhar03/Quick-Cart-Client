@@ -2,6 +2,7 @@ import { getAllBrands, getAllProducts } from "@/api/product.api";
 import {
   setSelectedBrandName,
   setSelectedProductId,
+  setSelectedSort,
 } from "@/store/slices/productSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,6 +14,7 @@ const useProduct = () => {
     products,
     brands,
     selectedBrand,
+    selectedSort,
     productPagination,
     selectedProductId,
     error,
@@ -42,13 +44,18 @@ const useProduct = () => {
     dispatch(setSelectedBrandName(brand));
   };
 
+  const setSelectedSortName = (sort) => {
+    dispatch(setSelectedSort(sort));
+  };
+
   useEffect(() => {
     fetchProducts({
       brand: selectedBrand,
       category: selectedCategory?.id ?? null,
       subCategory: selectedSubCategory,
+      sortBy: selectedSort ?? null,
     });
-  }, [selectedBrand, selectedCategory, selectedSubCategory]);
+  }, [selectedBrand, selectedSort, selectedCategory, selectedSubCategory]);
 
   useEffect(() => {
     fetchBrands();
@@ -60,11 +67,13 @@ const useProduct = () => {
     products,
     brands,
     selectedBrand,
+    selectedSort,
     selectedProductId,
     productPagination,
     error,
     setSelectedProduct,
     setSelectedBrand,
+    setSelectedSortName,
     fetchProducts,
   };
 };

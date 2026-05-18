@@ -1,7 +1,6 @@
 import Categories from "@/components/home/Categories";
 import ProductLayout from "@/components/home/ProductLayout";
 import useCategory from "@/hooks/useCategory";
-import React from "react";
 
 const Products = () => {
   const {
