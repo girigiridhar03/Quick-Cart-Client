@@ -8,14 +8,21 @@ import {
   SubCategoriesTypes,
 } from "./FilterCards";
 
-const ProductLayout = ({ selectedCategory, subCategories }) => {
+const ProductLayout = ({
+  subCategoriesLoading,
+  selectedCategory,
+  selectedSubCategory,
+  setSelectedSubCategoryId,
+  subCategories,
+}) => {
   const {
     productLoading,
-    brandsLoading,
     products,
     brands,
-    setSelectedProduct,
+    selectedBrand,
     productPagination,
+    setSelectedBrand,
+    setSelectedProduct,
   } = useProduct();
 
   return (
@@ -25,10 +32,22 @@ const ProductLayout = ({ selectedCategory, subCategories }) => {
           <SortCard />
           <PriceRange />
           {subCategories?.length > 0 && (
-            <SubCategoriesTypes subCategories={subCategories} />
+            <SubCategoriesTypes
+              subCategoriesLoading={subCategoriesLoading}
+              selectedCategory={selectedCategory}
+              subCategories={subCategories}
+              setSelectedSubCategoryId={setSelectedSubCategoryId}
+              selectedSubCategory={selectedSubCategory}
+            />
           )}
 
-          <Brands brandsLoading={brandsLoading} brands={brands} />
+          {brands?.length > 0 && (
+            <Brands
+              brands={brands}
+              selectedBrand={selectedBrand}
+              setSelectedBrand={setSelectedBrand}
+            />
+          )}
         </div>
       </aside>
       <section className="flex-1">

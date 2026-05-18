@@ -7,10 +7,14 @@ const Products = () => {
   const {
     categories,
     loading,
+    subCategoriesLoading,
     selectedCategory,
+    selectedSubCategory,
     subCategories,
     setSelectectedCategoryId,
+    setSelectedSubCategoryId,
     fetchAllSubCategories,
+    resetCategoryStates,
   } = useCategory();
   return (
     <section>
@@ -20,8 +24,15 @@ const Products = () => {
         selectedCategory={selectedCategory}
         setSelectectedCategoryId={setSelectectedCategoryId}
         fetchAllSubCategories={fetchAllSubCategories}
+        resetStates={resetCategoryStates}
       />
-      <ProductLayout selectedCategory={selectedCategory} subCategories={subCategories} />
+      <ProductLayout
+        subCategoriesLoading={subCategoriesLoading}
+        selectedCategory={selectedCategory}
+        selectedSubCategory={selectedSubCategory}
+        subCategories={subCategories}
+        setSelectedSubCategoryId={setSelectedSubCategoryId}
+      />
     </section>
   );
 };

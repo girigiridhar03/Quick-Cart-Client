@@ -9,6 +9,7 @@ const initialState = {
   brands: [],
   productPagination: {},
   selectedProductId: null,
+  selectedBrand: "All",
 };
 
 const productSlice = createSlice({
@@ -17,6 +18,13 @@ const productSlice = createSlice({
   reducers: {
     setSelectedProductId: (state, { payload }) => {
       state.selectedProductId = payload;
+    },
+    setSelectedBrandName: (state, { payload }) => {
+      state.selectedBrand = payload;
+    },
+    resetBrandStates: (state) => {
+      state.selectedBrand = "All";
+      state.brands = [];
     },
   },
   extraReducers: (builder) =>
@@ -33,6 +41,7 @@ const productSlice = createSlice({
       })
       .addCase(getAllProducts.rejected, (state, { payload }) => {
         state.productLoading = false;
+        state.products = [];
         state.error = payload;
       })
       .addCase(getAllBrands.pending, (state) => {
@@ -50,6 +59,7 @@ const productSlice = createSlice({
       }),
 });
 
-export const { setSelectedProductId } = productSlice.actions;
+export const { setSelectedProductId, setSelectedBrandName, resetBrandStates } =
+  productSlice.actions;
 
 export default productSlice.reducer;

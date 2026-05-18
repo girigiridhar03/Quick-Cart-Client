@@ -7,6 +7,7 @@ const initialState = {
   subCategories: [],
   subCategoriesLoading: false,
   selectedCategory: null,
+  selectedSubCategory: null,
   error: null,
 };
 
@@ -16,6 +17,15 @@ const categorySlice = createSlice({
   reducers: {
     setSelectedCategory: (state, { payload }) => {
       state.selectedCategory = payload;
+    },
+    setSelectedSubCategory: (state, { payload }) => {
+      state.selectedSubCategory = payload;
+    },
+    resetStates: (state) => {
+      state.selectedCategory = null;
+      state.selectedSubCategory = null;
+      state.subCategories = [];
+      state.subCategories = [];
     },
   },
   extraReducers: (builder) =>
@@ -35,6 +45,7 @@ const categorySlice = createSlice({
       })
       .addCase(getAllSubCategories.pending, (state) => {
         state.subCategoriesLoading = true;
+        state.subCategoriesLoading = [];
         state.error = null;
       })
       .addCase(getAllSubCategories.fulfilled, (state, { payload }) => {
@@ -48,6 +59,7 @@ const categorySlice = createSlice({
       }),
 });
 
-export const { setSelectedCategory } = categorySlice.actions;
+export const { setSelectedCategory, setSelectedSubCategory, resetStates } =
+  categorySlice.actions;
 
 export default categorySlice.reducer;

@@ -1,15 +1,20 @@
 import { getAllCategories, getAllSubCategories } from "@/api/category.api";
-import { setSelectedCategory } from "@/store/slices/categorySlice";
+import {
+  resetStates,
+  setSelectedCategory,
+  setSelectedSubCategory,
+} from "@/store/slices/categorySlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const useCategory = () => {
   const {
     loading,
+    subCategoriesLoading,
     categories,
     subCategories,
     selectedCategory,
-    subCategoriesLoading,
+    selectedSubCategory,
   } = useSelector((state) => state.category);
   const dispatch = useDispatch();
 
@@ -32,15 +37,26 @@ const useCategory = () => {
     dispatch(setSelectedCategory(obj));
   };
 
+  const setSelectedSubCategoryId = (obj) => {
+    dispatch(setSelectedSubCategory(obj));
+  };
+
+  const resetCategoryStates = () => {
+    dispatch(resetStates());
+  };
+
   return {
     loading,
+    subCategoriesLoading,
     categories,
     subCategories,
     selectedCategory,
-    subCategoriesLoading,
+    selectedSubCategory,
     setSelectectedCategoryId,
+    setSelectedSubCategoryId,
     fetchAllCategories,
     fetchAllSubCategories,
+    resetCategoryStates,
   };
 };
 

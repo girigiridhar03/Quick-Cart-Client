@@ -12,7 +12,8 @@ export const getAllProducts = createAsyncThunk(
         if (
           filterObj[key] !== null &&
           filterObj[key] !== undefined &&
-          filterObj[key] !== ""
+          filterObj[key] !== "" &&
+          filterObj[key] !== "All"
         ) {
           urlObj.append(key, filterObj[key].toString());
         }

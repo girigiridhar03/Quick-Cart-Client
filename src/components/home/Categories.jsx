@@ -7,6 +7,7 @@ const Categories = ({
   selectedCategory,
   setSelectectedCategoryId,
   fetchAllSubCategories,
+  resetStates,
 }) => {
   let timer;
 
@@ -14,7 +15,9 @@ const Categories = ({
     <div className="hidden lg:block sticky top-18 z-30 bg-bg/80 backdrop-blur-md pb-6">
       <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide py-2">
         <button
-          onClick={() => setSelectectedCategoryId(null)}
+          onClick={() => {
+            resetStates();
+          }}
           className={cn(
             "px-6 py-2.5 rounded-full text-[13px] font-semibold whitespace-nowrap transition-all duration-300 border flex items-center gap-2 capitalize",
             !selectedCategory

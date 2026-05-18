@@ -1,6 +1,7 @@
 import { LayoutGrid } from "lucide-react";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import { Slider } from "../ui/slider";
+import { ButtonSkeleton } from "../LoadingSkeletons/ButtonSkeleton";
 
 export const SortCard = () => {
   return (
@@ -58,56 +59,104 @@ export const PriceRange = () => {
   );
 };
 
-export const Brands = ({ brandsLoading, brands }) => {
+export const Brands = ({ brands, selectedBrand, setSelectedBrand }) => {
   return (
     <Card className="py-5 gap-5 rounded-3xl">
       <CardHeader className="flex items-center gap-2  py-0 px-4 justify-between">
         <h3 className="text-[#8a8a8a] text-[10px] tracking-[0.2em] uppercase font-semibold">
-          PRICE RANGE
+          BRAND
         </h3>
       </CardHeader>
       <CardContent className="flex flex-wrap gap-1.5 max-h-50 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-200">
-        <CustomBrandButton text={"All"} />
+        <CustomBrandButton
+          text={"All"}
+          selectedBrand={selectedBrand}
+          setSelectedBrand={setSelectedBrand}
+        />
         {brands?.map((brand) => (
-          <CustomBrandButton key={brand?._id} text={brand?.brand} />
+          <CustomBrandButton
+            key={brand?._id}
+            text={brand?.brand}
+            selectedBrand={selectedBrand}
+            setSelectedBrand={setSelectedBrand}
+          />
         ))}
       </CardContent>
     </Card>
   );
 };
 
-const CustomBrandButton = ({ text }) => {
+const CustomBrandButton = ({ text, selectedBrand, setSelectedBrand }) => {
   return (
-    <button className="text-[10px] text-[#8a8a8a] border border-[#d7d5d5] px-3 py-1.5 rounded-lg transition-all bg-white hover:border-[#ff6b35] font-bold cursor-pointer">
+    <button
+      className={`${selectedBrand === text ? "bg-black text-white" : "bg-white text-[#8a8a8a] border border-[#d7d5d5] hover:border-[#ff6b35]"} text-[10px]   px-3 py-1.5 rounded-lg transition-all   font-bold cursor-pointer`}
+      onClick={() => setSelectedBrand(text)}
+    >
       {text}
     </button>
   );
 };
 
-export const SubCategoriesTypes = ({ subCategories }) => {
+export const SubCategoriesTypes = ({
+  subCategoriesLoading,
+  selectedCategory,
+  subCategories,
+  selectedSubCategory,
+  setSelectedSubCategoryId,
+}) => {
   return (
     <Card className="py-5 gap-5 rounded-3xl">
       <CardHeader className="flex items-center gap-2  py-0 px-4 justify-between">
         <h3 className="text-[#8a8a8a] text-[10px] tracking-[0.2em] uppercase font-semibold">
-          PRICE RANGE
+          {selectedCategory?.name} TYPES
         </h3>
       </CardHeader>
-      <CardContent className="py-0 flex flex-col px-4 max-h-70 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-gray-200">
-        <SubCategoryButton text="All items" />
-        {subCategories?.map((category) => {
-          return (
-            <SubCategoryButton key={category?._id} text={category?.name} />
-          );
-        })}
+      <CardContent className="py-0 space-y-2 flex flex-col px-5 max-h-70 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-200">
+        {subCategoriesLoading ? (
+          Array.from({ length: 3 }).map((_, idx) => (
+            <ButtonSkeleton key={idx} />
+          ))
+        ) : (
+          <>
+            <SubCategoryButton
+              text="All items"
+              id={null}
+              selectedSubCategory={selectedSubCategory}
+              setSelectedSubCategoryId={setSelectedSubCategoryId}
+            />
+            {subCategories?.map((category) => {
+              return (
+                <SubCategoryButton
+                  key={category?._id}
+                  text={category?.name}
+                  id={category?._id}
+                  selectedSubCategory={selectedSubCategory}
+                  setSelectedSubCategoryId={setSelectedSubCategoryId}
+                />
+              );
+            })}
+          </>
+        )}
       </CardContent>
     </Card>
   );
 };
 
-const SubCategoryButton = ({ text }) => {
+const SubCategoryButton = ({
+  text,
+  id,
+  selectedSubCategory,
+  setSelectedSubCategoryId,
+}) => {
   return (
-    <button className="text-[#8a8a8a] font-semibold text-[0.75rem] text-left transition-all hover:bg-gray-50 hover:text-black px-4 py-2 rounded-lg cursor-pointer capitalize">
-      {text}
+    <button
+      className={`font-bold text-[0.75rem] flex items-center justify-between text-left transition-all ${selectedSubCategory === id ? "hover:bg-[#FFF8F4] hover:text-[#FF6B35]" : "hover:bg-gray-50 hover:text-black"} px-4 py-3 rounded-lg cursor-pointer capitalize ${selectedSubCategory === id ? "bg-[#FFF8F4] text-[#FF6B35]" : "text-[#8a8a8a] bg-white"} `}
+      onClick={() => setSelectedSubCategoryId(id)}
+    >
+      <span>{text}</span>
+      {selectedSubCategory === id && (
+        <span className="h-1.5 w-1.5 bg-[#ff6b35] rounded-full"></span>
+      )}
     </button>
   );
 };

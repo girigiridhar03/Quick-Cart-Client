@@ -1,5 +1,8 @@
 import { getAllBrands, getAllProducts } from "@/api/product.api";
-import { setSelectedProductId } from "@/store/slices/productSlice";
+import {
+  setSelectedBrandName,
+  setSelectedProductId,
+} from "@/store/slices/productSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -9,15 +12,19 @@ const useProduct = () => {
     brandsLoading,
     products,
     brands,
+    selectedBrand,
     productPagination,
     selectedProductId,
     error,
   } = useSelector((state) => state.product);
+  const { selectedCategory, selectedSubCategory } = useSelector(
+    (state) => state.category,
+  );
   const dispatch = useDispatch();
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (obj = {}) => {
     try {
-      await dispatch(getAllProducts()).unwrap();
+      await dispatch(getAllProducts(obj)).unwrap();
     } catch {}
   };
 
@@ -31,8 +38,19 @@ const useProduct = () => {
     dispatch(setSelectedProductId(id));
   };
 
+  const setSelectedBrand = (brand) => {
+    dispatch(setSelectedBrandName(brand));
+  };
+
   useEffect(() => {
-    fetchProducts();
+    fetchProducts({
+      brand: selectedBrand,
+      category: selectedCategory?.id ?? null,
+      subCategory: selectedSubCategory,
+    });
+  }, [selectedBrand, selectedCategory, selectedSubCategory]);
+
+  useEffect(() => {
     fetchBrands();
   }, []);
 
@@ -41,10 +59,12 @@ const useProduct = () => {
     brandsLoading,
     products,
     brands,
+    selectedBrand,
     selectedProductId,
     productPagination,
     error,
     setSelectedProduct,
+    setSelectedBrand,
     fetchProducts,
   };
 };
