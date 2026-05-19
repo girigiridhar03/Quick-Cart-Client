@@ -15,6 +15,10 @@ export const SortCard = ({ selectedSort, setSelectedSort }) => {
       <CardContent className="py-0 flex flex-col px-4">
         {[
           {
+            label: "Popularity",
+            value: "popularity",
+          },
+          {
             label: "Newest",
             value: "newest",
           },

@@ -10,7 +10,7 @@ const initialState = {
   productPagination: {},
   selectedProductId: null,
   selectedBrand: "All",
-  selectedSort: "newest",
+  selectedSort: "popularity",
 };
 
 const productSlice = createSlice({
