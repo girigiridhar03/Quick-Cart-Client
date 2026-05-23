@@ -1,5 +1,6 @@
 import ProductCard from "./ProductCard";
 import ProductCardSkeleton from "../LoadingSkeletons/ProductCardSkeleton";
+import NoProducts from "./NoProducts";
 
 const ProductsGrid = ({
   productLoading,
@@ -8,15 +9,22 @@ const ProductsGrid = ({
   productPagination,
 }) => {
   return (
-    <div className="grid grid-cols-4 gap-6">
-      {productLoading
-        ? Array.from({ length: 3 }).map((_, idx) => (
+    <div className="w-full">
+      {productLoading ? (
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+          {Array.from({ length: 4 }).map((_, idx) => (
             <ProductCardSkeleton key={idx} />
-          ))
-        : products?.length > 0 &&
-          products?.map((product) => (
+          ))}
+        </div>
+      ) : products?.length > 0 ? (
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+          {products?.map((product) => (
             <ProductCard key={product._id} product={product} />
           ))}
+        </div>
+      ) : (
+        <NoProducts />
+      )}
     </div>
   );
 };

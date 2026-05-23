@@ -4,12 +4,14 @@ import Register from "@/pages/auth/Register";
 import { Route, Routes } from "react-router-dom";
 import ClientRoutes from "./ClientRoutes";
 import Products from "@/pages/home/Products";
+import Cart from "@/pages/home/Cart";
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route element={<ClientRoutes />}>
         <Route path="/" element={<Products />} />
+        <Route path="/cart" element={<Cart />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />

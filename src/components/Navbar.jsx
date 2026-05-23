@@ -6,6 +6,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "./ui/avatar";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -48,12 +49,15 @@ const Navbar = () => {
         {/* Cart And Profile */}
 
         <div className="flex items-center gap-5">
-          <div className="relative">
-            <ShoppingCart className="relative h-7 w-8" />
-            <span className="absolute -right-1 -top-1 bg-[#FF6B35] text-white h-4.5 w-4.5 text-[.7rem] border-2 border-white flex items-center justify-center font-semibold rounded-full">
-              1
-            </span>
-          </div>
+          <Link to={"/cart"} >
+            <div className="relative">
+              <ShoppingCart className="relative h-7 w-8" />
+              <span className="absolute -right-1 -top-1 bg-[#FF6B35] text-white h-4.5 w-4.5 text-[.7rem] border-2 border-white flex items-center justify-center font-semibold rounded-full">
+                1
+              </span>
+            </div>
+          </Link>
+
           <Avatar size="lg" className="border border-[#FF5B35] cursor-pointer">
             <AvatarFallback>GR</AvatarFallback>
           </Avatar>

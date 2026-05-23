@@ -25,7 +25,6 @@ const categorySlice = createSlice({
       state.selectedCategory = null;
       state.selectedSubCategory = null;
       state.subCategories = [];
-      state.subCategories = [];
     },
   },
   extraReducers: (builder) =>

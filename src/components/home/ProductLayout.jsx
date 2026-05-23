@@ -28,7 +28,7 @@ const ProductLayout = ({
 
   return (
     <div className="flex flex-row gap-10 shrink-0">
-      <aside className="w-72 sticky top-0">
+      <aside className="hidden lg:block lg:w-60 xl:w-72 sticky top-0">
         <div className="space-y-10">
           <SortCard
             selectedSort={selectedSort}
