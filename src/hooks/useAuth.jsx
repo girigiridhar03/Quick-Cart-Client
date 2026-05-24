@@ -20,7 +20,9 @@ const useAuth = () => {
       localStorage.setItem(ACCESS_EXPIRES_KEY, accessTokenExpiresAt);
       localStorage.setItem(REFRESH_EXPIRES_KEY, refreshTokenExpiresAt);
       navigate("/");
-    } catch {}
+    } catch (error) {
+      console.log("Register: ", error);
+    }
   };
 
   const login = async (formData) => {
@@ -31,13 +33,16 @@ const useAuth = () => {
       localStorage.setItem(ACCESS_EXPIRES_KEY, accessTokenExpiresAt);
       localStorage.setItem(REFRESH_EXPIRES_KEY, refreshTokenExpiresAt);
       navigate("/");
-    } catch {}
+    } catch (error) {
+      console.log("Login: ", login);
+    }
   };
 
   const logout = async () => {
     try {
       await dispatch(authLogout()).unwrap();
-    } catch {
+    } catch (error) {
+      console.log("logout: ", error);
     } finally {
       localStorage.removeItem(ACCESS_EXPIRES_KEY);
       localStorage.removeItem(REFRESH_EXPIRES_KEY);

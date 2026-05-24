@@ -4,7 +4,7 @@ import Register from "@/pages/auth/Register";
 import { Route, Routes } from "react-router-dom";
 import ClientRoutes from "./ClientRoutes";
 import Products from "@/pages/home/Products";
-import Cart from "@/pages/home/Cart";
+import Cart from "@/pages/cart/Cart";
 
 const AppRoutes = () => {
   return (

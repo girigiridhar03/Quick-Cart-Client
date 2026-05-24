@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import useAuth from "@/hooks/useAuth";
 import { Info } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -267,12 +268,13 @@ const Login = () => {
             </span>
           </div>
           <a data-discover="true">
-            <button
+            <Button
               onClick={handleSubmit}
+              disabled={loading}
               className="transition-all duration-200 inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wider bg-[#FF6B35] text-white hover:bg-[#FF6B35]/90 active:scale-95 px-5 py-2.5 rounded-xl w-full h-14 text-sm font-bold shadow-xl shadow-brand/20"
             >
               Login to Account
-            </button>
+            </Button>
           </a>
           <div className="relative">
             <div className="absolute inset-0 flex items-center">

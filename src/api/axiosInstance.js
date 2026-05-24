@@ -132,26 +132,26 @@ const handleImmediateRefresh = async () => {
   }
 };
 
-// document.addEventListener("visibilitychange", async () => {
-//   if (document.visibilityState !== "visible") return;
-//   console.log("User returned to tab - checking token status...");
+document.addEventListener("visibilitychange", async () => {
+  if (document.visibilityState !== "visible") return;
+  console.log("User returned to tab - checking token status...");
 
-//   const timeLeft = accessTokenTimeLeft();
+  const timeLeft = accessTokenTimeLeft();
 
-//   if (timeLeft > REFRESH_BEFORE_MS) {
-//     console.log(`Token still valid — ${timeLeft / 1000 / 60} mins left`);
-//     return;
-//   }
+  if (timeLeft > REFRESH_BEFORE_MS) {
+    console.log(`Token still valid — ${timeLeft / 1000 / 60} mins left`);
+    return;
+  }
 
-//   if (isRefreshTokenExpired()) {
-//     console.log("Both tokens expired — logging out");
-//     await handleLogout();
-//     return;
-//   }
+  if (isRefreshTokenExpired()) {
+    console.log("Both tokens expired — logging out");
+    await handleLogout();
+    return;
+  }
 
-//   console.log("Access token expired — refreshing with refresh token...");
-//   await handleImmediateRefresh();
-// });
+  console.log("Access token expired — refreshing with refresh token...");
+  await handleImmediateRefresh();
+});
 
 export const initializeAuth = async () => {
   const accessExpiresAt = Number(localStorage.getItem(ACCESS_EXPIRES_KEY));
