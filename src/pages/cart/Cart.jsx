@@ -4,7 +4,7 @@ import useCart from "@/hooks/useCart";
 import React from "react";
 
 const Cart = () => {
-  const { cartLoading, cartItems, cartTotal, error } = useCart();
+  const { cartLoading, cartItems, cartTotal,totalDiscount,totalMrp, error } = useCart();
 
   return (
     <div className="w-full">
@@ -13,6 +13,8 @@ const Cart = () => {
           cartLoading={cartLoading}
           cartItems={cartItems}
           cartTotal={cartTotal}
+          totalDiscount={totalDiscount}
+          totalMrp={totalMrp}
           error={error}
         />
       ) : (

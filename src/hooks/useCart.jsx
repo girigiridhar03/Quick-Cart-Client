@@ -1,9 +1,10 @@
 import { addToCart, getAllCartItems } from "@/api/cart.api";
+import { setSelectedItemId } from "@/store/slices/cartSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const useCart = () => {
-  const { cartLoading, cartItems, cartTotal, error } = useSelector(
+  const { cartLoading, cartItems, cartTotal,totalMrp,totalDiscount, error } = useSelector(
     (state) => state.cart,
   );
   const dispatch = useDispatch();
@@ -24,6 +25,10 @@ const useCart = () => {
     }
   };
 
+  const setSelectedCartitem = (id) => {
+    dispatch(setSelectedItemId(id));
+  };
+
   useEffect(() => {
     fetchCartItems();
   }, []);
@@ -32,9 +37,12 @@ const useCart = () => {
     cartLoading,
     cartItems,
     cartTotal,
+    totalDiscount,
+    totalMrp,
     error,
     fetchCartItems,
     addCartItem,
+    setSelectedCartitem,
   };
 };
 

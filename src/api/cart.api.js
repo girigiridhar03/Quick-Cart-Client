@@ -28,3 +28,31 @@ export const addToCart = createAsyncThunk(
     }
   },
 );
+
+export const descreaseQuantity = createAsyncThunk(
+  "cart/quantityDescrease",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.patch(`/cart/descrease/${id}`);
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || "Something went wrong",
+      );
+    }
+  },
+);
+
+export const deleteItem = createAsyncThunk(
+  "cart/deleteItem",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.delete(`/cart/${id}`);
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || "Something went wrong",
+      );
+    }
+  },
+);

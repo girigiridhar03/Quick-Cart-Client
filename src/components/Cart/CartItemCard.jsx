@@ -1,5 +1,4 @@
 import React from "react";
-import { Card, CardContent } from "../ui/card";
 import { MinusIcon, PlusIcon, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { ButtonGroup } from "../ui/button-group";
@@ -7,9 +6,9 @@ import { ButtonGroup } from "../ui/button-group";
 const CartItemCard = ({ item }) => {
   const product = item?.product ?? {};
   return (
-    <Card className="w-full">
-      <CardContent className="flex gap-8">
-        <div className="w-40 h-30 rounded-2xl overflow-hidden">
+    <div className="w-full px-6">
+      <div className="flex gap-8">
+        <div className="w-25 h-20 md:w-40 md:h-27 rounded-2xl overflow-hidden">
           <img
             src={product?.productImages?.[0]?.url}
             alt={product?.name}
@@ -19,8 +18,8 @@ const CartItemCard = ({ item }) => {
         <section className="flex-1 flex flex-col justify-between">
           <div className="flex justify-between">
             <div>
-              <h6 className="font-bold">{product?.name}</h6>
-              <p className="text-[#8A8A8A]">{product?.weight}</p>
+              <h6 className="text-[12.5px] md:text-[14px] text-wrap font-bold">{product?.name}</h6>
+              <p className="text-[#8A8A8A] text-[11.5px] md:text-[13px] ">{product?.weight}</p>
             </div>
 
             <button className="cursor-pointer">
@@ -29,7 +28,7 @@ const CartItemCard = ({ item }) => {
           </div>
           <div className="flex justify-between">
             <div className="flex flex-col">
-              <span className="text-lg font-bold">
+              <span className="text-[14px] md:text-lg font-bold">
                 ₹{product?.price?.toLocaleString()}
               </span>
               {product?.discount > 0 && (
@@ -61,8 +60,8 @@ const CartItemCard = ({ item }) => {
             </ButtonGroup>
           </div>
         </section>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 
