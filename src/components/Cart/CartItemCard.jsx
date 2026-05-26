@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Loader, MinusIcon, PlusIcon, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { ButtonGroup } from "../ui/button-group";
@@ -14,6 +14,7 @@ const CartItemCard = ({
   removeCartItem,
 }) => {
   const product = item?.product ?? {};
+  const [selectedProduct, setSelectedProduct] = useState(null);
   return (
     <div className="w-full px-6">
       <div className="flex gap-8">
@@ -35,7 +36,13 @@ const CartItemCard = ({
               </p>
             </div>
 
-            <button className="cursor-pointer">
+            <button
+              onClick={async () => {
+                await deleteCartItem(product?._id);
+                removeCartItem(product?._id);
+              }}
+              className="cursor-pointer"
+            >
               <Trash2 className="text-[#8A8A8A] w-5 h-5" />
             </button>
           </div>
@@ -59,13 +66,17 @@ const CartItemCard = ({
                 variant="outline"
                 size="icon"
                 className="cursor-pointer border-none bg-transparent shadow-none text-primary"
-                disabled={quantityLoading || deleteLoading}
+                disabled={
+                  product?._id === selectedProduct &&
+                  (quantityLoading || deleteLoading)
+                }
                 onClick={async () => {
+                  setSelectedProduct(product?._id);
                   if (item?.quantity <= 1) {
-                    await deleteCartItem(item?._id);
-                    await removeCartItem(item?._id);
+                    await deleteCartItem(product?._id);
+                    removeCartItem(product?._id);
                   } else {
-                    await descreaseQunatityCount(item?._id);
+                    await descreaseQunatityCount(product?._id);
                     updateCartItems({
                       productId: product?._id,
                       quantity: item.quantity - 1,
@@ -75,7 +86,8 @@ const CartItemCard = ({
               >
                 <MinusIcon />
               </Button>
-              {quantityLoading || deleteLoading ? (
+              {product?._id === selectedProduct &&
+              (quantityLoading || deleteLoading) ? (
                 <Loader className="animate-spin w-4 h-4" />
               ) : (
                 <div className="font-bold">{item?.quantity ?? 1}</div>
@@ -84,8 +96,12 @@ const CartItemCard = ({
                 variant="outline"
                 size="icon"
                 className="cursor-pointer border-none bg-transparent shadow-none text-primary"
-                disabled={quantityLoading || deleteLoading}
+                disabled={
+                  product?._id === selectedProduct &&
+                  (quantityLoading || deleteLoading)
+                }
                 onClick={async () => {
+                  setSelectedProduct(product?._id);
                   await addCartItem({
                     id: item?.product?._id,
                     body: { quantity: 1 },

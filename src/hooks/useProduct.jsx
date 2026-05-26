@@ -3,6 +3,7 @@ import {
   setSelectedBrandName,
   setSelectedProductId,
   setSelectedSort,
+  updatedProduct,
 } from "@/store/slices/productSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -48,6 +49,10 @@ const useProduct = () => {
     dispatch(setSelectedSort(sort));
   };
 
+  const updatedProductItem = ({ productId, quantity }) => {
+    dispatch(updatedProduct({ productId, quantity }));
+  };
+
   useEffect(() => {
     fetchProducts({
       brand: selectedBrand,
@@ -74,6 +79,7 @@ const useProduct = () => {
     setSelectedProduct,
     setSelectedBrand,
     setSelectedSortName,
+    updatedProductItem,
     fetchProducts,
   };
 };

@@ -30,9 +30,9 @@ const productSlice = createSlice({
       state.selectedBrand = "All";
       state.brands = [];
     },
-    updatedProducts: (state, { payload }) => {
+    updatedProduct: (state, { payload }) => {
       const product = state.products.find(
-        (item) => item._id === payload.productId,
+        (item) => item?._id === payload.productId,
       );
       if (product) {
         product.cartQuantity = payload.quantity;
@@ -76,6 +76,7 @@ export const {
   setSelectedBrandName,
   resetBrandStates,
   setSelectedSort,
+  updatedProduct,
 } = productSlice.actions;
 
 export default productSlice.reducer;

@@ -25,6 +25,7 @@ const ProductLayout = ({
     setSelectedBrand,
     setSelectedProduct,
     setSelectedSortName,
+    updatedProductItem,
   } = useProduct();
 
   const {
@@ -32,6 +33,7 @@ const ProductLayout = ({
     deleteLoading,
     descreaseQunatityCount,
     addCartItem,
+    deleteCartItem,
   } = useCart();
 
   return (
@@ -81,6 +83,8 @@ const ProductLayout = ({
             setSelectedProduct={setSelectedProduct}
             descreaseQunatityCount={descreaseQunatityCount}
             addCartItem={addCartItem}
+            updatedProductItem={updatedProductItem}
+            deleteCartItem={deleteCartItem}
           />
         </div>
       </section>

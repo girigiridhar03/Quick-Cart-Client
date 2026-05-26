@@ -26,7 +26,9 @@ const cartSlice = createSlice({
       state.selectedItemId = payload;
     },
     updateQuantity: (state, { payload }) => {
-      const item = state.cartItems.find((i) => i?.product?._id === payload.productId);
+      const item = state.cartItems.find(
+        (i) => i?.product?._id === payload.productId,
+      );
       if (item) {
         item.quantity = payload.quantity;
 
@@ -49,7 +51,9 @@ const cartSlice = createSlice({
       }
     },
     removeItem: (state, { payload }) => {
-      state.cartItems = state.cartItems.filter((item) => item._id !== payload);
+      state.cartItems = state.cartItems.filter(
+        (item) => item?.product?._id !== payload,
+      );
       const { cartTotal, totalMrp, totalDiscount } = state.cartItems.reduce(
         (acc, curr) => {
           return {

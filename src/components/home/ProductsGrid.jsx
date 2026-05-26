@@ -11,6 +11,8 @@ const ProductsGrid = ({
   deleteLoading,
   descreaseQunatityCount,
   addCartItem,
+  updatedProductItem,
+  deleteCartItem,
 }) => {
   return (
     <div className="w-full">
@@ -31,6 +33,8 @@ const ProductsGrid = ({
               setSelectedProduct={setSelectedProduct}
               descreaseQunatityCount={descreaseQunatityCount}
               addCartItem={addCartItem}
+              updatedProductItem={updatedProductItem}
+              deleteCartItem={deleteCartItem}
             />
           ))}
         </div>

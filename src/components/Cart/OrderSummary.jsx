@@ -47,7 +47,7 @@ const OrderSummary = ({
         </div>
         <div className="flex items-center justify-between w-full font-semibold text-green-600">
           <div>Product Discount</div>
-          <div className="font-bold">-₹{totalDiscount}</div>
+          <div className="font-bold">-₹{totalDiscount?.toLocaleString()}</div>
         </div>
         <div className="flex items-center justify-between w-full text-[#8A8A8A]">
           <div className="font-semibold">Subtotal</div>
@@ -70,7 +70,7 @@ const OrderSummary = ({
       <CardFooter className="flex flex-col w-full gap-10">
         {totalDiscount > 0 && (
           <div className="bg-green-100 text-green-700 text-center py-4 px-3 rounded-2xl w-full">
-            🎉 You are saving ₹{totalDiscount} on this order!
+            🎉 You are saving ₹{totalDiscount?.toLocaleString()} on this order!
           </div>
         )}
 

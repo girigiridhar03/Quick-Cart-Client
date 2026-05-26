@@ -19,7 +19,10 @@ export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async ({ id, body }, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post(`/cart/${id}`, body);
+      const response = await axiosInstance.post(
+        `/cart/product/${id}/add`,
+        body,
+      );
       return response?.data;
     } catch (error) {
       return rejectWithValue(
@@ -33,7 +36,9 @@ export const descreaseQuantity = createAsyncThunk(
   "cart/quantityDescrease",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.patch(`/cart/descrease/${id}`);
+      const response = await axiosInstance.patch(
+        `/cart/product/${id}/descrease`,
+      );
       return response?.data;
     } catch (error) {
       return rejectWithValue(
@@ -47,7 +52,7 @@ export const deleteItem = createAsyncThunk(
   "cart/deleteItem",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.delete(`/cart/${id}`);
+      const response = await axiosInstance.delete(`/cart/product/${id}`);
       return response?.data;
     } catch (error) {
       return rejectWithValue(

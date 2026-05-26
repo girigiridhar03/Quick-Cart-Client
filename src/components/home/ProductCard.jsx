@@ -2,7 +2,8 @@ import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { ButtonGroup } from "../ui/button-group";
-import { MinusIcon, PlusIcon } from "lucide-react";
+import { Loader, MinusIcon, PlusIcon } from "lucide-react";
+import { useState } from "react";
 
 const ProductCard = ({
   product,
@@ -10,7 +11,10 @@ const ProductCard = ({
   deleteLoading,
   descreaseQunatityCount,
   addCartItem,
+  updatedProductItem,
+  deleteCartItem,
 }) => {
+  const [selectedProduct, setSelectedProduct] = useState(null);
   return (
     <Card className="px-0.5 py-2 gap-3 rounded-3xl shadow-lg hover:shadow-xl">
       <CardHeader className="px-1">
@@ -63,18 +67,27 @@ const ProductCard = ({
               size="icon"
               className="cursor-pointer border-none bg-transparent text-white shadow-none hover:bg-transparent hover:text-white w-[40%] "
               disabled={quantityLoading || deleteLoading}
-              // onClick={async () => {
-              //   if (item?.quantity <= 1) {
-              //     await deleteCartItem(item?._id);
-              //   } else {
-              //     await descreaseQunatityCount(item?._id);
-              //   }
-              //   await fetchCartItems();
-              // }}
+              onClick={async () => {
+                setSelectedProduct(product?._id);
+                if (product?.cartQuantity === 1) {
+                  await deleteCartItem(product?._id);
+                  updatedProductItem({
+                    productId: product?._id,
+                    quantity: 0,
+                  });
+                } else {
+                  await descreaseQunatityCount(product?._id);
+                  updatedProductItem({
+                    productId: product?._id,
+                    quantity: product?.cartQuantity - 1,
+                  });
+                }
+              }}
             >
               <MinusIcon />
             </Button>
-            {quantityLoading || deleteLoading ? (
+            {product?._id === selectedProduct &&
+            (quantityLoading || deleteLoading) ? (
               <Loader className="animate-spin w-4 h-4" />
             ) : (
               <div className="font-bold">{product.cartQuantity}</div>
@@ -83,14 +96,21 @@ const ProductCard = ({
               variant="outline"
               size="icon"
               className="cursor-pointer border-none bg-transparent text-white shadow-none hover:bg-transparent hover:text-white w-[40%] "
-              disabled={quantityLoading || deleteLoading}
-              // onClick={async () => {
-              //   await addCartItem({
-              //     id: item?.product?._id,
-              //     body: { quantity: 1 },
-              //   });
-              //   await fetchCartItems();
-              // }}
+              disabled={
+                product?._id === selectedProduct &&
+                (quantityLoading || deleteLoading)
+              }
+              onClick={async () => {
+                setSelectedProduct(product?._id);
+                await addCartItem({
+                  id: product?._id,
+                  body: { quantity: 1 },
+                });
+                updatedProductItem({
+                  productId: product?._id,
+                  quantity: product?.cartQuantity + 1,
+                });
+              }}
             >
               <PlusIcon />
             </Button>
@@ -99,6 +119,17 @@ const ProductCard = ({
           <Button
             variant="outline"
             className="h-8 w-17.5 font-semibold text-[0.8rem] rounded-lg text-[#FF6B35] shadow-none hover:text-[#ff6b35] cursor-pointer"
+            onClick={async () => {
+              setSelectedProduct(product?._id);
+              await addCartItem({
+                id: product?._id,
+                body: { quantity: 1 },
+              });
+              updatedProductItem({
+                productId: product?._id,
+                quantity: product?.cartQuantity + 1,
+              });
+            }}
           >
             ADD
           </Button>
