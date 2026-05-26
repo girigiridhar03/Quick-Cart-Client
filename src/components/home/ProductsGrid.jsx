@@ -7,6 +7,10 @@ const ProductsGrid = ({
   products,
   setSelectedProduct,
   productPagination,
+  quantityLoading,
+  deleteLoading,
+  descreaseQunatityCount,
+  addCartItem,
 }) => {
   return (
     <div className="w-full">
@@ -19,7 +23,15 @@ const ProductsGrid = ({
       ) : products?.length > 0 ? (
         <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
           {products?.map((product) => (
-            <ProductCard key={product._id} product={product} />
+            <ProductCard
+              key={product._id}
+              product={product}
+              quantityLoading={quantityLoading}
+              deleteLoading={deleteLoading}
+              setSelectedProduct={setSelectedProduct}
+              descreaseQunatityCount={descreaseQunatityCount}
+              addCartItem={addCartItem}
+            />
           ))}
         </div>
       ) : (

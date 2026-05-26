@@ -6,6 +6,7 @@ import {
   SortCard,
   SubCategoriesTypes,
 } from "./FilterCards";
+import useCart from "@/hooks/useCart";
 
 const ProductLayout = ({
   subCategoriesLoading,
@@ -25,6 +26,13 @@ const ProductLayout = ({
     setSelectedProduct,
     setSelectedSortName,
   } = useProduct();
+
+  const {
+    quantityLoading,
+    deleteLoading,
+    descreaseQunatityCount,
+    addCartItem,
+  } = useCart();
 
   return (
     <div className="flex flex-row gap-10 shrink-0">
@@ -68,7 +76,11 @@ const ProductLayout = ({
             productLoading={productLoading}
             products={products}
             productPagination={productPagination}
+            quantityLoading={quantityLoading}
+            deleteLoading={deleteLoading}
             setSelectedProduct={setSelectedProduct}
+            descreaseQunatityCount={descreaseQunatityCount}
+            addCartItem={addCartItem}
           />
         </div>
       </section>

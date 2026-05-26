@@ -2,7 +2,13 @@ import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({
+  product,
+  quantityLoading,
+  deleteLoading,
+  descreaseQunatityCount,
+  addCartItem,
+}) => {
   return (
     <Card className="px-0.5 py-2 gap-3 rounded-3xl shadow-lg hover:shadow-xl">
       <CardHeader className="px-1">
@@ -34,19 +40,19 @@ const ProductCard = ({ product }) => {
         </div>
       </CardContent>
       <CardFooter className="px-4 py-0 flex justify-between">
-          <div className="flex flex-col">
-            <span className="text-sm font-bold">
-              ₹{product?.price?.toLocaleString()}
+        <div className="flex flex-col">
+          <span className="text-sm font-bold">
+            ₹{product?.price?.toLocaleString()}
+          </span>
+          {product?.discount > 0 && (
+            <span className="text-[0.65rem] line-through text-[#8A8A8A]">
+              ₹{product?.mrp?.toLocaleString()}
             </span>
-            {product?.discount > 0 && (
-              <span className="text-[0.65rem] line-through text-[#8A8A8A]">
-                ₹{product?.mrp?.toLocaleString()}
-              </span>
-            )}
-          </div>
+          )}
+        </div>
         <Button
           variant="outline"
-          className="h-8 w-17.5 font-semibold text-[0.8rem] rounded-lg text-[#FF6B35] shadow-none hover:text-[#ff6b35]"
+          className="h-8 w-17.5 font-semibold text-[0.8rem] rounded-lg text-[#FF6B35] shadow-none hover:text-[#ff6b35] cursor-pointer"
         >
           ADD
         </Button>

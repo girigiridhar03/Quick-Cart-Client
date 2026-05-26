@@ -1,9 +1,17 @@
 import React from "react";
-import { MinusIcon, PlusIcon, Trash2 } from "lucide-react";
+import { Loader, MinusIcon, PlusIcon, Trash2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { ButtonGroup } from "../ui/button-group";
 
-const CartItemCard = ({ item }) => {
+const CartItemCard = ({
+  quantityLoading,
+  deleteLoading,
+  item,
+  descreaseQunatityCount,
+  deleteCartItem,
+  fetchCartItems,
+  addCartItem,
+}) => {
   const product = item?.product ?? {};
   return (
     <div className="w-full px-6">
@@ -18,8 +26,12 @@ const CartItemCard = ({ item }) => {
         <section className="flex-1 flex flex-col justify-between">
           <div className="flex justify-between">
             <div>
-              <h6 className="text-[12.5px] md:text-[14px] text-wrap font-bold">{product?.name}</h6>
-              <p className="text-[#8A8A8A] text-[11.5px] md:text-[13px] ">{product?.weight}</p>
+              <h6 className="text-[12.5px] md:text-[14px] text-wrap font-bold">
+                {product?.name}
+              </h6>
+              <p className="text-[#8A8A8A] text-[11.5px] md:text-[13px] ">
+                {product?.weight}
+              </p>
             </div>
 
             <button className="cursor-pointer">
@@ -46,14 +58,32 @@ const CartItemCard = ({ item }) => {
                 variant="outline"
                 size="icon"
                 className="cursor-pointer border-none bg-transparent shadow-none text-primary"
+                disabled={quantityLoading || deleteLoading}
+                onClick={async () => {
+                  if (item?.quantity <= 1) {
+                    await deleteCartItem(item?._id);
+                  } else {
+                    await descreaseQunatityCount(item?._id);
+                  }
+                  await fetchCartItems();
+                }}
               >
                 <MinusIcon />
               </Button>
-              <div className="font-bold">{item?.quantity ?? 1}</div>
+              {quantityLoading || deleteLoading ? (
+                <Loader className="animate-spin w-4 h-4" />
+              ) : (
+                <div className="font-bold">{item?.quantity ?? 1}</div>
+              )}
               <Button
                 variant="outline"
                 size="icon"
                 className="cursor-pointer border-none bg-transparent shadow-none text-primary"
+                disabled={quantityLoading || deleteLoading}
+                onClick={async () => {
+                  await addCartItem({ id: item?.product?._id, body: { quantity: 1 } });
+                  await fetchCartItems();
+                }}
               >
                 <PlusIcon />
               </Button>

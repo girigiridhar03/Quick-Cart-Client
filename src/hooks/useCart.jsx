@@ -1,12 +1,23 @@
-import { addToCart, getAllCartItems } from "@/api/cart.api";
+import {
+  addToCart,
+  deleteItem,
+  descreaseQuantity,
+  getAllCartItems,
+} from "@/api/cart.api";
 import { setSelectedItemId } from "@/store/slices/cartSlice";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const useCart = () => {
-  const { cartLoading, cartItems, cartTotal,totalMrp,totalDiscount, error } = useSelector(
-    (state) => state.cart,
-  );
+  const {
+    cartLoading,
+    quantityLoading,
+    deleteLoading,
+    cartItems,
+    cartTotal,
+    totalMrp,
+    totalDiscount,
+    error,
+  } = useSelector((state) => state.cart);
   const dispatch = useDispatch();
 
   const fetchCartItems = async () => {
@@ -29,12 +40,18 @@ const useCart = () => {
     dispatch(setSelectedItemId(id));
   };
 
-  useEffect(() => {
-    fetchCartItems();
-  }, []);
+  const descreaseQunatityCount = async (id) => {
+    await dispatch(descreaseQuantity(id)).unwrap();
+  };
+
+  const deleteCartItem = async (id) => {
+    await dispatch(deleteItem(id)).unwrap();
+  };
 
   return {
     cartLoading,
+    quantityLoading,
+    deleteLoading,
     cartItems,
     cartTotal,
     totalDiscount,
@@ -42,7 +59,9 @@ const useCart = () => {
     error,
     fetchCartItems,
     addCartItem,
+    deleteCartItem,
     setSelectedCartitem,
+    descreaseQunatityCount,
   };
 };
 

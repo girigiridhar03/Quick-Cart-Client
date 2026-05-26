@@ -4,7 +4,13 @@ import { ChevronRight, MapPin, Ticket } from "lucide-react";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 
-const OrderSummary = ({ cartTotal, totalMrp, totalDiscount }) => {
+const OrderSummary = ({
+  cartTotal,
+  totalMrp,
+  totalDiscount,
+  deleteLoading,
+  quantityLoading,
+}) => {
   return (
     <Card className="w-full rounded-3xl">
       <CardHeader className="gap-5">
@@ -35,7 +41,9 @@ const OrderSummary = ({ cartTotal, totalMrp, totalDiscount }) => {
       <CardContent className="space-y-4">
         <div className="flex items-center justify-between w-full text-[#8A8A8A]">
           <div className="font-semibold">Item Total (MRP)</div>
-          <div className="font-bold line-through">₹{totalMrp?.toLocaleString()}</div>
+          <div className="font-bold line-through">
+            ₹{totalMrp?.toLocaleString()}
+          </div>
         </div>
         <div className="flex items-center justify-between w-full font-semibold text-green-600">
           <div>Product Discount</div>
@@ -70,7 +78,10 @@ const OrderSummary = ({ cartTotal, totalMrp, totalDiscount }) => {
           <div>Total Payable</div>
           <div className="text-primary">₹{cartTotal?.toLocaleString()}</div>
         </div>
-        <Button className="w-full py-7 rounded-2xl font-bold text-[0.95rem] cursor-pointer">
+        <Button
+          disabled={deleteLoading || quantityLoading}
+          className="w-full py-7 rounded-2xl font-bold text-[0.95rem] cursor-pointer"
+        >
           PROCEED TO CHECKOUT
         </Button>
 

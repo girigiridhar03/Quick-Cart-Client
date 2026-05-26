@@ -6,11 +6,17 @@ import { Separator } from "../ui/separator";
 
 const CartLayout = ({
   cartLoading,
+  quantityLoading,
+  deleteLoading,
   cartItems,
   cartTotal,
   totalDiscount,
   totalMrp,
   error,
+  descreaseQunatityCount,
+  fetchCartItems,
+  deleteCartItem,
+  addCartItem,
 }) => {
   return (
     <div className="w-full space-y-10 mt-2">
@@ -22,12 +28,20 @@ const CartLayout = ({
         <Card className="flex-1 space-y-5 w-full lg:w-[60%] xl:w-[65%] py-6 rounded-3xl">
           <CardContent className="w-full px-0">
             {cartItems?.map((item) => (
-              <>
-                <CartItemCard key={item?._id} item={item} />
+              <React.Fragment key={item?._id}>
+                <CartItemCard
+                  item={item}
+                  descreaseQunatityCount={descreaseQunatityCount}
+                  deleteCartItem={deleteCartItem}
+                  fetchCartItems={fetchCartItems}
+                  addCartItem={addCartItem}
+                  deleteLoading={deleteLoading}
+                  quantityLoading={quantityLoading}
+                />
                 {cartItems?.length !== cartItems?.length && (
                   <Separator className="my-5" />
                 )}
-              </>
+              </React.Fragment>
             ))}
           </CardContent>
         </Card>
@@ -37,11 +51,12 @@ const CartLayout = ({
             cartTotal={cartTotal}
             totalDiscount={totalDiscount}
             totalMrp={totalMrp}
+            deleteLoading={deleteLoading}
+            quantityLoading={quantityLoading}
           />
           <p className="text-[12px] w-[85%] mx-auto text-[#8A8A8A] text-center">
             QuickMart delivers thousands of items in under 10 minutes. By
-            placing this
-            order, you agree to our policies.
+            placing this order, you agree to our policies.
           </p>
         </div>
       </div>
