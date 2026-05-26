@@ -9,8 +9,9 @@ const CartItemCard = ({
   item,
   descreaseQunatityCount,
   deleteCartItem,
-  fetchCartItems,
   addCartItem,
+  updateCartItems,
+  removeCartItem,
 }) => {
   const product = item?.product ?? {};
   return (
@@ -62,10 +63,14 @@ const CartItemCard = ({
                 onClick={async () => {
                   if (item?.quantity <= 1) {
                     await deleteCartItem(item?._id);
+                    await removeCartItem(item?._id);
                   } else {
                     await descreaseQunatityCount(item?._id);
+                    updateCartItems({
+                      productId: product?._id,
+                      quantity: item.quantity - 1,
+                    });
                   }
-                  await fetchCartItems();
                 }}
               >
                 <MinusIcon />
@@ -81,8 +86,14 @@ const CartItemCard = ({
                 className="cursor-pointer border-none bg-transparent shadow-none text-primary"
                 disabled={quantityLoading || deleteLoading}
                 onClick={async () => {
-                  await addCartItem({ id: item?.product?._id, body: { quantity: 1 } });
-                  await fetchCartItems();
+                  await addCartItem({
+                    id: item?.product?._id,
+                    body: { quantity: 1 },
+                  });
+                  updateCartItems({
+                    productId: product?._id,
+                    quantity: item.quantity + 1,
+                  });
                 }}
               >
                 <PlusIcon />

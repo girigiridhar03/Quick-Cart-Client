@@ -17,6 +17,8 @@ const CartLayout = ({
   fetchCartItems,
   deleteCartItem,
   addCartItem,
+  updateCartItems,
+  removeCartItem,
 }) => {
   return (
     <div className="w-full space-y-10 mt-2">
@@ -37,6 +39,8 @@ const CartLayout = ({
                   addCartItem={addCartItem}
                   deleteLoading={deleteLoading}
                   quantityLoading={quantityLoading}
+                  updateCartItems={updateCartItems}
+                  removeCartItem={removeCartItem}
                 />
                 {cartItems?.length !== cartItems?.length && (
                   <Separator className="my-5" />

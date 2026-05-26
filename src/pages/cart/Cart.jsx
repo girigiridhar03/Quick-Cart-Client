@@ -17,6 +17,8 @@ const Cart = () => {
     fetchCartItems,
     deleteCartItem,
     addCartItem,
+    updateCartItems,
+    removeCartItem,
   } = useCart();
 
   useEffect(() => {
@@ -39,6 +41,8 @@ const Cart = () => {
           fetchCartItems={fetchCartItems}
           deleteCartItem={deleteCartItem}
           addCartItem={addCartItem}
+          updateCartItems={updateCartItems}
+          removeCartItem={removeCartItem}
         />
       ) : (
         <NoItems />

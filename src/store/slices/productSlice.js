@@ -30,6 +30,14 @@ const productSlice = createSlice({
       state.selectedBrand = "All";
       state.brands = [];
     },
+    updatedProducts: (state, { payload }) => {
+      const product = state.products.find(
+        (item) => item._id === payload.productId,
+      );
+      if (product) {
+        product.cartQuantity = payload.quantity;
+      }
+    },
   },
   extraReducers: (builder) =>
     builder

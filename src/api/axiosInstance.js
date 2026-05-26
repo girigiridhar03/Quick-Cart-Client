@@ -86,7 +86,11 @@ const handleLogout = async () => {
   } finally {
     localStorage.removeItem(ACCESS_EXPIRES_KEY);
     localStorage.removeItem(REFRESH_EXPIRES_KEY);
-    window.location.href = "/";
+    if (window.location.pathname !== "/") {
+      window.location.href = "/login";
+    } else {
+      window.location.href = "/";
+    }
   }
 };
 

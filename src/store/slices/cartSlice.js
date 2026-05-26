@@ -25,6 +25,51 @@ const cartSlice = createSlice({
     setSelectedItemId: (state, { payload }) => {
       state.selectedItemId = payload;
     },
+    updateQuantity: (state, { payload }) => {
+      const item = state.cartItems.find((i) => i?.product?._id === payload.productId);
+      if (item) {
+        item.quantity = payload.quantity;
+
+        const { cartTotal, totalMrp, totalDiscount } = state.cartItems.reduce(
+          (acc, curr) => {
+            return {
+              cartTotal: acc.cartTotal + curr.product.price * curr.quantity,
+              totalMrp: acc.totalMrp + curr.product.mrp * curr.quantity,
+              totalDiscount:
+                acc.totalDiscount +
+                (curr.product.mrp - curr.product.price) * curr.quantity,
+            };
+          },
+          { cartTotal: 0, totalMrp: 0, totalDiscount: 0 },
+        );
+
+        state.cartTotal = cartTotal;
+        state.totalMrp = totalMrp;
+        state.totalDiscount = totalDiscount;
+      }
+    },
+    removeItem: (state, { payload }) => {
+      state.cartItems = state.cartItems.filter((item) => item._id !== payload);
+      const { cartTotal, totalMrp, totalDiscount } = state.cartItems.reduce(
+        (acc, curr) => {
+          return {
+            cartTotal: acc.cartTotal + curr.product.price * curr.quantity,
+            totalDiscount:
+              acc.totalDiscount + curr.product.discount * curr.quantity,
+            totalMrp: acc.totalMrp + curr.product.mrp * curr.quantity,
+          };
+        },
+        {
+          cartTotal: 0,
+          totalMrp: 0,
+          totalDiscount: 0,
+        },
+      );
+
+      state.cartTotal = cartTotal;
+      state.totalMrp = totalMrp;
+      state.totalDiscount = totalDiscount;
+    },
   },
   extraReducers: (builder) =>
     builder
@@ -82,6 +127,7 @@ const cartSlice = createSlice({
       }),
 });
 
-export const { setSelectedItemId } = cartSlice.actions;
+export const { setSelectedItemId, updateQuantity, removeItem } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;

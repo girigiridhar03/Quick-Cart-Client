@@ -4,7 +4,7 @@ import {
   descreaseQuantity,
   getAllCartItems,
 } from "@/api/cart.api";
-import { setSelectedItemId } from "@/store/slices/cartSlice";
+import { removeItem, setSelectedItemId, updateQuantity } from "@/store/slices/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const useCart = () => {
@@ -48,6 +48,15 @@ const useCart = () => {
     await dispatch(deleteItem(id)).unwrap();
   };
 
+  const updateCartItems = ({ productId, quantity }) => {
+    console.log(productId,quantity)
+    dispatch(updateQuantity({ productId, quantity }));
+  };
+
+  const removeCartItem = (id)=>{
+    dispatch(removeItem(id));
+  }
+
   return {
     cartLoading,
     quantityLoading,
@@ -62,6 +71,8 @@ const useCart = () => {
     deleteCartItem,
     setSelectedCartitem,
     descreaseQunatityCount,
+    updateCartItems,
+    removeCartItem
   };
 };
 

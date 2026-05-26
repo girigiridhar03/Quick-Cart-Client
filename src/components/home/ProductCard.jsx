@@ -1,6 +1,8 @@
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
+import { ButtonGroup } from "../ui/button-group";
+import { MinusIcon, PlusIcon } from "lucide-react";
 
 const ProductCard = ({
   product,
@@ -50,12 +52,57 @@ const ProductCard = ({
             </span>
           )}
         </div>
-        <Button
-          variant="outline"
-          className="h-8 w-17.5 font-semibold text-[0.8rem] rounded-lg text-[#FF6B35] shadow-none hover:text-[#ff6b35] cursor-pointer"
-        >
-          ADD
-        </Button>
+        {product?.cartQuantity > 0 ? (
+          <ButtonGroup
+            orientation="horizontal"
+            aria-label="Media controls"
+            className="h-8 w-17.5 items-center justify-between bg-primary text-white shadow-lg rounded-xl border outline-0"
+          >
+            <Button
+              variant="outline"
+              size="icon"
+              className="cursor-pointer border-none bg-transparent text-white shadow-none hover:bg-transparent hover:text-white w-[40%] "
+              disabled={quantityLoading || deleteLoading}
+              // onClick={async () => {
+              //   if (item?.quantity <= 1) {
+              //     await deleteCartItem(item?._id);
+              //   } else {
+              //     await descreaseQunatityCount(item?._id);
+              //   }
+              //   await fetchCartItems();
+              // }}
+            >
+              <MinusIcon />
+            </Button>
+            {quantityLoading || deleteLoading ? (
+              <Loader className="animate-spin w-4 h-4" />
+            ) : (
+              <div className="font-bold">{product.cartQuantity}</div>
+            )}
+            <Button
+              variant="outline"
+              size="icon"
+              className="cursor-pointer border-none bg-transparent text-white shadow-none hover:bg-transparent hover:text-white w-[40%] "
+              disabled={quantityLoading || deleteLoading}
+              // onClick={async () => {
+              //   await addCartItem({
+              //     id: item?.product?._id,
+              //     body: { quantity: 1 },
+              //   });
+              //   await fetchCartItems();
+              // }}
+            >
+              <PlusIcon />
+            </Button>
+          </ButtonGroup>
+        ) : (
+          <Button
+            variant="outline"
+            className="h-8 w-17.5 font-semibold text-[0.8rem] rounded-lg text-[#FF6B35] shadow-none hover:text-[#ff6b35] cursor-pointer"
+          >
+            ADD
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );
