@@ -86,10 +86,10 @@ const handleLogout = async () => {
   } finally {
     localStorage.removeItem(ACCESS_EXPIRES_KEY);
     localStorage.removeItem(REFRESH_EXPIRES_KEY);
-    if (window.location.pathname !== "/") {
-      window.location.href = "/login";
-    } else {
+    if (window.location.pathname === "/") {
       window.location.href = "/";
+    } else {
+      window.location.href = "/login";
     }
   }
 };
@@ -211,6 +211,7 @@ axiosInstance.interceptors.response.use(
     const isAuthPage = ["/login", "/register"].includes(
       window.location.pathname,
     );
+    console.log(originalRequest);
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&

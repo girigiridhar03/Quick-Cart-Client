@@ -5,6 +5,8 @@ import { Route, Routes } from "react-router-dom";
 import ClientRoutes from "./ClientRoutes";
 import Products from "@/pages/home/Products";
 import Cart from "@/pages/cart/Cart";
+import AdminRoutes from "./AdminRoutes";
+import AdminProducts from "@/pages/admin/AdminProducts";
 
 const AppRoutes = () => {
   return (
@@ -15,6 +17,9 @@ const AppRoutes = () => {
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route element={<AdminRoutes />}>
+        <Route path="/admin/products" element={<AdminProducts />} />
+      </Route>
     </Routes>
   );
 };
