@@ -7,7 +7,7 @@ const ClientRoutes = () => {
     <main className="min-h-screen overflow-x-hidden bg-[#F7F7F5]">
       <Navbar />
 
-      <section className="mx-auto w-full max-w-360 px-4 pt-5 sm:px-6 sm:pt-6 md:pt-25 lg:px-8 lg:pt-20">
+      <section className="mx-auto w-full max-w-360 px-4 pt-5 sm:px-6 sm:pt-6 mt-18 md:mt-0 md:pt-25 lg:px-8 lg:pt-20">
         <Outlet />
       </section>
     </main>

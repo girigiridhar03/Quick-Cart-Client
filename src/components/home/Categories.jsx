@@ -29,7 +29,6 @@ const Categories = ({
             key={cat._id}
             onClick={() => {
               setSelectectedCategoryId({ id: cat._id, name: cat.name });
-              clearTimeout(timer);
               fetchAllSubCategories(cat._id);
             }}
             style={

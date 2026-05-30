@@ -31,9 +31,9 @@ const useProduct = () => {
     } catch {}
   };
 
-  const fetchBrands = async () => {
+  const fetchBrands = async ({ category, subCategory }) => {
     try {
-      await dispatch(getAllBrands()).unwrap();
+      await dispatch(getAllBrands({ category, subCategory })).unwrap();
     } catch {}
   };
 
@@ -63,8 +63,11 @@ const useProduct = () => {
   }, [selectedBrand, selectedSort, selectedCategory, selectedSubCategory]);
 
   useEffect(() => {
-    fetchBrands();
-  }, []);
+    fetchBrands({
+      category: selectedCategory?.id ?? null,
+      subCategory: selectedSubCategory?.id ?? null,
+    });
+  }, [selectedCategory, selectedSubCategory]);
 
   return {
     productLoading,

@@ -34,9 +34,28 @@ export const getAllProducts = createAsyncThunk(
 
 export const getAllBrands = createAsyncThunk(
   "product/brands",
-  async (_, { rejectWithValue }) => {
+  async (obj, { rejectWithValue }) => {
+    let endPoint = "/product/brands";
+
+    if (Object.keys(obj).length > 0) {
+      const urlObj = new URLSearchParams();
+
+      Object.keys(obj).forEach((key) => {
+        if (
+          obj[key] !== null &&
+          obj[key] !== undefined &&
+          obj[key] !== "" &&
+          obj[key] !== "All"
+        ) {
+          urlObj.append(key, obj[key].toString());
+        }
+      });
+
+      endPoint += `?${urlObj.toString()}`;
+    }
+
     try {
-      const response = await axiosInstance.get("/product/brands");
+      const response = await axiosInstance.get(endPoint);
       return response?.data;
     } catch (error) {
       return rejectWithValue(

@@ -1,40 +1,34 @@
 import ProductsGrid from "./ProductsGrid";
-import useProduct from "@/hooks/useProduct";
 import {
   Brands,
   PriceRange,
   SortCard,
   SubCategoriesTypes,
 } from "./FilterCards";
-import useCart from "@/hooks/useCart";
 
 const ProductLayout = ({
+  productLoading,
+  products,
+  brands,
+  selectedBrand,
+  selectedSort,
+  productPagination,
+  setSelectedBrand,
+  setSelectedProduct,
+  setSelectedSortName,
+  updatedProductItem,
   subCategoriesLoading,
   selectedCategory,
   selectedSubCategory,
   setSelectedSubCategoryId,
   subCategories,
+  quantityLoading,
+  deleteLoading,
+  descreaseQunatityCount,
+  addCartItem,
+  deleteCartItem,
 }) => {
-  const {
-    productLoading,
-    products,
-    brands,
-    selectedBrand,
-    selectedSort,
-    productPagination,
-    setSelectedBrand,
-    setSelectedProduct,
-    setSelectedSortName,
-    updatedProductItem,
-  } = useProduct();
 
-  const {
-    quantityLoading,
-    deleteLoading,
-    descreaseQunatityCount,
-    addCartItem,
-    deleteCartItem,
-  } = useCart();
 
   return (
     <div className="flex flex-row gap-10 shrink-0">

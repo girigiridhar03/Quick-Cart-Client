@@ -96,8 +96,8 @@ export const Brands = ({ brands, selectedBrand, setSelectedBrand }) => {
         />
         {brands?.map((brand) => (
           <CustomBrandButton
-            key={brand?._id}
-            text={brand?.brand}
+            key={brand}
+            text={brand}
             selectedBrand={selectedBrand}
             setSelectedBrand={setSelectedBrand}
           />
@@ -107,11 +107,16 @@ export const Brands = ({ brands, selectedBrand, setSelectedBrand }) => {
   );
 };
 
-const CustomBrandButton = ({ text, selectedBrand, setSelectedBrand }) => {
+export const CustomBrandButton = ({
+  text,
+  selectedBrand,
+  setSelectedBrand,
+  id = null,
+}) => {
   return (
     <button
-      className={`${selectedBrand === text ? "bg-black text-white" : "bg-white text-[#8a8a8a] border border-[#d7d5d5] hover:border-[#ff6b35]"} text-[10px]   px-3 py-1.5 rounded-lg transition-all   font-bold cursor-pointer`}
-      onClick={() => setSelectedBrand(text)}
+      className={`${selectedBrand === text || selectedBrand === id ? "bg-black text-white" : "bg-white text-[#8a8a8a] border border-[#d7d5d5] hover:border-[#ff6b35]"} text-[13px] lg:text-[10px] capitalize   px-3 py-1.5 rounded-lg transition-all   font-bold cursor-pointer`}
+      onClick={() => (id ? setSelectedBrand(id) : setSelectedBrand(text))}
     >
       {text}
     </button>
@@ -171,7 +176,7 @@ const SubCategoryButton = ({
 }) => {
   return (
     <button
-      className={`font-bold text-[0.75rem] flex items-center justify-between text-left transition-all ${selectedSubCategory === id ? "hover:bg-[#FFF8F4] hover:text-[#FF6B35]" : "hover:bg-gray-50 hover:text-black"} px-4 py-3 rounded-lg cursor-pointer capitalize ${selectedSubCategory === id ? "bg-[#FFF8F4] text-[#FF6B35]" : "text-[#8a8a8a] bg-white"} `}
+      className={`font-bold text-[0.75rem] flex items-center capitalize justify-between text-left transition-all ${selectedSubCategory === id ? "hover:bg-[#FFF8F4] hover:text-[#FF6B35]" : "hover:bg-gray-50 hover:text-black"} px-4 py-3 rounded-lg cursor-pointer capitalize ${selectedSubCategory === id ? "bg-[#FFF8F4] text-[#FF6B35]" : "text-[#8a8a8a] bg-white"} `}
       onClick={() => setSelectedSubCategoryId(id)}
     >
       <span>{text}</span>
@@ -179,5 +184,38 @@ const SubCategoryButton = ({
         <span className="h-1.5 w-1.5 bg-[#ff6b35] rounded-full"></span>
       )}
     </button>
+  );
+};
+
+export const MobileCategoryCards = ({
+  text,
+  icon,
+  id,
+  selectedCategory,
+  setSelectectedCategoryId,
+  fetchAllSubCategories,
+  resetStates,
+}) => {
+  return (
+    <Card
+      className={`${(!selectedCategory && text === "All") || selectedCategory?.id === id ? "bg-[#ff6b35]" : "bg-[#F7F7F7]"} `}
+      onClick={() => {
+        if (text === "All") {
+          resetStates();
+        } else {
+          setSelectectedCategoryId({ id, name: text });
+          fetchAllSubCategories(id);
+        }
+      }}
+    >
+      <CardContent className="items-center flex flex-col gap-2 px-0">
+        <div className="text-2xl">{icon}</div>
+        <p
+          className={`capitalize text-[0.8rem] ${(!selectedCategory && text === "All") || selectedCategory?.id === id ? "text-white" : "text-[#0000009b]"}  font-semibold`}
+        >
+          {text}
+        </p>
+      </CardContent>
+    </Card>
   );
 };
