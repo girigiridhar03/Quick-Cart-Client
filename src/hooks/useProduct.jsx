@@ -1,4 +1,4 @@
-import { getAllBrands, getAllProducts } from "@/api/product.api";
+import { createProduct, getAllBrands, getAllProducts } from "@/api/product.api";
 import {
   setSelectedBrandName,
   setSelectedProductId,
@@ -12,6 +12,7 @@ const useProduct = () => {
   const {
     productLoading,
     brandsLoading,
+    createProductLoading,
     products,
     brands,
     selectedBrand,
@@ -53,6 +54,12 @@ const useProduct = () => {
     dispatch(updatedProduct({ productId, quantity }));
   };
 
+  const createProd = async (formData) => {
+    try {
+      await dispatch(createProduct(formData)).unwrap();
+    } catch {}
+  };
+
   useEffect(() => {
     fetchProducts({
       brand: selectedBrand,
@@ -72,6 +79,7 @@ const useProduct = () => {
   return {
     productLoading,
     brandsLoading,
+    createProductLoading,
     products,
     brands,
     selectedBrand,
@@ -84,6 +92,7 @@ const useProduct = () => {
     setSelectedSortName,
     updatedProductItem,
     fetchProducts,
+    createProd,
   };
 };
 

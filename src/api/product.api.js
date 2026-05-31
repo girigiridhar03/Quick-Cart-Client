@@ -64,3 +64,17 @@ export const getAllBrands = createAsyncThunk(
     }
   },
 );
+
+export const createProduct = createAsyncThunk(
+  "product/create-product",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post("/product", formData);
+      return response?.data;
+    } catch (error) {
+      return rejectWithValue(
+        error?.response?.data?.message || "Something went wrong",
+      );
+    }
+  },
+);
