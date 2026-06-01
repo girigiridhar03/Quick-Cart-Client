@@ -8,7 +8,13 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet,
+} from "@/components/ui/field";
 import { Plus, Sparkles, UploadCloud, X } from "lucide-react";
 import { Separator } from "../ui/separator";
 import { Input } from "../ui/input";
@@ -16,8 +22,10 @@ import { Textarea } from "../ui/textarea";
 import { Switch } from "../ui/switch";
 import { useEffect, useRef, useState } from "react";
 import { Badge } from "../ui/badge";
+import { createProductSchema } from "@/utils/constants";
 
-const AddProductDrawer = ({ loading, createProd }) => {
+const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
+  const { categories, subCategories, fetchSubCategories } = categoryObj;
   const inputRef = useRef(null);
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
@@ -29,9 +37,26 @@ const AddProductDrawer = ({ loading, createProd }) => {
     subCategory: "",
     discount: "",
     description: "",
-    tags: "",
     stock: "",
+    isActive: true,
+    tags: [],
   });
+  const [errors, setErrors] = useState({
+    name: "",
+    brand: "",
+    weight: "",
+    mrp: "",
+    category: "",
+    subCategory: "",
+    discount: "",
+    description: "",
+    stock: "",
+    images: "",
+    tags: [],
+    isActive: true,
+  });
+  const [productsTags, setProductsTags] = useState([]);
+  const [tag, setTag] = useState("");
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files || []);
@@ -71,7 +96,49 @@ const AddProductDrawer = ({ loading, createProd }) => {
     };
   }, []);
 
-  const handleChange = (e) => {};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCreateProduct = () => {
+    const result = createProductSchema.safeParse(formData);
+
+    if (!result.success || files.length === 0) {
+      const errors = {};
+
+      if (!result.success) {
+        const format = result.error.flatten();
+
+        Object.keys(format.fieldErrors).forEach((item) => {
+          errors[item] = format.fieldErrors[item]?.[0];
+        });
+      }
+
+      if (files.length === 0) {
+        errors.images = "Product Images required";
+      }
+
+      setErrors((prev) => ({
+        ...prev,
+        ...errors,
+      }));
+
+      return;
+    }
+    const payload = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key === "tags") {
+        value.forEach((item) => payload.append("tags", item));
+      } else {
+        payload.append(key, value);
+      }
+    });
+
+    files.forEach((file) => {
+      payload.append("images", file);
+    });
+  };
 
   const filedLabelStyle =
     "text-[0.6rem] text-[#8A8A8A] font-semibold tracking-[0.1rem]";
@@ -120,6 +187,11 @@ const AddProductDrawer = ({ loading, createProd }) => {
                     value={formData.name}
                     onChange={handleChange}
                   />
+                  {errors.name.length > 0 && (
+                    <FieldError className="px-1 capitalize text-[12px]">
+                      {errors.name}
+                    </FieldError>
+                  )}
                 </Field>
               </FieldGroup>
 
@@ -142,6 +214,11 @@ const AddProductDrawer = ({ loading, createProd }) => {
                       onChange={handleChange}
                       required
                     />
+                    {errors.brand.length > 0 && (
+                      <FieldError className="px-1 capitalize text-[12px]">
+                        {errors.brand}
+                      </FieldError>
+                    )}
                   </Field>
                   <Field className="gap-3">
                     <FieldLabel
@@ -152,15 +229,26 @@ const AddProductDrawer = ({ loading, createProd }) => {
                     </FieldLabel>
                     <select
                       id="category"
-                      defaultValue=""
-                      className={fieldInputStyle}
+                      className={`${fieldInputStyle} capitalize`}
+                      name="category"
+                      value={formData.category}
+                      onChange={(e) => {
+                        handleChange(e);
+                        fetchSubCategories(e.target.value);
+                      }}
                     >
-                      <option value="">Select status</option>
-                      <option value="todo">Todo</option>
-                      <option value="in-progress">In Progress</option>
-                      <option value="done">Done</option>
-                      <option value="cancelled">Cancelled</option>
+                      <option value="">Select Cateogry</option>
+                      {categories?.map((item) => (
+                        <option key={item?._id} value={item?._id}>
+                          {item?.name}
+                        </option>
+                      ))}
                     </select>
+                    {errors?.category?.length > 0 && (
+                      <FieldError className="px-1 capitalize text-[12px]">
+                        {errors.category}
+                      </FieldError>
+                    )}
                   </Field>
                 </div>
               </FieldGroup>
@@ -178,15 +266,24 @@ const AddProductDrawer = ({ loading, createProd }) => {
 
                     <select
                       id="sub-category"
-                      defaultValue=""
-                      className={fieldInputStyle}
+                      name="subCategory"
+                      value={formData.subCategory}
+                      className={`${fieldInputStyle} capitalize`}
+                      disabled={subCategories?.length === 0}
+                      onChange={handleChange}
                     >
-                      <option value="">Select status</option>
-                      <option value="todo">Todo</option>
-                      <option value="in-progress">In Progress</option>
-                      <option value="done">Done</option>
-                      <option value="cancelled">Cancelled</option>
+                      <option value="">None / General</option>
+                      {subCategories?.map((item) => (
+                        <option key={item?._id} value={item?._id}>
+                          {item?.name}
+                        </option>
+                      ))}
                     </select>
+                    {errors?.subCategory?.length > 0 && (
+                      <FieldError className="px-1 capitalize text-[12px]">
+                        {errors.subCategory}
+                      </FieldError>
+                    )}
                   </Field>
                   <Field className="gap-3">
                     <FieldLabel
@@ -199,11 +296,16 @@ const AddProductDrawer = ({ loading, createProd }) => {
                       id="weigth-size"
                       placeholder="e.g. 500g, 1L, Pack of 4"
                       className={fieldInputStyle}
-                      name="weigth"
+                      name="weight"
                       value={formData.weight}
                       onChange={handleChange}
                       required
                     />
+                    {errors?.weight?.length > 0 && (
+                      <FieldError className="px-1 capitalize text-[12px]">
+                        {errors.weight}
+                      </FieldError>
+                    )}
                   </Field>
                 </div>
               </FieldGroup>
@@ -227,6 +329,11 @@ const AddProductDrawer = ({ loading, createProd }) => {
                       value={formData.mrp}
                       onChange={handleChange}
                     />
+                    {errors.mrp.length > 0 && (
+                      <FieldError className="px-1 capitalize text-[12px]">
+                        {errors.mrp}
+                      </FieldError>
+                    )}
                   </Field>
                   <Field className="gap-3">
                     <FieldLabel htmlFor="discount" className={filedLabelStyle}>
@@ -243,6 +350,11 @@ const AddProductDrawer = ({ loading, createProd }) => {
                       value={formData.discount}
                       onChange={handleChange}
                     />
+                    {errors?.discount?.length > 0 && (
+                      <FieldError className="px-1 capitalize text-[12px]">
+                        {errors.discount}
+                      </FieldError>
+                    )}
                   </Field>
                 </div>
               </FieldGroup>
@@ -265,13 +377,27 @@ const AddProductDrawer = ({ loading, createProd }) => {
                       value={formData.stock}
                       onChange={handleChange}
                     />
+                    {errors?.stock?.length > 0 && (
+                      <FieldError className="px-1 capitalize text-[12px]">
+                        {errors.stock}
+                      </FieldError>
+                    )}
                   </Field>
                   <Field className="gap-1">
                     <FieldLabel className={filedLabelStyle}>
                       Catalog visibility
                     </FieldLabel>
                     <Field orientation="horizontal" className="flex-1">
-                      <Switch id="switch" />
+                      <Switch
+                        id="switch"
+                        defaultChecked={formData.isActive}
+                        onCheckedChange={(checked) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            isActive: checked,
+                          }))
+                        }
+                      />
                       <FieldLabel
                         htmlFor="switch"
                         className="font-bold"
@@ -320,6 +446,11 @@ const AddProductDrawer = ({ loading, createProd }) => {
                     className="hidden"
                     onChange={handleFileChange}
                   />
+                  {errors.images.length > 0 && (
+                    <FieldError className="px-1 capitalize text-[12px]">
+                      {errors.images}
+                    </FieldError>
+                  )}
                 </Field>
               </FieldGroup>
 
@@ -343,11 +474,15 @@ const AddProductDrawer = ({ loading, createProd }) => {
                     value={formData.description}
                     onChange={handleChange}
                   />
+                  {errors.description.length > 0 && (
+                    <FieldError className="px-1 capitalize text-[12px]">
+                      {errors.description}
+                    </FieldError>
+                  )}
                 </Field>
               </FieldGroup>
 
               {/* Products Tags */}
-
               <FieldGroup>
                 <Field className="gap-3">
                   <FieldLabel htmlFor="tags" className={filedLabelStyle}>
@@ -355,30 +490,68 @@ const AddProductDrawer = ({ loading, createProd }) => {
                   </FieldLabel>
                   <div className="space-y-2">
                     <div
-                      className={`flex flex-wrap gap-1.5 p-3 bg-gray-50 border border-border rounded-xl min-h-11`}
+                      className={`flex flex-wrap gap-1.5 p-3 bg-gray-50 border border-border rounded-xl max-h-40 overflow-y-auto`}
                     >
-                      <span className="text-[11px] text-[#A0A0A0] font-semibold self-center px-1">
-                        No tags added. Enter below or click "Auto-Fill" above.
-                      </span>
+                      {productsTags?.length > 0 ? (
+                        productsTags?.map((tag) => (
+                          <div className="bg-[#FFF0EB] text-primary font-semibold flex items-center gap-1.5 py-2 px-3 capitalize rounded-xl">
+                            <span>{tag}</span>
+                            <button
+                              onClick={() => {
+                                setProductsTags((prev) =>
+                                  prev.filter((item) => item !== tag),
+                                );
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  tags: productsTags,
+                                }));
+                              }}
+                              className="cursor-pointer"
+                            >
+                              <X className="h-3 w-3" />
+                            </button>
+                          </div>
+                        ))
+                      ) : (
+                        <span className="text-[11px] text-[#A0A0A0] font-semibold self-center px-1">
+                          No tags added. Enter below or click "Auto-Fill" above.
+                        </span>
+                      )}
                     </div>
                     <div className="flex items-center gap-3">
                       <Input
                         id="tags"
-                        placeholder="Product Name"
+                        placeholder="Product Tags"
                         required
                         className={`${fieldInputStyle}`}
-                        name="tags"
-                        value={formData.tags}
-                        onChange={handleChange}
+                        value={tag}
+                        onChange={(e) => {
+                          setTag(e.target.value);
+                        }}
                       />
                       <Button
                         variant="outline"
                         className="h-11 rounded-xl cursor-pointer py-0 text-primary font-semibold"
+                        disabled={tag.trim()?.length === 0}
+                        onClick={() => {
+                          setProductsTags((prev) => [
+                            ...prev,
+                            tag.toUpperCase(),
+                          ]);
+                          setFormData((prev) => ({
+                            ...prev,
+                            tags: productsTags,
+                          }));
+                          setTag("");
+                        }}
                       >
                         ADD TAG
                       </Button>
                     </div>
                   </div>
+                  {errors.tags.length > 0 && (
+                    <FieldError className="px-1">{errors.tags}</FieldError>
+                  )}
                 </Field>
               </FieldGroup>
             </FieldSet>
@@ -392,7 +565,10 @@ const AddProductDrawer = ({ loading, createProd }) => {
           >
             Cancel
           </Button>
-          <Button className="w-1/2 px-5 py-6 font-semibold text-[0.9rem] rounded-2xl cursor-pointer">
+          <Button
+            onClick={handleCreateProduct}
+            className="w-1/2 px-5 py-6 font-semibold text-[0.9rem] rounded-2xl cursor-pointer"
+          >
             Submit
           </Button>
         </DrawerFooter>

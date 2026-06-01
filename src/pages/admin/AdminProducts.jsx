@@ -47,6 +47,11 @@ const AdminProducts = () => {
         <AddProductDrawer
           loading={createProductLoading}
           createProd={createProd}
+          categoryObj={{
+            categories,
+            subCategories,
+            fetchSubCategories: fetchAllSubCategories,
+          }}
         />
       </div>
     </div>
