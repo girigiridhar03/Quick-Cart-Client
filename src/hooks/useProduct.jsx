@@ -29,13 +29,17 @@ const useProduct = () => {
   const fetchProducts = async (obj = {}) => {
     try {
       await dispatch(getAllProducts(obj)).unwrap();
-    } catch {}
+    } catch (error) {
+      return error;
+    }
   };
 
   const fetchBrands = async ({ category, subCategory }) => {
     try {
       await dispatch(getAllBrands({ category, subCategory })).unwrap();
-    } catch {}
+    } catch (error) {
+      return error;
+    }
   };
 
   const setSelectedProduct = (id) => {
@@ -57,7 +61,9 @@ const useProduct = () => {
   const createProd = async (formData) => {
     try {
       await dispatch(createProduct(formData)).unwrap();
-    } catch {}
+    } catch (error) {
+      return error;
+    }
   };
 
   useEffect(() => {

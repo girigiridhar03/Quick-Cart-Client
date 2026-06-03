@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "./axiosInstance";
+import { handleThunkError } from "@/utils/error";
 
 export const getAllCategories = createAsyncThunk(
   "category/categories",
@@ -8,9 +9,7 @@ export const getAllCategories = createAsyncThunk(
       const response = await axiosInstance.get("/category");
       return response?.data;
     } catch (error) {
-      return rejectWithValue(
-        error?.response?.data?.message || "Something went wrong",
-      );
+      return handleThunkError(error, rejectWithValue);
     }
   },
 );
@@ -24,9 +23,7 @@ export const getAllSubCategories = createAsyncThunk(
       );
       return response?.data;
     } catch (error) {
-      return rejectWithValue(
-        error?.response?.data?.message || "Something went wrong",
-      );
+      return handleThunkError(error, rejectWithValue);
     }
   },
 );

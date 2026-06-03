@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "./axiosInstance";
+import { handleThunkError, handleThunkSuccess } from "@/utils/error";
 
 export const getAllProducts = createAsyncThunk(
   "product/products",
@@ -25,9 +26,7 @@ export const getAllProducts = createAsyncThunk(
       const response = await axiosInstance.get(endPoint);
       return response?.data;
     } catch (error) {
-      return rejectWithValue(
-        error?.response?.data?.message || "Something went wrong",
-      );
+      return handleThunkError(error, rejectWithValue, { showToast: true });
     }
   },
 );
@@ -58,9 +57,7 @@ export const getAllBrands = createAsyncThunk(
       const response = await axiosInstance.get(endPoint);
       return response?.data;
     } catch (error) {
-      return rejectWithValue(
-        error?.response?.data?.message || "Something went wrong",
-      );
+      return handleThunkError(error, rejectWithValue, { showToast: true });
     }
   },
 );
@@ -69,12 +66,17 @@ export const createProduct = createAsyncThunk(
   "product/create-product",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post("/product", formData);
-      return response?.data;
+      const response = await axiosInstance.post("/product", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return handleThunkSuccess(response?.data, {
+        showToast: true,
+        successMessage: "Product created successfully",
+      });
     } catch (error) {
-      return rejectWithValue(
-        error?.response?.data?.message || "Something went wrong",
-      );
+      return handleThunkError(error, rejectWithValue, { showToast: true });
     }
   },
 );

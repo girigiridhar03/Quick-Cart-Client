@@ -15,7 +15,7 @@ import {
   FieldLabel,
   FieldSet,
 } from "@/components/ui/field";
-import { Plus, Sparkles, UploadCloud, X } from "lucide-react";
+import { Loader2, Plus, Sparkles, UploadCloud, X } from "lucide-react";
 import { Separator } from "../ui/separator";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
@@ -27,7 +27,6 @@ import { createProductSchema } from "@/utils/constants";
 const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
   const { categories, subCategories, fetchSubCategories } = categoryObj;
   const inputRef = useRef(null);
-  const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     name: "",
     brand: "",
@@ -40,6 +39,7 @@ const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
     stock: "",
     isActive: true,
     tags: [],
+    images: [],
   });
   const [errors, setErrors] = useState({
     name: "",
@@ -58,10 +58,21 @@ const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
   const [productsTags, setProductsTags] = useState([]);
   const [tag, setTag] = useState("");
 
+  const syncImages = (incomingFiles) => {
+    setFormData((prev) => ({
+      ...prev,
+      images: [...prev.images, ...incomingFiles].slice(0, 5),
+    }));
+    setErrors((prev) => ({
+      ...prev,
+      images: "",
+    }));
+  };
+
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files || []);
-
-    setFiles((prev) => [...prev, ...selectedFiles].slice(0, 5));
+    syncImages(selectedFiles);
+    e.target.value = "";
   };
 
   const handleClick = () => {
@@ -78,8 +89,7 @@ const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
     e.stopPropagation();
 
     const droppedFiles = Array.from(e.dataTransfer.files);
-
-    setFiles((prev) => [...prev, ...droppedFiles].slice(0, 5));
+    syncImages(droppedFiles);
   };
 
   useEffect(() => {
@@ -99,12 +109,16 @@ const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  const handleCreateProduct = () => {
-    const result = createProductSchema.safeParse(formData);
+  const handleCreateProduct = async () => {
+    const result = createProductSchema.safeParse({
+      ...formData,
+      images: undefined,
+    });
 
-    if (!result.success || files.length === 0) {
+    if (!result.success || formData.images.length === 0) {
       const errors = {};
 
       if (!result.success) {
@@ -115,7 +129,7 @@ const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
         });
       }
 
-      if (files.length === 0) {
+      if (formData.images.length === 0) {
         errors.images = "Product Images required";
       }
 
@@ -130,21 +144,36 @@ const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
     Object.entries(formData).forEach(([key, value]) => {
       if (key === "tags") {
         value.forEach((item) => payload.append("tags", item));
+      } else if (key === "images") {
+        value.forEach((file) => payload.append("images", file));
       } else {
         payload.append(key, value);
       }
     });
 
-    files.forEach((file) => {
-      payload.append("images", file);
+    await createProd(payload);
+    setFormData({
+      name: "",
+      brand: "",
+      weight: "",
+      mrp: "",
+      category: "",
+      subCategory: "",
+      discount: "",
+      description: "",
+      stock: "",
+      isActive: true,
+      tags: [],
+      images: [],
     });
+    setProductsTags([]);
   };
 
   const filedLabelStyle =
     "text-[0.6rem] text-[#8A8A8A] font-semibold tracking-[0.1rem]";
   const fieldInputStyle =
     "bg-[#F9FAFB] rounded-xl border border-input h-12 px-3 font-bold text-sm shadow-none focus:outline-none focus:ring-2 focus:ring-ring w-full";
-
+  const isFormValid = true;
   return (
     <Drawer direction="right">
       <DrawerTrigger asChild>
@@ -442,10 +471,42 @@ const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
                     ref={inputRef}
                     type="file"
                     multiple
-                    accept=".jpg,.jpeg,.png,.webp"
+                    accept=".jpg,.jpeg,.png,.webp,.avif"
                     className="hidden"
                     onChange={handleFileChange}
                   />
+                  {formData.images.length > 0 && (
+                    <div className="grid grid-cols-5 gap-3 mt-4">
+                      {formData.images.map((file) => (
+                        <div
+                          key={`${file.name}-${file.lastModified}`}
+                          className="group h-20 w-20 rounded-xl overflow-hidden relative"
+                          onClick={() =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              images: prev.images.filter(
+                                (item) =>
+                                  !(
+                                    item.name === file.name &&
+                                    item.lastModified === file.lastModified
+                                  ),
+                              ),
+                            }))
+                          }
+                        >
+                          <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40 text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 cursor-pointer">
+                            <X size={18} />
+                          </div>
+
+                          <img
+                            src={URL.createObjectURL(file)}
+                            alt={file.name}
+                            className="h-full w-full object-cover border-2 border-primary/10 bg-black"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
                   {errors.images.length > 0 && (
                     <FieldError className="px-1 capitalize text-[12px]">
                       {errors.images}
@@ -494,16 +555,20 @@ const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
                     >
                       {productsTags?.length > 0 ? (
                         productsTags?.map((tag) => (
-                          <div className="bg-[#FFF0EB] text-primary font-semibold flex items-center gap-1.5 py-2 px-3 capitalize rounded-xl">
+                          <div
+                            key={tag}
+                            className="bg-[#FFF0EB] text-primary font-semibold flex items-center gap-1.5 py-2 px-3 capitalize rounded-xl"
+                          >
                             <span>{tag}</span>
                             <button
                               onClick={() => {
-                                setProductsTags((prev) =>
-                                  prev.filter((item) => item !== tag),
+                                const nextTags = productsTags.filter(
+                                  (item) => item !== tag,
                                 );
+                                setProductsTags(nextTags);
                                 setFormData((prev) => ({
                                   ...prev,
-                                  tags: productsTags,
+                                  tags: nextTags,
                                 }));
                               }}
                               className="cursor-pointer"
@@ -534,13 +599,11 @@ const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
                         className="h-11 rounded-xl cursor-pointer py-0 text-primary font-semibold"
                         disabled={tag.trim()?.length === 0}
                         onClick={() => {
-                          setProductsTags((prev) => [
-                            ...prev,
-                            tag.toUpperCase(),
-                          ]);
+                          const nextTags = [...productsTags, tag.toUpperCase()];
+                          setProductsTags(nextTags);
                           setFormData((prev) => ({
                             ...prev,
-                            tags: productsTags,
+                            tags: nextTags,
                           }));
                           setTag("");
                         }}
@@ -561,15 +624,18 @@ const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
         <DrawerFooter className="flex-row items-center w-full">
           <Button
             variant="outline"
-            className="w-1/2 px-5 py-6 font-semibold text-[0.9rem] rounded-2xl cursor-pointer"
+            className="w-1/2 px-5 py-6 font-semibold text-[0.9rem] rounded-2xl cursor-pointer text-primary"
           >
-            Cancel
+            CANCEL
           </Button>
+
           <Button
             onClick={handleCreateProduct}
             className="w-1/2 px-5 py-6 font-semibold text-[0.9rem] rounded-2xl cursor-pointer"
+            disabled={loading || !isFormValid}
           >
-            Submit
+            {loading && <Loader2 className="animate-spin" />}
+            CREATE PRODUCT
           </Button>
         </DrawerFooter>
       </DrawerContent>
