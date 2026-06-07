@@ -4,6 +4,7 @@ import ProductLayout from "@/components/home/ProductLayout";
 import useCart from "@/hooks/useCart";
 import useCategory from "@/hooks/useCategory";
 import useProduct from "@/hooks/useProduct";
+import { useEffect } from "react";
 
 const Products = () => {
   const {
@@ -30,6 +31,8 @@ const Products = () => {
     setSelectedProduct,
     setSelectedSortName,
     updatedProductItem,
+    fetchProducts,
+    fetchBrands,
   } = useProduct();
 
   const {
@@ -39,6 +42,23 @@ const Products = () => {
     addCartItem,
     deleteCartItem,
   } = useCart();
+
+  useEffect(() => {
+    fetchProducts({
+      brand: selectedBrand,
+      category: selectedCategory?.id ?? null,
+      subCategory: selectedSubCategory,
+      sortBy: selectedSort ?? null,
+    });
+  }, [selectedBrand, selectedSort, selectedCategory, selectedSubCategory]);
+
+  useEffect(() => {
+    fetchBrands({
+      category: selectedCategory?.id ?? null,
+      subCategory: selectedSubCategory?.id ?? null,
+    });
+  }, [selectedCategory, selectedSubCategory]);
+
   return (
     <section>
       <Categories

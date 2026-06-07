@@ -80,3 +80,15 @@ export const createProduct = createAsyncThunk(
     }
   },
 );
+
+export const getSingleProduct = createAsyncThunk(
+  "product/single-product",
+  async (slugId, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/product/${slugId}`);
+      return response?.data;
+    } catch (error) {
+      return handleThunkError(error, rejectWithValue, { showToast: false });
+    }
+  },
+);

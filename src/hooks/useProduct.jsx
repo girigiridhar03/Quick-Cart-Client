@@ -1,11 +1,15 @@
-import { createProduct, getAllBrands, getAllProducts } from "@/api/product.api";
+import {
+  createProduct,
+  getAllBrands,
+  getAllProducts,
+  getSingleProduct,
+} from "@/api/product.api";
 import {
   setSelectedBrandName,
   setSelectedProductId,
   setSelectedSort,
   updatedProduct,
 } from "@/store/slices/productSlice";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const useProduct = () => {
@@ -13,17 +17,16 @@ const useProduct = () => {
     productLoading,
     brandsLoading,
     createProductLoading,
+    singleProductLoading,
     products,
     brands,
+    singleProductDetails,
     selectedBrand,
     selectedSort,
     productPagination,
     selectedProductId,
     error,
   } = useSelector((state) => state.product);
-  const { selectedCategory, selectedSubCategory } = useSelector(
-    (state) => state.category,
-  );
   const dispatch = useDispatch();
 
   const fetchProducts = async (obj = {}) => {
@@ -37,6 +40,14 @@ const useProduct = () => {
   const fetchBrands = async ({ category, subCategory }) => {
     try {
       await dispatch(getAllBrands({ category, subCategory })).unwrap();
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const fetchSingleProductDetails = async (slugId) => {
+    try {
+      await dispatch(getSingleProduct(slugId)).unwrap();
     } catch (error) {
       return error;
     }
@@ -66,28 +77,14 @@ const useProduct = () => {
     }
   };
 
-  useEffect(() => {
-    fetchProducts({
-      brand: selectedBrand,
-      category: selectedCategory?.id ?? null,
-      subCategory: selectedSubCategory,
-      sortBy: selectedSort ?? null,
-    });
-  }, [selectedBrand, selectedSort, selectedCategory, selectedSubCategory]);
-
-  useEffect(() => {
-    fetchBrands({
-      category: selectedCategory?.id ?? null,
-      subCategory: selectedSubCategory?.id ?? null,
-    });
-  }, [selectedCategory, selectedSubCategory]);
-
   return {
     productLoading,
     brandsLoading,
     createProductLoading,
+    singleProductLoading,
     products,
     brands,
+    singleProductDetails,
     selectedBrand,
     selectedSort,
     selectedProductId,
@@ -99,6 +96,8 @@ const useProduct = () => {
     updatedProductItem,
     fetchProducts,
     createProd,
+    fetchSingleProductDetails,
+    fetchBrands,
   };
 };
 

@@ -2,7 +2,7 @@ import AddProductDrawer from "@/components/admin/AddProductDrawer";
 import { CustomHeader } from "@/components/admin/CompUtils";
 import useCategory from "@/hooks/useCategory";
 import useProduct from "@/hooks/useProduct";
-import React from "react";
+import React, { useEffect } from "react";
 
 const AdminProducts = () => {
   const {
@@ -19,6 +19,7 @@ const AdminProducts = () => {
     setSelectedSortName,
     updatedProductItem,
     fetchProducts,
+    fetchBrands,
     createProd,
     error,
   } = useProduct();
@@ -36,6 +37,22 @@ const AdminProducts = () => {
     fetchAllSubCategories,
     resetCategoryStates,
   } = useCategory();
+
+  useEffect(() => {
+    fetchProducts({
+      brand: selectedBrand,
+      category: selectedCategory?.id ?? null,
+      subCategory: selectedSubCategory,
+      sortBy: selectedSort ?? null,
+    });
+  }, [selectedBrand, selectedSort, selectedCategory, selectedSubCategory]);
+
+  useEffect(() => {
+    fetchBrands({
+      category: selectedCategory?.id ?? null,
+      subCategory: selectedSubCategory?.id ?? null,
+    });
+  }, [selectedCategory, selectedSubCategory]);
 
   return (
     <div>
