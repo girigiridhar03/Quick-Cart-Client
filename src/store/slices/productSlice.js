@@ -95,7 +95,7 @@ const productSlice = createSlice({
       })
       .addCase(getSingleProduct.fulfilled, (state, { payload }) => {
         state.singleProductLoading = false;
-        state.singleProductDetails = payload;
+        state.singleProductDetails = payload?.data;
       })
       .addCase(getSingleProduct.rejected, (state, { payload }) => {
         state.singleProductLoading = false;

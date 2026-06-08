@@ -151,22 +151,26 @@ const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
       }
     });
 
-    await createProd(payload);
-    setFormData({
-      name: "",
-      brand: "",
-      weight: "",
-      mrp: "",
-      category: "",
-      subCategory: "",
-      discount: "",
-      description: "",
-      stock: "",
-      isActive: true,
-      tags: [],
-      images: [],
-    });
-    setProductsTags([]);
+    try {
+      await createProd(payload);
+      setFormData({
+        name: "",
+        brand: "",
+        weight: "",
+        mrp: "",
+        category: "",
+        subCategory: "",
+        discount: "",
+        description: "",
+        stock: "",
+        isActive: true,
+        tags: [],
+        images: [],
+      });
+      setProductsTags([]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const filedLabelStyle =

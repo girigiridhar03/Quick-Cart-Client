@@ -13,10 +13,12 @@ const Navbar = () => {
     <header className="fixed h-16 top-0 left-0 right-0 bg-white border-b shadow">
       <nav className="w-[95%] h-full max-w-350 mx-auto flex items-center gap-8">
         {/* Logo */}
-        <div className="text-2xl font-bold">
-          <span>Quick</span>
-          <span className="text-[#FF6B35]">Mart</span>
-        </div>
+        <Link to={"/"}>
+          <div className="text-2xl font-bold cursor-pointer">
+            <span>Quick</span>
+            <span className="text-[#FF6B35]">Mart</span>
+          </div>
+        </Link>
 
         {/* Location */}
         <div className="flex justify-center flex-col">
@@ -49,7 +51,7 @@ const Navbar = () => {
         {/* Cart And Profile */}
 
         <div className="flex items-center gap-5">
-          <Link to={"/cart"} >
+          <Link to={"/cart"}>
             <div className="relative">
               <ShoppingCart className="relative h-7 w-8" />
               <span className="absolute -right-1 -top-1 bg-[#FF6B35] text-white h-4.5 w-4.5 text-[.7rem] border-2 border-white flex items-center justify-center font-semibold rounded-full">

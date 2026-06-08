@@ -1,7 +1,8 @@
-import SingleProductCard from "@/components/home/SingleProductCard";
+import ProductDetailsCard from "@/components/home/SingleProduct/ProductDetailsCard";
+import SingleProductCard from "@/components/home/SingleProduct/SingleProductCard";
 import useProduct from "@/hooks/useProduct";
 import React, { useEffect } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const SingleProduct = () => {
   const { slugId } = useParams();
@@ -18,7 +19,14 @@ const SingleProduct = () => {
 
   return (
     <section>
-      <SingleProductCard />
+      <SingleProductCard
+        loading={singleProductLoading}
+        product={singleProductDetails}
+      />
+      <ProductDetailsCard
+        loading={singleProductLoading}
+        product={singleProductDetails}
+      />
     </section>
   );
 };
