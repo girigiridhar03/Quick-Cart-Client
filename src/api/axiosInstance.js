@@ -8,6 +8,7 @@ import {
 } from "../utils/constants";
 
 let refreshTimer = null;
+const PROTECTED_PATH_PREFIXES = ["/cart", "/admin"];
 
 const getCookieValue = (name) => {
   const cookies = document.cookie.split(";");
@@ -28,6 +29,23 @@ const axiosInstance = axios.create({
   },
 });
 
+const isProtectedRoute = (pathname = window.location.pathname) =>
+  PROTECTED_PATH_PREFIXES.some(
+    (protectedPath) =>
+      pathname === protectedPath || pathname.startsWith(`${protectedPath}/`),
+  );
+
+const clearStoredSession = () => {
+  localStorage.removeItem(ACCESS_EXPIRES_KEY);
+  localStorage.removeItem(REFRESH_EXPIRES_KEY);
+};
+
+export const hasStoredSession = () =>
+  Boolean(
+    localStorage.getItem(ACCESS_EXPIRES_KEY) &&
+      localStorage.getItem(REFRESH_EXPIRES_KEY),
+  );
+
 const isAccessTokenExpired = () => {
   const expireAt = Number(localStorage.getItem(ACCESS_EXPIRES_KEY));
   if (!expireAt) return true;
@@ -40,12 +58,6 @@ const isRefreshTokenExpired = () => {
   if (!expireAt) return true;
 
   return Date.now() >= expireAt;
-};
-
-const accessTokenTimeLeft = () => {
-  const expireAt = Number(localStorage.getItem(ACCESS_EXPIRES_KEY));
-  if (!expireAt) return 0;
-  return expireAt - Date.now();
 };
 
 const callRefreshAPI = async () => {
@@ -84,14 +96,9 @@ const handleLogout = async () => {
   } catch (error) {
     console.error(error);
   } finally {
-    localStorage.removeItem(ACCESS_EXPIRES_KEY);
-    localStorage.removeItem(REFRESH_EXPIRES_KEY);
-    if (
-      ["/cart", "/admin", "/admin/product"].includes(window.location.pathname)
-    ) {
+    clearStoredSession();
+    if (isProtectedRoute()) {
       window.location.href = "/login";
-    } else {
-      window.location.href = "/";
     }
   }
 };
@@ -138,27 +145,6 @@ const handleImmediateRefresh = async () => {
   }
 };
 
-document.addEventListener("visibilitychange", async () => {
-  if (document.visibilityState !== "visible") return;
-  console.log("User returned to tab - checking token status...");
-
-  const timeLeft = accessTokenTimeLeft();
-
-  if (timeLeft > REFRESH_BEFORE_MS) {
-    console.log(`Token still valid — ${timeLeft / 1000 / 60} mins left`);
-    return;
-  }
-
-  if (isRefreshTokenExpired()) {
-    console.log("Both tokens expired — logging out");
-    await handleLogout();
-    return;
-  }
-
-  console.log("Access token expired — refreshing with refresh token...");
-  await handleImmediateRefresh();
-});
-
 export const initializeAuth = async () => {
   const accessExpiresAt = Number(localStorage.getItem(ACCESS_EXPIRES_KEY));
   const refreshExpiresAt = Number(localStorage.getItem(REFRESH_EXPIRES_KEY));
@@ -170,7 +156,7 @@ export const initializeAuth = async () => {
 
   if (isRefreshTokenExpired()) {
     console.log("Session expired — clearing data");
-    await handleLogout();
+    clearStoredSession();
     return false;
   }
 
@@ -186,7 +172,7 @@ export const initializeAuth = async () => {
     scheduleTokenRefresh(accessTokenExpiresAt);
     return true;
   } catch {
-    await handleLogout();
+    clearStoredSession();
     return false;
   }
 };
@@ -213,7 +199,6 @@ axiosInstance.interceptors.response.use(
     const isAuthPage = ["/login", "/register"].includes(
       window.location.pathname,
     );
-    console.log(originalRequest);
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&

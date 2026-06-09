@@ -2,18 +2,23 @@ import ProductCard from "./ProductCard";
 import ProductCardSkeleton from "../LoadingSkeletons/ProductCardSkeleton";
 import NoProducts from "./NoProducts";
 
-const ProductsGrid = ({
-  productLoading,
-  products,
-  setSelectedProduct,
-  productPagination,
-  quantityLoading,
-  deleteLoading,
-  descreaseQunatityCount,
-  addCartItem,
-  updatedProductItem,
-  deleteCartItem,
-}) => {
+const ProductsGrid = ({ product, cart }) => {
+  const {
+    productLoading,
+    products,
+    productPagination,
+    setSelectedProduct,
+    updatedProductItem,
+  } = product;
+
+  const {
+    quantityLoading,
+    deleteLoading,
+    descreaseQunatityCount,
+    addCartItem,
+    deleteCartItem,
+  } = cart;
+
   return (
     <div className="w-full">
       {productLoading ? (

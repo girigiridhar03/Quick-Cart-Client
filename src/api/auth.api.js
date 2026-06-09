@@ -7,7 +7,10 @@ export const authRegister = createAsyncThunk(
   "auth/register",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post(`${BASE_URL}/user/register`, formData);
+      const response = await axiosInstance.post(
+        `${BASE_URL}/user/register`,
+        formData,
+      );
       return handleThunkSuccess(response?.data, {
         showToast: true,
         successMessage: "Registration successful",
@@ -22,7 +25,10 @@ export const authLogin = createAsyncThunk(
   "auth/login",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axiosInstance.post(`${BASE_URL}/user/login`, formData);
+      const response = await axiosInstance.post(
+        `${BASE_URL}/user/login`,
+        formData,
+      );
       return handleThunkSuccess(response?.data, {
         showToast: true,
         successMessage: "Login successful",
@@ -38,6 +44,18 @@ export const authLogout = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post("/user/logout");
+      return response?.data;
+    } catch (error) {
+      return handleThunkError(error, rejectWithValue, { showToast: true });
+    }
+  },
+);
+
+export const userDetails = createAsyncThunk(
+  "auth/me",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get("/user/me");
       return response?.data;
     } catch (error) {
       return handleThunkError(error, rejectWithValue, { showToast: true });

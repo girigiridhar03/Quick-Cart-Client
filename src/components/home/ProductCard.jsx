@@ -123,7 +123,7 @@ const ProductCard = ({
           <Button
             variant="outline"
             className="h-8 w-17.5 font-semibold text-[0.8rem] rounded-lg text-[#FF6B35] shadow-none hover:text-[#ff6b35] cursor-pointer"
-            onClick={async (e) => {
+            onClick={async () => {
               setSelectedProduct(product?._id);
               await addCartItem({
                 id: product?._id,

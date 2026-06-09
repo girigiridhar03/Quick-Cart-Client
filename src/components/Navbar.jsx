@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <header className="fixed h-16 top-0 left-0 right-0 bg-white border-b shadow">
+    <header className="fixed h-16 top-0 left-0 right-0 bg-white border-b shadow z-9999">
       <nav className="w-[95%] h-full max-w-350 mx-auto flex items-center gap-8">
         {/* Logo */}
         <Link to={"/"}>

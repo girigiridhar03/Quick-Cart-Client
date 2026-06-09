@@ -29,20 +29,22 @@ const Cart = () => {
     <div className="w-full">
       {cartItems?.length > 0 ? (
         <CartLayout
-          cartLoading={cartLoading}
-          quantityLoading={quantityLoading}
-          deleteLoading={deleteLoading}
-          cartItems={cartItems}
-          cartTotal={cartTotal}
-          totalDiscount={totalDiscount}
-          totalMrp={totalMrp}
-          error={error}
-          descreaseQunatityCount={descreaseQunatityCount}
-          fetchCartItems={fetchCartItems}
-          deleteCartItem={deleteCartItem}
-          addCartItem={addCartItem}
-          updateCartItems={updateCartItems}
-          removeCartItem={removeCartItem}
+          cart={{
+            cartLoading,
+            quantityLoading,
+            deleteLoading,
+            cartItems,
+            cartTotal,
+            totalDiscount,
+            totalMrp,
+            error,
+            descreaseQunatityCount,
+            fetchCartItems,
+            deleteCartItem,
+            addCartItem,
+            updateCartItems,
+            removeCartItem,
+          }}
         />
       ) : (
         <NoItems />

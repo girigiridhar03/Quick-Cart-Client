@@ -11,6 +11,7 @@ import {
   updatedProduct,
 } from "@/store/slices/productSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const useProduct = () => {
   const {
@@ -28,6 +29,7 @@ const useProduct = () => {
     error,
   } = useSelector((state) => state.product);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const fetchProducts = async (obj = {}) => {
     try {
@@ -49,6 +51,7 @@ const useProduct = () => {
     try {
       await dispatch(getSingleProduct(slugId)).unwrap();
     } catch (error) {
+      navigate("/", { replace: true });
       return error;
     }
   };

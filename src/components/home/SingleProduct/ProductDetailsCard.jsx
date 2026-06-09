@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Info, ShieldCheck, Sparkles, Zap } from "lucide-react";
 import React from "react";
+import { ProductDetailsHighlightCard } from "../commonComponents";
 
 const ProductDetailsCard = ({ loading, product }) => {
   return (
@@ -29,54 +30,28 @@ const ProductDetailsCard = ({ loading, product }) => {
             <Separator />
             <CardContent className="w-full p-0 flex flex-col gap-2.5">
               {/* Brand */}
-              <div className="w-full bg-[#FCFDFD] border border-[#8fa1b928] flex items-center justify-between p-4 rounded-xl gap-2.5 shadow">
-                <div className="flex items-center gap-2">
-                  <div className="bg-[#FFF8ED] w-8 h-8 flex items-center justify-center rounded-lg">
-                    <Zap className="h-1/2 text-primary" />
-                  </div>
-                  <p className="text-[#62748E] font-bold text-[12px]">Brand</p>
-                </div>
-                <p className="font-bold text-[11px] uppercase">
-                  {product?.brand}
-                </p>
-              </div>
-
-              {/* Weight */}
-              <div className="w-full bg-[#FCFDFD] border border-[#8fa1b928] flex items-center justify-between p-4 rounded-xl gap-2.5 shadow">
-                <div className="flex items-center gap-2">
-                  <div className="bg-[#FFF8ED] w-8 h-8 flex items-center justify-center rounded-lg">
-                    <Info className="h-1/2 text-primary" />
-                  </div>
-                  <p className="text-[#62748E] font-bold text-[12px]">
-                    Size / Weight
-                  </p>
-                </div>
-                <p className="font-bold text-[11px] uppercase">
-                  {product?.weight}
-                </p>
-              </div>
-
-              {/* Category */}
-              <div className="w-full bg-[#FCFDFD] border border-[#8fa1b928] flex items-center justify-between p-4 rounded-xl gap-2.5 shadow">
-                <div className="flex items-center gap-2">
-                  <div className="bg-[#FFF8ED] w-8 h-8 flex items-center justify-center rounded-lg">
-                    <Sparkles className="h-1/2 text-primary" />
-                  </div>
-                  <p className="text-[#62748E] font-bold text-[12px]">
-                    Category
-                  </p>
-                </div>
-                <p className="font-bold text-[11px] uppercase text-primary">
-                  {product?.category?.name}
-                </p>
-              </div>
+              <ProductDetailsHighlightCard
+                Icon={Zap}
+                title={"Brand"}
+                para={product?.brand}
+              />
+              <ProductDetailsHighlightCard
+                Icon={Info}
+                title={"Size / Weight"}
+                para={product?.weight}
+              />
+              <ProductDetailsHighlightCard
+                Icon={Sparkles}
+                title={"Category"}
+                para={product?.category?.name}
+              />
 
               {/* Fresh Tag */}
               <div className="bg-[#F8FDFA] w-full rounded-xl flex items-center text-green-700 p-4 gap-1.5 ">
                 <ShieldCheck className="md:w-3 md:h-4 text-green-700" />
                 <p className="text-[11px] font-bold">
-                  Always-fresh guarantee. Hand-selected products matching our
-                  peak freshness checklist.
+                  Sourced with intention. Every item is verified for quality
+                  before it reaches you.
                 </p>
               </div>
             </CardContent>

@@ -8,12 +8,13 @@ import {
   ShieldCheck,
   Sparkles,
   Info,
+  Flag,
 } from "lucide-react";
+import { ProductHighlightCard } from "../commonComponents";
+import CustomDialog from "../CustomDialog";
 
 const SingleProductCard = ({ loading, product }) => {
   const [selectedImage, setSelectedImage] = useState({});
-  console.log("products: ", product);
-
   useEffect(() => {
     if (!product?.productImages?.length) return;
 
@@ -60,8 +61,20 @@ const SingleProductCard = ({ loading, product }) => {
         <section className="flex-1 flex flex-col gap-4 lg:gap-5">
           <div className="flex gap-1 flex-col">
             {/* Brand */}
-            <div className="text-primary text-sm font-semibold uppercase">
-              {product?.brand}
+            <div className="flex justify-between">
+              <div className="text-primary text-sm font-semibold uppercase">
+                {product?.brand}
+              </div>
+              {/* 
+              <button title="Report this product" className="cursor-pointer" >
+                <Flag className="w-4 h-4" />
+              </button> */}
+              <CustomDialog
+                header={{
+                  trigger: <Flag className="w-4 h-4" />,
+                  title: "Report Product",
+                }}
+              />
             </div>
 
             {/* Title */}
@@ -148,42 +161,26 @@ const SingleProductCard = ({ loading, product }) => {
 
             {/* Product Highlights */}
             <div className="grid grid-cols-2 gap-2">
-              <div className="w-full bg-[#FCFDFD] border border-[#8fa1b928] flex items-center p-2 rounded-xl gap-2.5">
-                <div className="bg-[#FFF8ED] w-8 h-8 flex items-center justify-center rounded-lg">
-                  <ShieldCheck className="h-1/2 text-primary" />
-                </div>
-                <div className="text-[11px]">
-                  <p className="text-[#8FA1B9] font-bold">AUTHETIC</p>
-                  <p className="font-semibold">{product?.brand}</p>
-                </div>
-              </div>
-              <div className="w-full bg-[#FCFDFD] border border-[#8fa1b928] flex items-center p-2 rounded-xl gap-2.5">
-                <div className="bg-[#FFF8ED] w-8 h-8 flex items-center justify-center rounded-lg">
-                  <Sparkles className="h-1/2 text-primary" />
-                </div>
-                <div className="text-[11px]">
-                  <p className="text-[#8FA1B9] font-bold">CATEGORY</p>
-                  <p className="font-semibold capitalize">{product?.category?.name}</p>
-                </div>
-              </div>
-              <div className="w-full bg-[#FCFDFD] border border-[#8fa1b928] flex items-center p-2 rounded-xl gap-2.5">
-                <div className="bg-[#FFF8ED] w-8 h-8 flex items-center justify-center rounded-lg">
-                  <Info className="h-1/2 text-primary" />
-                </div>
-                <div className="text-[11px]">
-                  <p className="text-[#8FA1B9] font-bold">NET WEIGHT</p>
-                  <p className="font-semibold">{product?.weight}</p>
-                </div>
-              </div>
-              <div className="w-full bg-[#FCFDFD] border border-[#8fa1b928] flex items-center p-2 rounded-xl gap-2.5">
-                <div className="bg-[#FFF8ED] w-8 h-8 flex items-center justify-center rounded-lg">
-                  <Zap className="h-1/2 text-primary" />
-                </div>
-                <div className="text-[11px]">
-                  <p className="text-[#8FA1B9] font-bold">STOCK LEFT</p>
-                  <p className="font-semibold">{product?.stock}</p>
-                </div>
-              </div>
+              <ProductHighlightCard
+                Icon={ShieldCheck}
+                title={"AUTHETIC"}
+                para={product?.brand}
+              />
+              <ProductHighlightCard
+                Icon={Sparkles}
+                title={"CATEGORY"}
+                para={product?.category?.name}
+              />
+              <ProductHighlightCard
+                Icon={Info}
+                title={"NET WEIGHT"}
+                para={product?.weight}
+              />
+              <ProductHighlightCard
+                Icon={Zap}
+                title={"STOCK LEFT"}
+                para={product?.stock}
+              />
             </div>
 
             {/* Add To Cart */}

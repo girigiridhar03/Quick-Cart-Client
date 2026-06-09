@@ -4,22 +4,23 @@ import OrderSummary from "./OrderSummary";
 import { Card, CardContent } from "../ui/card";
 import { Separator } from "../ui/separator";
 
-const CartLayout = ({
-  cartLoading,
-  quantityLoading,
-  deleteLoading,
-  cartItems,
-  cartTotal,
-  totalDiscount,
-  totalMrp,
-  error,
-  descreaseQunatityCount,
-  fetchCartItems,
-  deleteCartItem,
-  addCartItem,
-  updateCartItems,
-  removeCartItem,
-}) => {
+const CartLayout = ({ cart }) => {
+  const {
+    cartLoading,
+    quantityLoading,
+    deleteLoading,
+    cartItems,
+    cartTotal,
+    totalDiscount,
+    totalMrp,
+    error,
+    descreaseQunatityCount,
+    fetchCartItems,
+    deleteCartItem,
+    addCartItem,
+    updateCartItems,
+    removeCartItem,
+  } = cart;
   return (
     <div className="w-full space-y-10 mt-2">
       <h2 className="text-2xl font-bold space-x-1">
@@ -29,7 +30,7 @@ const CartLayout = ({
       <div className="w-full flex flex-col lg:flex-row items-start gap-7 lg:gap-5 xl:gap-7">
         <Card className="flex-1 space-y-5 w-full lg:w-[60%] xl:w-[65%] py-6 rounded-3xl">
           <CardContent className="w-full px-0">
-            {cartItems?.map((item,i) => (
+            {cartItems?.map((item, i) => (
               <React.Fragment key={item?._id}>
                 <CartItemCard
                   item={item}
@@ -42,9 +43,7 @@ const CartLayout = ({
                   updateCartItems={updateCartItems}
                   removeCartItem={removeCartItem}
                 />
-                {cartItems?.length !== i+1 && (
-                  <Separator className="my-5" />
-                )}
+                {cartItems?.length !== i + 1 && <Separator className="my-5" />}
               </React.Fragment>
             ))}
           </CardContent>

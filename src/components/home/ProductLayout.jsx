@@ -6,29 +6,35 @@ import {
   SubCategoriesTypes,
 } from "./FilterCards";
 
-const ProductLayout = ({
-  productLoading,
-  products,
-  brands,
-  selectedBrand,
-  selectedSort,
-  productPagination,
-  setSelectedBrand,
-  setSelectedProduct,
-  setSelectedSortName,
-  updatedProductItem,
-  subCategoriesLoading,
-  selectedCategory,
-  selectedSubCategory,
-  setSelectedSubCategoryId,
-  subCategories,
-  quantityLoading,
-  deleteLoading,
-  descreaseQunatityCount,
-  addCartItem,
-  deleteCartItem,
-}) => {
+const ProductLayout = ({ product, category, cart }) => {
+  const {
+    productLoading,
+    products,
+    productPagination,
+    brands,
+    selectedBrand,
+    selectedSort,
+    setSelectedProduct,
+    setSelectedSortName,
+    setSelectedBrand,
+    updatedProductItem,
+  } = product;
 
+  const {
+    subCategoriesLoading,
+    subCategories,
+    selectedCategory,
+    selectedSubCategory,
+    setSelectedSubCategoryId,
+  } = category;
+
+  const {
+    quantityLoading,
+    deleteLoading,
+    descreaseQunatityCount,
+    addCartItem,
+    deleteCartItem,
+  } = cart;
 
   return (
     <div className="flex flex-row gap-10 shrink-0">
@@ -69,16 +75,20 @@ const ProductLayout = ({
             </p>
           </div>
           <ProductsGrid
-            productLoading={productLoading}
-            products={products}
-            productPagination={productPagination}
-            quantityLoading={quantityLoading}
-            deleteLoading={deleteLoading}
-            setSelectedProduct={setSelectedProduct}
-            descreaseQunatityCount={descreaseQunatityCount}
-            addCartItem={addCartItem}
-            updatedProductItem={updatedProductItem}
-            deleteCartItem={deleteCartItem}
+            product={{
+              productLoading,
+              products,
+              productPagination,
+              setSelectedProduct,
+              updatedProductItem,
+            }}
+            cart={{
+              quantityLoading,
+              deleteLoading,
+              descreaseQunatityCount,
+              addCartItem,
+              deleteCartItem,
+            }}
           />
         </div>
       </section>

@@ -1,11 +1,16 @@
-import { authLogin, authLogout, authRegister } from "@/api/auth.api";
+import {
+  authLogin,
+  authLogout,
+  authRegister,
+  userDetails,
+} from "@/api/auth.api";
 import { scheduleTokenRefresh } from "@/api/axiosInstance";
 import { ACCESS_EXPIRES_KEY, REFRESH_EXPIRES_KEY } from "@/utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const useAuth = () => {
-  const { loading, error, isAuthenticated } = useSelector(
+  const { loading, error, isAuthenticated, user } = useSelector(
     (state) => state.auth,
   );
   const dispatch = useDispatch();
@@ -19,9 +24,11 @@ const useAuth = () => {
       scheduleTokenRefresh(accessTokenExpiresAt);
       localStorage.setItem(ACCESS_EXPIRES_KEY, accessTokenExpiresAt);
       localStorage.setItem(REFRESH_EXPIRES_KEY, refreshTokenExpiresAt);
+      await dispatch(userDetails()).unwrap();
       navigate("/");
+      return null;
     } catch (error) {
-      console.log("Register: ", error);
+      return error;
     }
   };
 
@@ -32,17 +39,20 @@ const useAuth = () => {
       scheduleTokenRefresh(accessTokenExpiresAt);
       localStorage.setItem(ACCESS_EXPIRES_KEY, accessTokenExpiresAt);
       localStorage.setItem(REFRESH_EXPIRES_KEY, refreshTokenExpiresAt);
+      await dispatch(userDetails()).unwrap();
       navigate("/");
+      return null;
     } catch (error) {
-      console.log("Login: ", login);
+      return error;
     }
   };
 
   const logout = async () => {
     try {
       await dispatch(authLogout()).unwrap();
+      return null;
     } catch (error) {
-      console.log("logout: ", error);
+      return error;
     } finally {
       localStorage.removeItem(ACCESS_EXPIRES_KEY);
       localStorage.removeItem(REFRESH_EXPIRES_KEY);
@@ -50,13 +60,23 @@ const useAuth = () => {
     }
   };
 
+  const getUser = async () => {
+    try {
+      await dispatch(userDetails()).unwrap();
+    } catch (error) {
+      return error;
+    }
+  };
+
   return {
     loading,
     error,
+    user,
     isAuthenticated,
     register,
     login,
     logout,
+    getUser,
   };
 };
 

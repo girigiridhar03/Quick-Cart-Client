@@ -11,21 +11,22 @@ import { Funnel, X } from "lucide-react";
 import { Separator } from "../ui/separator";
 import { CustomBrandButton, MobileCategoryCards } from "./FilterCards";
 
-const MobileFilters = ({
-  categories,
-  loading,
-  selectedCategory,
-  setSelectectedCategoryId,
-  fetchAllSubCategories,
-  resetStates,
-  brands,
-  selectedBrand,
-  setSelectedBrand,
-  subCategoriesLoading,
-  selectedSubCategory,
-  setSelectedSubCategoryId,
-  subCategories,
-}) => {
+const MobileFilters = ({ category, product }) => {
+  const {
+    loading,
+    subCategoriesLoading,
+    categories,
+    subCategories,
+    selectedCategory,
+    selectedSubCategory,
+    setSelectedSubCategoryId,
+    setSelectectedCategoryId,
+    fetchAllSubCategories,
+    resetCategoryStates: resetStates,
+  } = category;
+
+  const { brands, selectedBrand, setSelectedBrand } = product;
+
   return (
     <div className="flex items-center gap-5 w-full mb-7 lg:hidden">
       <Drawer direction="right">

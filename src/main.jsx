@@ -8,10 +8,15 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import store from "./store";
 import { initializeAuth } from "./api/axiosInstance";
+import { userDetails } from "./api/auth.api";
 
 const init = async () => {
   try {
-    await initializeAuth();
+    const hasValidSession = await initializeAuth();
+
+    if (hasValidSession) {
+      await store.dispatch(userDetails()).unwrap();
+    }
   } catch (error) {
     return error;
   } finally {

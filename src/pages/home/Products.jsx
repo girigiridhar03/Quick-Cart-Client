@@ -70,41 +70,51 @@ const Products = () => {
         resetStates={resetCategoryStates}
       />
       <MobileFilters
-        categories={categories}
-        loading={loading}
-        selectedCategory={selectedCategory}
-        brands={brands}
-        selectedBrand={selectedBrand}
-        subCategoriesLoading={subCategoriesLoading}
-        subCategories={subCategories}
-        setSelectedSubCategoryId={setSelectedSubCategoryId}
-        selectedSubCategory={selectedSubCategory}
-        setSelectectedCategoryId={setSelectectedCategoryId}
-        fetchAllSubCategories={fetchAllSubCategories}
-        resetStates={resetCategoryStates}
-        setSelectedBrand={setSelectedBrand}
+        category={{
+          loading,
+          subCategoriesLoading,
+          categories,
+          subCategories,
+          selectedCategory,
+          selectedSubCategory,
+          setSelectedSubCategoryId,
+          setSelectectedCategoryId,
+          fetchAllSubCategories,
+          resetCategoryStates,
+        }}
+        product={{
+          brands,
+          selectedBrand,
+          setSelectedBrand,
+        }}
       />
       <ProductLayout
-        productLoading={productLoading}
-        products={products}
-        brands={brands}
-        selectedBrand={selectedBrand}
-        selectedSort={selectedSort}
-        productPagination={productPagination}
-        subCategoriesLoading={subCategoriesLoading}
-        selectedCategory={selectedCategory}
-        selectedSubCategory={selectedSubCategory}
-        subCategories={subCategories}
-        quantityLoading={quantityLoading}
-        deleteLoading={deleteLoading}
-        setSelectedSubCategoryId={setSelectedSubCategoryId}
-        setSelectedBrand={setSelectedBrand}
-        setSelectedProduct={setSelectedProduct}
-        setSelectedSortName={setSelectedSortName}
-        updatedProductItem={updatedProductItem}
-        descreaseQunatityCount={descreaseQunatityCount}
-        addCartItem={addCartItem}
-        deleteCartItem={deleteCartItem}
+        product={{
+          productLoading,
+          products,
+          productPagination,
+          brands,
+          selectedBrand,
+          selectedSort,
+          setSelectedProduct,
+          setSelectedSortName,
+          setSelectedBrand,
+          updatedProductItem,
+        }}
+        category={{
+          subCategoriesLoading,
+          subCategories,
+          selectedCategory,
+          selectedSubCategory,
+          setSelectedSubCategoryId,
+        }}
+        cart={{
+          quantityLoading,
+          deleteLoading,
+          descreaseQunatityCount,
+          addCartItem,
+          deleteCartItem,
+        }}
       />
     </section>
   );
