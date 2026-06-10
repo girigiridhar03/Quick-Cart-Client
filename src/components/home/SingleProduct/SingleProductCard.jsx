@@ -12,14 +12,32 @@ import {
 } from "lucide-react";
 import { ProductHighlightCard } from "../commonComponents";
 import CustomDialog from "../CustomDialog";
+import { productReportReasons } from "@/utils/constants";
 
 const SingleProductCard = ({ loading, product }) => {
   const [selectedImage, setSelectedImage] = useState({});
+  const [open, setOpen] = useState(false);
+  const [reportDetails, setReportDetails] = useState({
+    reason: "",
+    description: "",
+  });
   useEffect(() => {
     if (!product?.productImages?.length) return;
 
     setSelectedImage(product.productImages[0]);
   }, [product?.productImages]);
+
+  const handleFlagSubmit = () => {
+    console.log(reportDetails);
+  };
+
+  useEffect(() => {
+    if (open) return;
+    setReportDetails({
+      reason: "",
+      description: "",
+    });
+  }, [open]);
 
   return (
     <Card className="w-full rounded-3xl">
@@ -65,14 +83,32 @@ const SingleProductCard = ({ loading, product }) => {
               <div className="text-primary text-sm font-semibold uppercase">
                 {product?.brand}
               </div>
-              {/* 
-              <button title="Report this product" className="cursor-pointer" >
-                <Flag className="w-4 h-4" />
-              </button> */}
+
+              {/* Flag Dialog */}
               <CustomDialog
+                dialogState={{
+                  open,
+                  setOpen,
+                }}
                 header={{
                   trigger: <Flag className="w-4 h-4" />,
                   title: "Report Product",
+                }}
+                reportDetails={{
+                  cards: productReportReasons,
+                  reportTitle: "Why are you reporting this product?",
+                }}
+                formDetails={{
+                  state: reportDetails,
+                  setState: setReportDetails,
+                  handleSubmit: handleFlagSubmit,
+                }}
+                previewCard={{
+                  isProduct: true,
+                  title: product?.name,
+                  img: product?.productImages?.[0]?.url ?? null,
+                  brand: product?.brand,
+                  category: product?.category?.name,
                 }}
               />
             </div>

@@ -1,6 +1,9 @@
 import ProductDetailsCard from "@/components/home/SingleProduct/ProductDetailsCard";
+import ReviewSummaryCard from "@/components/home/SingleProduct/ReviewSummaryCard";
 import SingleProductCard from "@/components/home/SingleProduct/SingleProductCard";
+import { Button } from "@/components/ui/button";
 import useProduct from "@/hooks/useProduct";
+import { Plus } from "lucide-react";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
@@ -18,7 +21,7 @@ const SingleProduct = () => {
   }, [slugId]);
 
   return (
-    <section>
+    <section className="mb-5">
       <SingleProductCard
         loading={singleProductLoading}
         product={singleProductDetails}
@@ -27,6 +30,21 @@ const SingleProduct = () => {
         loading={singleProductLoading}
         product={singleProductDetails}
       />
+      <div className="space-y-5" >
+        <div className="flex items-center justify-between" >
+          <div>
+            <h2 className="text-3xl font-bold">Customer Reviews</h2>
+            <p className="uppercase text-[#8A8A8A] font-bold text-[14px] ">
+              Verified shopper feedback and ratings
+            </p>
+          </div>
+          <Button variant="outline" className="text-primary hover:text-primary h-15 text-lg shadow font-bold rounded-2xl cursor-pointer px-10">
+            <Plus className="h-20" />
+            WRITE A REVIEW
+          </Button>
+        </div>
+        <ReviewSummaryCard />
+      </div>
     </section>
   );
 };

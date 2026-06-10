@@ -6,6 +6,82 @@ export const ACCESS_EXPIRES_KEY = "accessTokenExpiresAt";
 export const REFRESH_EXPIRES_KEY = "refreshTokenExpiresAt";
 export const CSRF_TOKEN = "csrf_token";
 
+export const productReportReasons = [
+  {
+    emoji: "🚫",
+    title: "Wrong Information",
+    description: "Price or info incorrect",
+    htmlFor: "wrong-information",
+    value: "Wrong Information",
+  },
+  {
+    emoji: "🏷️",
+    title: "Counterfeit Product",
+    description: "Fake branded item",
+    htmlFor: "counterfeit-product",
+    value: "Counterfeit Product",
+  },
+  {
+    emoji: "⚠️",
+    title: "Dangerous Product",
+    description: "Harmful or illegal",
+    htmlFor: "dangerous-product",
+    value: "Dangerous Product",
+  },
+  {
+    emoji: "🖼️",
+    title: "Inappropriate",
+    description: "Offensive or misleading",
+    htmlFor: "inappropriate",
+    value: "Inappropriate",
+  },
+  {
+    emoji: "🔄",
+    title: "Other",
+    description: "Something else",
+    htmlFor: "other",
+    value: "Other",
+  },
+];
+
+export const reviewReportReasons = [
+  {
+    emoji: "📢",
+    title: "Spam",
+    description: "Unwanted promotion",
+    htmlFor: "spam",
+    value: "Spam",
+  },
+  {
+    emoji: "😡",
+    title: "Offensive",
+    description: "Abusive content",
+    htmlFor: "offensive",
+    value: "Offensive",
+  },
+  {
+    emoji: "🎭",
+    title: "Fake Review",
+    description: "Not genuine",
+    htmlFor: "fake-review",
+    value: "Fake Review",
+  },
+  {
+    emoji: "🤬",
+    title: "Offensive Language",
+    description: "Inappropriate words",
+    htmlFor: "offensive-language",
+    value: "Offensive Language",
+  },
+  {
+    emoji: "🔄",
+    title: "Other",
+    description: "Something else",
+    htmlFor: "other",
+    value: "Other",
+  },
+];
+
 export const createProductSchema = z.object({
   name: z.string({ required_error: "Product name is required" }).trim().min(3),
   brand: z.string({ required_error: "Brand is required" }).trim().min(3),
