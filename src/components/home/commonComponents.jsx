@@ -60,20 +60,22 @@ export const ReportCard = ({ emoji, title, desc, htmlFor, value }) => {
 
 export const ReviewProgress = () => {
   return (
-    <div className="flex items-center gap-6">
-      <div className="flex items-center font-bold text-[17px]">
+    <div className="flex items-center gap-5 lg:gap-6 rounded-2xl hover:bg-primary/6 cursor-pointer py-1 px-2 transition-all">
+      <div className="flex items-center gap-0.5 font-bold text-[13px] lg:text-[15px]">
         <span>5</span>
         <span>
-          <Star className="fill-black h-4.5 w-4.5" />
+          <Star className="fill-black w-3.5 h-3.5 lg:h-4 lg:w-4" />
         </span>
       </div>
       <div className="flex-1 bg-[#F7F7F5] rounded-2xl h-2.5">
-        <div className="w-[49%] bg-primary rounded-2xl h-full"></div>
+        <div className="w-[49%] transition-all bg-primary rounded-2xl h-full"></div>
       </div>
       <div className="text-[#8A8A8A]">
-        <span className="font-bold text-[17px]">49%</span>
+        <span className="font-bold text-[13px] lg:text-[15px]">49%</span>
         <span className="text-[14px]">(69)</span>
       </div>
     </div>
   );
 };
+
+//  border-2 border-primary/15 shadow cursor-pointer
