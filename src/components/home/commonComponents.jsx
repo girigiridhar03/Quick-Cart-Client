@@ -79,3 +79,17 @@ export const ReviewProgress = () => {
 };
 
 //  border-2 border-primary/15 shadow cursor-pointer
+
+export const ReviewButton = ({ text, handleClick, Icon }) => {
+  return (
+    <button
+      onClick={handleClick}
+      className="group bg-[#F7F7F7] border-2 border-transparent text-[#8A8A8A] font-bold flex items-center text-[13px] rounded-lg xl:rounded-xl hover:border-primary hover:text-primary py-2 px-3 xl:py-2 xl:px-4 cursor-pointer gap-1.5"
+    >
+      <span>
+        <Icon className="w-3 h-3 xl:w-4 xl:h-4 " />
+      </span>
+      <span className="text-[11px] xl:text-[12px]" >{text}</span>
+    </button>
+  );
+};
