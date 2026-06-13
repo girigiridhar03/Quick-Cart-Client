@@ -92,3 +92,15 @@ export const getSingleProduct = createAsyncThunk(
     }
   },
 );
+
+export const getRelatedProducts = createAsyncThunk(
+  "product/relatedProducts",
+  async (slugId, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/product/${slugId}/related`);
+      return response?.data;
+    } catch (error) {
+      return handleThunkError(error, rejectWithValue, { showToast: false });
+    }
+  },
+);

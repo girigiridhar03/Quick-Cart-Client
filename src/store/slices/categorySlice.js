@@ -44,7 +44,7 @@ const categorySlice = createSlice({
       })
       .addCase(getAllSubCategories.pending, (state) => {
         state.subCategoriesLoading = true;
-        state.subCategoriesLoading = [];
+        state.subCategories = [];
         state.error = null;
       })
       .addCase(getAllSubCategories.fulfilled, (state, { payload }) => {

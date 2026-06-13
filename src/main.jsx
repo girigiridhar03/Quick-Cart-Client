@@ -21,14 +21,12 @@ const init = async () => {
     return error;
   } finally {
     createRoot(document.getElementById("root")).render(
-      <StrictMode>
-        <BrowserRouter>
-          <Provider store={store}>
-            <App />
-            <ToastContainer position="top-right" autoClose={3000} />
-          </Provider>
-        </BrowserRouter>
-      </StrictMode>,
+      <BrowserRouter>
+        <Provider store={store}>
+          <App />
+          <ToastContainer position="top-right" autoClose={3000} />
+        </Provider>
+      </BrowserRouter>,
     );
   }
 };

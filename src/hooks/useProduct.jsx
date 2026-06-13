@@ -2,6 +2,7 @@ import {
   createProduct,
   getAllBrands,
   getAllProducts,
+  getRelatedProducts,
   getSingleProduct,
 } from "@/api/product.api";
 import {
@@ -55,6 +56,21 @@ const useProduct = () => {
       return error;
     }
   };
+  const createProd = async (formData) => {
+    try {
+      await dispatch(createProduct(formData)).unwrap();
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const fetchRelatedProducts = async (slugId) => {
+    try {
+      await dispatch(getRelatedProducts(slugId)).unwrap();
+    } catch (error) {
+      return error;
+    }
+  };
 
   const setSelectedProduct = (id) => {
     dispatch(setSelectedProductId(id));
@@ -70,14 +86,6 @@ const useProduct = () => {
 
   const updatedProductItem = ({ productId, quantity }) => {
     dispatch(updatedProduct({ productId, quantity }));
-  };
-
-  const createProd = async (formData) => {
-    try {
-      await dispatch(createProduct(formData)).unwrap();
-    } catch (error) {
-      return error;
-    }
   };
 
   return {
@@ -101,6 +109,7 @@ const useProduct = () => {
     createProd,
     fetchSingleProductDetails,
     fetchBrands,
+    fetchRelatedProducts,
   };
 };
 

@@ -24,7 +24,7 @@ const useCart = () => {
     try {
       await dispatch(getAllCartItems()).unwrap();
     } catch (error) {
-      console.log("getCartItems:", error);
+      return error;
     }
   };
 
@@ -32,7 +32,7 @@ const useCart = () => {
     try {
       await dispatch(addToCart({ id, body })).unwrap();
     } catch (error) {
-      console.log("addToCart: ", error);
+      return error;
     }
   };
 
@@ -41,15 +41,22 @@ const useCart = () => {
   };
 
   const descreaseQunatityCount = async (id) => {
-    await dispatch(descreaseQuantity(id)).unwrap();
+    try {
+      await dispatch(descreaseQuantity(id)).unwrap();
+    } catch (error) {
+      return error;
+    }
   };
 
   const deleteCartItem = async (id) => {
-    await dispatch(deleteItem(id)).unwrap();
+    try {
+      await dispatch(deleteItem(id)).unwrap();
+    } catch (error) {
+      return error;
+    }
   };
 
   const updateCartItems = ({ productId, quantity }) => {
-    console.log(productId,quantity)
     dispatch(updateQuantity({ productId, quantity }));
   };
 
