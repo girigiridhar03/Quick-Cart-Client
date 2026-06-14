@@ -10,16 +10,19 @@ import { Flag, Star, ThumbsDown, ThumbsUp } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { ReviewButton } from "../commonComponents";
 import AdminReplyCard from "./AdminReplyCard";
-const ReviewerCard = () => {
+import { format } from "date-fns";
+const ReviewerCard = ({ review }) => {
   return (
     <Card className="w-full rounded-3xl px-6 py-8 xl:px-10 gap-6 xl:gap-7">
       <CardHeader className="px-0 flex gap-4">
         <Avatar className="w-13 h-13 rounded-2xl after:rounded-2xl">
           <AvatarImage
             className="rounded-2xl"
-            src="https://i.pravatar.cc/150?u=mrev-p2-1"
+            src={review?.userDetails?.profile?.url}
           />
-          <AvatarFallback className="rounded-2xl">CN</AvatarFallback>
+          <AvatarFallback className="rounded-2xl uppercase">
+            {review?.userDetails?.username[0]}
+          </AvatarFallback>
         </Avatar>
         <div className="space-y-0.5 xl:space-y-1">
           <div className="text-[16px] xl:text-xl font-bold">Deepak Chahar</div>
@@ -28,18 +31,22 @@ const ReviewerCard = () => {
               {[1, 2, 3, 4, 5].map((star) => (
                 <Star
                   key={star}
-                  className="fill-primary w-3 h-3 xl:w-4 xl:h-4 text-primary"
+                  className={`${star <= Math.floor(review.rating) ? "fill-primary text-primary" : "text-gray-300"} w-3 h-3 xl:w-4 xl:h-4`}
                 />
               ))}
             </div>
-            <p className="font-bold text-[#8A8A8A] text-[12px] ">4 Jun 2026</p>
+            <p className="font-bold text-[#8A8A8A] text-[12px] ">
+              {format(review.createdAt, "d MMM yyyy")}
+            </p>
           </div>
         </div>
       </CardHeader>
       <CardContent className="px-0 space-y-2">
-        <h5 className="text-[16px] xl:text-lg font-bold">Highly Nutritious</h5>
+        <h5 className="text-[16px] xl:text-lg font-bold capitalize">
+          {review.title}
+        </h5>
         <p className="leading-relaxed text-[#444] font-medium text-[13px] xl:text-[16px]">
-          Satisfied with the overall experience. Great packing standard.
+          {review.body}
         </p>
       </CardContent>
       <Separator />
@@ -62,7 +69,7 @@ const ReviewerCard = () => {
             handleClick={() => console.log("clicked")}
           />
         </div>
-        <AdminReplyCard />
+        {review?.adminReply?.reply?.length > 0 && <AdminReplyCard adminReply={review?.adminReply} />}
       </CardFooter>
     </Card>
   );

@@ -17,7 +17,8 @@ const SingleProduct = () => {
     fetchRelatedProducts,
   } = useProduct();
 
-  const { fetchReviews, fetchReviewSummary } = useReview();
+  const { reviewSummary, reviews, fetchReviews, fetchReviewSummary } =
+    useReview();
 
   useEffect(() => {
     if (!slugId) return;
@@ -37,6 +38,7 @@ const SingleProduct = () => {
     fetchDetails();
   }, [slugId]);
 
+
   return (
     <section className="mb-5">
       <SingleProductCard
@@ -48,9 +50,15 @@ const SingleProduct = () => {
         product={singleProductDetails}
       />
       <div className="space-y-10">
-        <ReviewHeader />
+        <ReviewHeader summary={reviewSummary} />
         <ReviewerFilterCard />
-        <ReviewerCard />
+        {reviews?.length > 0 && (
+          <div className="space-y-4">
+            {reviews.map((review) => (
+              <ReviewerCard key={review._id} review={review} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

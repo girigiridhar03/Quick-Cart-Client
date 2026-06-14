@@ -46,7 +46,7 @@ const reviewSlice = createSlice({
       })
       .addCase(getProductReviews.fulfilled, (state, { payload }) => {
         state.reviewsLoading = false;
-        state.reviews = payload?.data;
+        state.reviews = payload?.data?.reviews;
       })
       .addCase(getProductReviews.rejected, (state, { payload }) => {
         state.reviewsLoading = false;

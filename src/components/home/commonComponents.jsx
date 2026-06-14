@@ -58,21 +58,24 @@ export const ReportCard = ({ emoji, title, desc, htmlFor, value }) => {
   );
 };
 
-export const ReviewProgress = () => {
+export const ReviewProgress = ({ item }) => {
   return (
-    <div className="flex items-center gap-5 lg:gap-6 rounded-2xl hover:bg-primary/6 cursor-pointer py-1 px-2 transition-all">
-      <div className="flex items-center gap-0.5 font-bold text-[13px] lg:text-[15px]">
-        <span>5</span>
-        <span>
-          <Star className="fill-black w-3.5 h-3.5 lg:h-4 lg:w-4" />
-        </span>
+    <div className="grid grid-cols-[45px_1fr_70px] items-center gap-4 rounded-2xl hover:bg-primary/6 cursor-pointer py-2 px-2 transition-all">
+      <div className="flex items-center gap-1 font-bold text-[15px]">
+        <span>{item.rating}</span>
+        <Star className="fill-black w-4 h-4" />
       </div>
-      <div className="flex-1 bg-[#F7F7F5] rounded-2xl h-2.5">
-        <div className="w-[49%] transition-all bg-primary rounded-2xl h-full"></div>
+
+      <div className="bg-[#F7F7F5] rounded-full h-2 overflow-hidden">
+        <div
+          className="h-full bg-primary rounded-full transition-all duration-300"
+          style={{ width: `${item.percentage}%` }}
+        />
       </div>
-      <div className="text-[#8A8A8A]">
-        <span className="font-bold text-[13px] lg:text-[15px]">49%</span>
-        <span className="text-[14px]">(69)</span>
+
+      <div className="text-[#8A8A8A] text-right whitespace-nowrap">
+        <span className="font-bold text-[15px]">{item.percentage}%</span>
+        {item.count > 0 && <span className="text-[14px]">({item.count})</span>}
       </div>
     </div>
   );
@@ -89,7 +92,7 @@ export const ReviewButton = ({ text, handleClick, Icon }) => {
       <span>
         <Icon className="w-3 h-3 xl:w-4 xl:h-4 " />
       </span>
-      <span className="text-[11px] xl:text-[12px]" >{text}</span>
+      <span className="text-[11px] xl:text-[12px]">{text}</span>
     </button>
   );
 };

@@ -2,7 +2,7 @@ import React from "react";
 import ReviewSummaryCard from "./ReviewSummaryCard";
 import WriteReviewDialog from "./WriteReviewDialog";
 
-const ReviewHeader = () => {
+const ReviewHeader = ({summary}) => {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
@@ -14,7 +14,7 @@ const ReviewHeader = () => {
         </div>
         <WriteReviewDialog />
       </div>
-      <ReviewSummaryCard />
+      <ReviewSummaryCard summary={summary} />
     </div>
   );
 };
