@@ -3,6 +3,7 @@ import ReviewerCard from "@/components/home/SingleProduct/ReviewerCard";
 import ReviewerFilterCard from "@/components/home/SingleProduct/ReviewerFilterCard";
 import ReviewHeader from "@/components/home/SingleProduct/ReviewHeader";
 import SingleProductCard from "@/components/home/SingleProduct/SingleProductCard";
+import useAuth from "@/hooks/useAuth";
 import useProduct from "@/hooks/useProduct";
 import useReview from "@/hooks/useReview";
 import React, { useEffect } from "react";
@@ -17,8 +18,15 @@ const SingleProduct = () => {
     fetchRelatedProducts,
   } = useProduct();
 
-  const { reviewSummary, reviews, fetchReviews, fetchReviewSummary } =
-    useReview();
+  const {
+    reviewSummary,
+    reviews,
+    postReview,
+    fetchReviews,
+    fetchReviewSummary,
+  } = useReview();
+
+  const { user } = useAuth();
 
   useEffect(() => {
     if (!slugId) return;
@@ -38,7 +46,6 @@ const SingleProduct = () => {
     fetchDetails();
   }, [slugId]);
 
-
   return (
     <section className="mb-5">
       <SingleProductCard
@@ -50,12 +57,18 @@ const SingleProduct = () => {
         product={singleProductDetails}
       />
       <div className="space-y-10">
-        <ReviewHeader summary={reviewSummary} />
-        <ReviewerFilterCard />
+        <ReviewHeader
+          slugId={slugId}
+          summary={reviewSummary}
+          postReview={postReview}
+          user={user}
+        />
+        {reviewSummary?.averageRating > 0 && <ReviewerFilterCard />}
+
         {reviews?.length > 0 && (
           <div className="space-y-4">
             {reviews.map((review) => (
-              <ReviewerCard key={review._id} review={review} />
+              <ReviewerCard key={review._id} review={review} user={user} />
             ))}
           </div>
         )}

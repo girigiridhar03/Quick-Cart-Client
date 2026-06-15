@@ -1,6 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "./axiosInstance";
-import { handleThunkError, handleThunkSuccess } from "@/utils/error";
+import {
+  handleThunkError,
+  handleThunkSuccess,
+  handleUnauthorizedRedirect,
+} from "@/utils/error";
 
 export const getAllProducts = createAsyncThunk(
   "product/products",
@@ -26,6 +30,11 @@ export const getAllProducts = createAsyncThunk(
       const response = await axiosInstance.get(endPoint);
       return response?.data;
     } catch (error) {
+      const authError = handleUnauthorizedRedirect(error, rejectWithValue, {
+        message: "Please log in to continue.",
+      });
+      if (authError) return authError;
+
       return handleThunkError(error, rejectWithValue, { showToast: true });
     }
   },
@@ -57,6 +66,11 @@ export const getAllBrands = createAsyncThunk(
       const response = await axiosInstance.get(endPoint);
       return response?.data;
     } catch (error) {
+      const authError = handleUnauthorizedRedirect(error, rejectWithValue, {
+        message: "Please log in to continue.",
+      });
+      if (authError) return authError;
+
       return handleThunkError(error, rejectWithValue, { showToast: true });
     }
   },
@@ -76,6 +90,11 @@ export const createProduct = createAsyncThunk(
         successMessage: "Product created successfully",
       });
     } catch (error) {
+      const authError = handleUnauthorizedRedirect(error, rejectWithValue, {
+        message: "Please log in to manage products.",
+      });
+      if (authError) return authError;
+
       return handleThunkError(error, rejectWithValue, { showToast: true });
     }
   },
@@ -88,6 +107,11 @@ export const getSingleProduct = createAsyncThunk(
       const response = await axiosInstance.get(`/product/${slugId}`);
       return response?.data;
     } catch (error) {
+      const authError = handleUnauthorizedRedirect(error, rejectWithValue, {
+        message: "Please log in to continue.",
+      });
+      if (authError) return authError;
+
       return handleThunkError(error, rejectWithValue, { showToast: false });
     }
   },
@@ -100,6 +124,11 @@ export const getRelatedProducts = createAsyncThunk(
       const response = await axiosInstance.get(`/product/${slugId}/related`);
       return response?.data;
     } catch (error) {
+      const authError = handleUnauthorizedRedirect(error, rejectWithValue, {
+        message: "Please log in to continue.",
+      });
+      if (authError) return authError;
+
       return handleThunkError(error, rejectWithValue, { showToast: false });
     }
   },

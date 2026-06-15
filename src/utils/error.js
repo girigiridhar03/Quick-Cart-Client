@@ -53,11 +53,7 @@ export const getApiErrorMessage = (error) => {
   return "Something went wrong";
 };
 
-export const handleThunkError = (
-  error,
-  rejectWithValue,
-  options = {},
-) => {
+export const handleThunkError = (error, rejectWithValue, options = {}) => {
   const message = getApiErrorMessage(error);
 
   if (options.showToast) {
@@ -67,10 +63,31 @@ export const handleThunkError = (
   return rejectWithValue(message);
 };
 
+export const handleUnauthorizedRedirect = (
+  error,
+  rejectWithValue,
+  options = {},
+) => {
+  if (error?.response?.status !== 401) {
+    return null;
+  }
+
+  const message = options.message || "Please log in to continue.";
+
+  toast.error(message);
+
+  setTimeout(() => {
+    window.location.href = "/login";
+  }, 2000);
+
+  return rejectWithValue(message);
+};
+
 export const handleThunkSuccess = (responseData, options = {}) => {
   const message =
     options.successMessage ||
-    (typeof responseData?.message === "string" && responseData.message.trim().length > 0
+    (typeof responseData?.message === "string" &&
+    responseData.message.trim().length > 0
       ? responseData.message
       : null);
 
