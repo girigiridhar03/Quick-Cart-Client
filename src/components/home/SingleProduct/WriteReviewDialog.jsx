@@ -6,58 +6,48 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
-import { Camera, Star } from "lucide-react";
+import {
+  handleClick,
+  handleDragOver,
+  handleDrop,
+  handleFileChange,
+} from "@/utils/utils";
+import { Camera, Star, X } from "lucide-react";
 import React, { useEffect, useRef } from "react";
 
 const WriteReviewDialog = ({
+  TriggerButton,
   TriggerJsx,
   title,
   reviewDetails,
+  setReviewDetails,
   onChange,
   onPost,
   handleStar,
   open,
   setOpen,
 }) => {
-  // const { state, setState, handleSubmit } = formDetails;
-
-  // const handleDetailsChange = (e) => {
-  //   const value = e.target.value;
-  //   if (value.length <= 500) {
-  //     setState((prev) => ({ ...prev, description: value }));
-  //   } else {
-  //     setState((prev) => ({ ...prev, description: value.slice(0, 500) }));
-  //   }
-  // };
   const inputRef = useRef(null);
-  const handleFileChange = (e) => {
-    const selectedFiles = Array.from(e.target.files || []);
-    syncImages(selectedFiles);
-    e.target.value = "";
+  const triggerContent =
+    typeof TriggerJsx === "function" ? <TriggerJsx /> : TriggerJsx;
+
+  const triggerProps = {
+    type: "button",
+    onClick: () => setOpen?.(true),
   };
 
-  const handleClick = () => {
-    inputRef.current?.click();
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const droppedFiles = Array.from(e.dataTransfer.files);
-    syncImages(droppedFiles);
-  };
+  const triggerElement = React.isValidElement(TriggerButton) ? (
+    React.cloneElement(TriggerButton, triggerProps, triggerContent)
+  ) : TriggerButton ? (
+    <TriggerButton {...triggerProps}>{triggerContent}</TriggerButton>
+  ) : (
+    <Button {...triggerProps}>{triggerContent}</Button>
+  );
 
   useEffect(() => {
     const preventDefaults = (e) => {
@@ -75,17 +65,7 @@ const WriteReviewDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        render={
-          <Button
-            variant="outline"
-            className="text-primary hover:text-primary w-auto h-15 text-[12px] md:text-[14px] lg:text-[16px] shadow font-bold rounded-2xl cursor-pointer md:px-7"
-            title="Report this product"
-          />
-        }
-      >
-        <TriggerJsx />
-      </DialogTrigger>
+      {triggerElement}
       <DialogContent className="sm:max-w-sm md:max-w-lg px-5 md:px-10 max-h-175 2xl:max-h-250 overflow-hidden flex flex-col">
         <DialogHeader className="sticky top-0 bg-popover z-10 pt-2 pb-0">
           <DialogTitle className="text-xl md:text-2xl font-bold">
@@ -126,7 +106,7 @@ const WriteReviewDialog = ({
             <Field className="w-full px-2">
               <FieldLabel className="flex items-center justify-between w-full uppercase text-[#8A8A8A] font-bold">
                 <p className="uppercase ">Your Review</p>
-                {/* <p>{state.description.length}/500</p> */}
+                <p>{reviewDetails.body.length}/500</p>
               </FieldLabel>
               <Textarea
                 name="body"
@@ -145,9 +125,9 @@ const WriteReviewDialog = ({
                 PRODUCT IMAGES
               </FieldLabel>
               <div
-                onClick={handleClick}
+                onClick={() => handleClick(inputRef)}
                 onDrag={handleDragOver}
-                onDrop={handleDrop}
+                onDrop={(e) => handleDrop(e, setReviewDetails)}
                 className="group transition-all border-2 border-dashed border-gray-300 rounded-2xl bg-white h-60 hover:border-primary flex flex-col items-center justify-center cursor-pointer"
               >
                 <div className="h-16 w-16 rounded-full bg-[#F7F7F7] group-hover:bg-primary shadow-md flex items-center justify-center mb-6">
@@ -172,16 +152,16 @@ const WriteReviewDialog = ({
                 multiple
                 accept=".jpg,.jpeg,.png,.webp,.avif"
                 className="hidden"
-                onChange={handleFileChange}
+                onChange={(e) => handleFileChange(e, setReviewDetails)}
               />
-              {/* {formData.images.length > 0 && (
+              {reviewDetails?.images?.length > 0 && (
                 <div className="grid grid-cols-5 gap-3 mt-4">
-                  {formData.images.map((file) => (
+                  {reviewDetails.images.map((file) => (
                     <div
                       key={`${file.name}-${file.lastModified}`}
                       className="group h-20 w-20 rounded-xl overflow-hidden relative"
                       onClick={() =>
-                        setFormData((prev) => ({
+                        setReviewDetails((prev) => ({
                           ...prev,
                           images: prev.images.filter(
                             (item) =>
@@ -206,7 +186,7 @@ const WriteReviewDialog = ({
                   ))}
                 </div>
               )}
-              {errors.images.length > 0 && (
+              {/* {errors.images.length > 0 && (
                 <FieldError className="px-1 capitalize text-[12px]">
                   {errors.images}
                 </FieldError>

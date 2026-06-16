@@ -10,6 +10,7 @@ import {
   setSelectedProductId,
   setSelectedSort,
   updatedProduct,
+  updateSingleProductQuantity,
 } from "@/store/slices/productSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -88,6 +89,10 @@ const useProduct = () => {
     dispatch(updatedProduct({ productId, quantity }));
   };
 
+  const updateSingleProductCount = (id, count) => {
+    dispatch(updateSingleProductQuantity({ id, count }));
+  };
+
   return {
     productLoading,
     brandsLoading,
@@ -110,6 +115,7 @@ const useProduct = () => {
     fetchSingleProductDetails,
     fetchBrands,
     fetchRelatedProducts,
+    updateSingleProductCount,
   };
 };
 

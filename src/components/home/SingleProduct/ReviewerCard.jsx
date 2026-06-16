@@ -4,7 +4,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Edit, Flag, Star, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
@@ -12,8 +12,15 @@ import { ReviewButton } from "../commonComponents";
 import AdminReplyCard from "./AdminReplyCard";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
+import WriteReviewDialog from "./WriteReviewDialog";
 const ReviewerCard = ({ review, user }) => {
-  console.log(user);
+  const [reviewDetails, setReviewDetails] = useState({
+    title: "",
+    body: "",
+    rating: 0,
+    images: [],
+  });
+  const [open, setOpen] = useState(false);
   return (
     <Card className="w-full rounded-3xl px-6 py-8 xl:px-10 gap-6 xl:gap-7">
       <CardHeader className="px-0 flex gap-4">
@@ -47,13 +54,38 @@ const ReviewerCard = ({ review, user }) => {
           </div>
           {user?._id === review?.userDetails?._id && (
             <div className="flex items-center gap-3">
-              <Button
-                variant="outline"
-                size="icon"
-                className="bg-red-50 text-red-500 border-2 border-red-100 rounded-full"
-              >
-                <Edit />
-              </Button>
+              <WriteReviewDialog
+                TriggerButton={({ children, ...props }) => (
+                  <Button
+                    {...props}
+                    variant="outline"
+                    size="icon"
+                    className="bg-red-50 text-red-500 border-2 border-red-100 rounded-full cursor-pointer hover:text-red-500"
+                    onClick={() => {
+                      console.log("data")
+                      setOpen(true)
+                      setReviewDetails({
+                        title: review?.title,
+                        body: review?.body,
+                        rating: review?.rating,
+                        images: review?.images,
+                      });
+                    }}
+                  >
+                    {children}
+                  </Button>
+                )}
+                TriggerJsx={() => <Edit />}
+                title={"Edit Your Review"}
+                reviewDetails={reviewDetails}
+                open={open}
+                setOpen={setOpen}
+                setReviewDetails={setReviewDetails}
+                // onChange={handleChange}
+                // onPost={handlePostReview}
+                // handleStar={handleStar}
+              />
+
               <Button
                 variant="outline"
                 size="icon"

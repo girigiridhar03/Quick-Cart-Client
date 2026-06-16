@@ -23,6 +23,12 @@ import { Switch } from "../ui/switch";
 import { useEffect, useRef, useState } from "react";
 import { Badge } from "../ui/badge";
 import { createProductSchema } from "@/utils/constants";
+import {
+  handleClick,
+  handleDragOver,
+  handleDrop,
+  handleFileChange,
+} from "@/utils/utils";
 
 const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
   const { categories, subCategories, fetchSubCategories } = categoryObj;
@@ -58,39 +64,39 @@ const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
   const [productsTags, setProductsTags] = useState([]);
   const [tag, setTag] = useState("");
 
-  const syncImages = (incomingFiles) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: [...prev.images, ...incomingFiles].slice(0, 5),
-    }));
-    setErrors((prev) => ({
-      ...prev,
-      images: "",
-    }));
-  };
+  // const syncImages = (incomingFiles) => {
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     images: [...prev.images, ...incomingFiles].slice(0, 5),
+  //   }));
+  //   setErrors((prev) => ({
+  //     ...prev,
+  //     images: "",
+  //   }));
+  // };
 
-  const handleFileChange = (e) => {
-    const selectedFiles = Array.from(e.target.files || []);
-    syncImages(selectedFiles);
-    e.target.value = "";
-  };
+  // const handleFileChange = (e) => {
+  //   const selectedFiles = Array.from(e.target.files || []);
+  //   syncImages(selectedFiles);
+  //   e.target.value = "";
+  // };
 
-  const handleClick = () => {
-    inputRef.current?.click();
-  };
+  // const handleClick = () => {
+  //   inputRef.current?.click();
+  // };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
+  // const handleDragOver = (e) => {
+  //   e.preventDefault();
+  //   e.stopPropagation();
+  // };
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+  // const handleDrop = (e) => {
+  //   e.preventDefault();
+  //   e.stopPropagation();
 
-    const droppedFiles = Array.from(e.dataTransfer.files);
-    syncImages(droppedFiles);
-  };
+  //   const droppedFiles = Array.from(e.dataTransfer.files);
+  //   syncImages(droppedFiles);
+  // };
 
   useEffect(() => {
     const preventDefaults = (e) => {
@@ -453,9 +459,9 @@ const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
                     PRODUCT IMAGES*
                   </FieldLabel>
                   <div
-                    onClick={handleClick}
+                    onClick={() => handleClick(inputRef)}
                     onDrag={handleDragOver}
-                    onDrop={handleDrop}
+                    onDrop={(e) => handleDrop(e, setFormData, setErrors)}
                     className="border-2 border-dashed border-gray-300 rounded-4xl bg-[#F9FAFB] h-40 hover:border-primary flex flex-col items-center justify-center cursor-pointer"
                   >
                     <div className="h-13 w-13 rounded-full bg-white shadow-md flex items-center justify-center mb-6">
@@ -477,7 +483,9 @@ const AddProductDrawer = ({ loading, createProd, categoryObj }) => {
                     multiple
                     accept=".jpg,.jpeg,.png,.webp,.avif"
                     className="hidden"
-                    onChange={handleFileChange}
+                    onChange={(e) =>
+                      handleFileChange(e, setFormData, setErrors)
+                    }
                   />
                   {formData.images.length > 0 && (
                     <div className="grid grid-cols-5 gap-3 mt-4">

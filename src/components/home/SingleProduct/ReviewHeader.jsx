@@ -2,19 +2,28 @@ import React, { useEffect, useState } from "react";
 import ReviewSummaryCard from "./ReviewSummaryCard";
 import WriteReviewDialog from "./WriteReviewDialog";
 import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const ReviewHeader = ({ slugId, summary, postReview }) => {
   const [reviewDetails, setReviewDetails] = useState({
     title: "",
     body: "",
     rating: 0,
+    images: [],
   });
   const [open, setOpen] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    setReviewDetails((prev) => ({ ...prev, [name]: value }));
+    if (name === "body") {
+      if (value.length <= 500) {
+        setReviewDetails((prev) => ({ ...prev, [name]: value }));
+      } else {
+        setReviewDetails((prev) => ({ ...prev, [name]: value.slice(0, 500) }));
+      }
+    } else {
+      setReviewDetails((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleStar = (star) => {
@@ -51,6 +60,16 @@ const ReviewHeader = ({ slugId, summary, postReview }) => {
         </div>
         {!summary?.isMyReview && (
           <WriteReviewDialog
+            TriggerButton={({ children, ...props }) => (
+              <Button
+                {...props}
+                variant="outline"
+                className="text-primary hover:text-primary w-auto h-15 text-[12px] md:text-[14px] lg:text-[16px] shadow font-bold rounded-2xl cursor-pointer md:px-7"
+                title="Report this product"
+              >
+                {children}
+              </Button>
+            )}
             TriggerJsx={() => (
               <>
                 <Plus className="h-20" />
@@ -59,11 +78,12 @@ const ReviewHeader = ({ slugId, summary, postReview }) => {
             )}
             title={"Share Your Experience"}
             reviewDetails={reviewDetails}
+            open={open}
+            setOpen={setOpen}
+            setReviewDetails={setReviewDetails}
             onChange={handleChange}
             onPost={handlePostReview}
             handleStar={handleStar}
-            open={open}
-            setOpen={setOpen}
           />
         )}
       </div>

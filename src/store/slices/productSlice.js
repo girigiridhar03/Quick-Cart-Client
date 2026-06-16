@@ -46,6 +46,14 @@ const productSlice = createSlice({
         product.cartQuantity = payload.quantity;
       }
     },
+    updateSingleProductQuantity: (state, { payload }) => {
+      if (
+        !state.singleProductDetails &&
+        state.singleProductDetails?._id !== payload?.id
+      )
+        return;
+      state.singleProductDetails.cartQuantity = payload?.count;
+    },
   },
   extraReducers: (builder) =>
     builder
@@ -109,6 +117,7 @@ export const {
   resetBrandStates,
   setSelectedSort,
   updatedProduct,
+  updateSingleProductQuantity,
 } = productSlice.actions;
 
 export default productSlice.reducer;

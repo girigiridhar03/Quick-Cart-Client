@@ -9,12 +9,14 @@ import {
   Sparkles,
   Info,
   Flag,
+  Loader,
 } from "lucide-react";
 import { ProductHighlightCard } from "../commonComponents";
 import CustomDialog from "../CustomDialog";
 import { productReportReasons } from "@/utils/constants";
 
-const SingleProductCard = ({ loading, product }) => {
+const SingleProductCard = ({ loading, product, cart }) => {
+  const { quantityLoading, deleteLoading, handleCart } = cart;
   const [selectedImage, setSelectedImage] = useState({});
   const [open, setOpen] = useState(false);
   const [reportDetails, setReportDetails] = useState({
@@ -220,8 +222,65 @@ const SingleProductCard = ({ loading, product }) => {
             </div>
 
             {/* Add To Cart */}
-            <Button className="h-14 lg:h-16 rounded-2xl text-lg lg:text-xl font-bold cursor-pointer">
-              Add to Cart
+            <Button
+              onClick={
+                product?.cartQuantity <= 0
+                  ? () => {
+                      handleCart("add", {
+                        id: product?._id,
+                        body: { quantity: 1 },
+                      });
+                    }
+                  : undefined
+              }
+              className={`h-14 lg:h-16 rounded-2xl text-lg lg:text-xl font-bold cursor-pointer w-full px-5 py-8 ${product?.cartQuantity > 0 && "hover:bg-primary/90 bg-primary/90"}`}
+            >
+              {product?.cartQuantity > 0 ? (
+                <div className="flex items-center justify-between w-full">
+                  <span
+                    className="bg-white/20 h-9 w-9 flex items-center justify-center rounded-xl"
+                    onClick={() =>
+                      handleCart("remove", {
+                        id: product?._id,
+                        body: { quantity: product?.cartQuantity - 1 },
+                      })
+                    }
+                  >
+                    -
+                  </span>
+                  <div className="flex flex-col ">
+                    <span className="text-[11px] font-bold text-white/70">
+                      IN CART
+                    </span>
+                    <span className="font-bold">
+                      {quantityLoading || deleteLoading ? (
+                        <Loader className="animate-spin w-4 h-4" />
+                      ) : (
+                        product.cartQuantity
+                      )}
+                    </span>
+                  </div>
+                  <span
+                    className="bg-white/20 h-9 w-9 flex items-center justify-center rounded-xl"
+                    onClick={() =>
+                      handleCart("add", {
+                        id: product?._id,
+                        body: { quantity: 1 },
+                      })
+                    }
+                  >
+                    +
+                  </span>
+                </div>
+              ) : (
+                <span>
+                  {quantityLoading ? (
+                    <Loader className="animate-spin w-4 h-4" />
+                  ) : (
+                    "Add to Cart"
+                  )}
+                </span>
+              )}
             </Button>
           </div>
         </section>
