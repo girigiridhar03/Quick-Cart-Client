@@ -24,7 +24,11 @@ const init = async () => {
       <BrowserRouter>
         <Provider store={store}>
           <App />
-          <ToastContainer position="top-right" autoClose={3000} />
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            style={{ zIndex: 1100 }}
+          />
         </Provider>
       </BrowserRouter>,
     );

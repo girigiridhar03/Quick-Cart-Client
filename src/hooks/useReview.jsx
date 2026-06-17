@@ -1,6 +1,7 @@
 import {
   addReview,
   deleteReview,
+  deleteReviewImage,
   editReview,
   getProductReviews,
   getReviewSummary,
@@ -12,6 +13,7 @@ const useReview = () => {
     addLoading,
     deleteLoading,
     reviewsLoading,
+    deleteReviewImageLoading,
     reviews,
     selectedReview,
     reviewSummary,
@@ -23,7 +25,7 @@ const useReview = () => {
     try {
       await dispatch(getProductReviews(slugId)).unwrap();
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 
@@ -31,7 +33,7 @@ const useReview = () => {
     try {
       await dispatch(getReviewSummary(slugId)).unwrap();
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 
@@ -39,7 +41,7 @@ const useReview = () => {
     try {
       await dispatch(addReview({ slugId, body })).unwrap();
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 
@@ -47,7 +49,7 @@ const useReview = () => {
     try {
       await dispatch(editReview({ slugId, id, body })).unwrap();
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 
@@ -55,7 +57,15 @@ const useReview = () => {
     try {
       await dispatch(deleteReview({ slugId, id })).unwrap();
     } catch (error) {
-      return error;
+      throw error;
+    }
+  };
+
+  const delReviewImg = async (reviewId, imageId) => {
+    try {
+      await dispatch(deleteReviewImage({ reviewId, imageId })).unwrap();
+    } catch (error) {
+      throw error;
     }
   };
 
@@ -63,6 +73,7 @@ const useReview = () => {
     addLoading,
     deleteLoading,
     reviewsLoading,
+    deleteReviewImageLoading,
     reviews,
     selectedReview,
     reviewSummary,
@@ -72,6 +83,7 @@ const useReview = () => {
     postReview,
     updateReview,
     delReview,
+    delReviewImg,
   };
 };
 

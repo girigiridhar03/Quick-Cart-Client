@@ -3,51 +3,20 @@ import ReviewSummaryCard from "./ReviewSummaryCard";
 import WriteReviewDialog from "./WriteReviewDialog";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { getFormData, handleChange, handleStar } from "@/utils/utils";
 
-const ReviewHeader = ({ slugId, summary, postReview }) => {
-  const [reviewDetails, setReviewDetails] = useState({
-    title: "",
-    body: "",
-    rating: 0,
-    images: [],
-  });
-  const [open, setOpen] = useState(false);
+const ReviewHeader = ({
+  slugId,
+  summary,
+  addLoading,
+  openState,
+  reviewDetailsState,
+  handleChanges,
+}) => {
+  const { open, setOpen } = openState;
+  const { reviewDetails, setReviewDetails } = reviewDetailsState;
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "body") {
-      if (value.length <= 500) {
-        setReviewDetails((prev) => ({ ...prev, [name]: value }));
-      } else {
-        setReviewDetails((prev) => ({ ...prev, [name]: value.slice(0, 500) }));
-      }
-    } else {
-      setReviewDetails((prev) => ({ ...prev, [name]: value }));
-    }
-  };
-
-  const handleStar = (star) => {
-    setReviewDetails((prev) => ({ ...prev, rating: star }));
-  };
-
-  const handlePostReview = async () => {
-    try {
-      await postReview(slugId, reviewDetails);
-      setOpen(false);
-    } catch (error) {
-      return error;
-    }
-  };
-
-  useEffect(() => {
-    if (open) return;
-
-    setReviewDetails({
-      title: "",
-      body: "",
-      rating: 0,
-    });
-  }, [open]);
+  const { postReview, handleFileDelete, handlePostReview } = handleChanges;
 
   return (
     <div className="space-y-5">
@@ -78,12 +47,14 @@ const ReviewHeader = ({ slugId, summary, postReview }) => {
             )}
             title={"Share Your Experience"}
             reviewDetails={reviewDetails}
+            addLoading={addLoading}
             open={open}
             setOpen={setOpen}
             setReviewDetails={setReviewDetails}
-            onChange={handleChange}
+            onChange={(e) => handleChange(e, setReviewDetails)}
+            handleFileDelete={handleFileDelete}
             onPost={handlePostReview}
-            handleStar={handleStar}
+            handleStar={(star) => handleStar(star, setReviewDetails)}
           />
         )}
       </div>

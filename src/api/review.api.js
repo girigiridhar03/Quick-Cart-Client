@@ -56,6 +56,7 @@ export const addReview = createAsyncThunk(
         },
       );
       dispatch(getProductReviews(slugId));
+      dispatch(getReviewSummary(slugId));
       return handleThunkSuccess(response?.data, { showToast: true });
     } catch (error) {
       const authError = handleUnauthorizedRedirect(error, rejectWithValue, {
@@ -74,6 +75,7 @@ export const deleteReview = createAsyncThunk(
     try {
       const response = await axiosInstance.delete(`/review/${id}`);
       dispatch(getProductReviews(slugId));
+      dispatch(getReviewSummary(slugId));
       return handleThunkSuccess(response?.data, { showToast: true });
     } catch (error) {
       const authError = handleUnauthorizedRedirect(error, rejectWithValue, {
@@ -90,8 +92,31 @@ export const editReview = createAsyncThunk(
   "review/edit",
   async ({ slugId, id, body }, { rejectWithValue, dispatch }) => {
     try {
-      const response = await axiosInstance.patch(`/review/${id}`, body);
+      const response = await axiosInstance.patch(`/review/${id}`, body, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
       dispatch(getProductReviews(slugId));
+      return handleThunkSuccess(response?.data, { showToast: true });
+    } catch (error) {
+      const authError = handleUnauthorizedRedirect(error, rejectWithValue, {
+        message: "Please log in to manage your reviews.",
+      });
+      if (authError) return authError;
+
+      return handleThunkError(error, rejectWithValue, { showToast: true });
+    }
+  },
+);
+
+export const deleteReviewImage = createAsyncThunk(
+  "/review/deleteImage",
+  async ({ reviewId, imageId }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.delete(
+        `/review/${reviewId}/image/${imageId}`,
+      );
       return handleThunkSuccess(response?.data, { showToast: true });
     } catch (error) {
       const authError = handleUnauthorizedRedirect(error, rejectWithValue, {

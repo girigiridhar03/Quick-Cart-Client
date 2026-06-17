@@ -24,7 +24,7 @@ const useCart = () => {
     try {
       await dispatch(getAllCartItems()).unwrap();
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 
@@ -32,7 +32,7 @@ const useCart = () => {
     try {
       await dispatch(addToCart({ id, body })).unwrap();
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 
@@ -44,7 +44,7 @@ const useCart = () => {
     try {
       await dispatch(descreaseQuantity(id)).unwrap();
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 
@@ -52,7 +52,7 @@ const useCart = () => {
     try {
       await dispatch(deleteItem(id)).unwrap();
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 

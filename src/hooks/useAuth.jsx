@@ -28,7 +28,7 @@ const useAuth = () => {
       navigate("/");
       return null;
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 
@@ -43,7 +43,7 @@ const useAuth = () => {
       navigate("/");
       return null;
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 
@@ -52,7 +52,7 @@ const useAuth = () => {
       await dispatch(authLogout()).unwrap();
       return null;
     } catch (error) {
-      return error;
+      throw error;
     } finally {
       localStorage.removeItem(ACCESS_EXPIRES_KEY);
       localStorage.removeItem(REFRESH_EXPIRES_KEY);
@@ -64,7 +64,7 @@ const useAuth = () => {
     try {
       await dispatch(userDetails()).unwrap();
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 

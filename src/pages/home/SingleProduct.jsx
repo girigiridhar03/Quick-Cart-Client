@@ -7,7 +7,8 @@ import useAuth from "@/hooks/useAuth";
 import useCart from "@/hooks/useCart";
 import useProduct from "@/hooks/useProduct";
 import useReview from "@/hooks/useReview";
-import React, { useEffect } from "react";
+import { getFormData } from "@/utils/utils";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const SingleProduct = () => {
@@ -23,9 +24,15 @@ const SingleProduct = () => {
   const {
     reviewSummary,
     reviews,
+    deleteReviewImageLoading,
+    addLoading,
+    deleteLoading: deleteRevLoading,
     postReview,
+    updateReview,
     fetchReviews,
     fetchReviewSummary,
+    delReviewImg,
+    delReview,
   } = useReview();
 
   const { user } = useAuth();
@@ -37,6 +44,14 @@ const SingleProduct = () => {
     deleteCartItem,
     descreaseQunatityCount,
   } = useCart();
+
+  const [reviewDetails, setReviewDetails] = useState({
+    title: "",
+    body: "",
+    rating: 0,
+    images: [],
+  });
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (!slugId) return;
@@ -56,6 +71,17 @@ const SingleProduct = () => {
     fetchDetails();
   }, [slugId]);
 
+  useEffect(() => {
+    if (open) return;
+
+    setReviewDetails({
+      title: "",
+      body: "",
+      rating: 0,
+      images: [],
+    });
+  }, [open]);
+
   const handleCart = async (action, payload) => {
     try {
       if (action === "add") {
@@ -73,6 +99,54 @@ const SingleProduct = () => {
           updateSingleProductCount(slugId, payload?.body?.quantity);
         }
       }
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const handleEditPost = async (id) => {
+    const formData = getFormData(reviewDetails);
+
+    try {
+      await updateReview(slugId, id, formData);
+      setOpen(false);
+    } catch (error) {
+      return error;
+    }
+  };
+  const handleFileDelete = async (file, id) => {
+    if (file?._id) {
+      try {
+        await delReviewImg(id, file?._id);
+      } catch (error) {
+        return error;
+      }
+    }
+    setReviewDetails((prev) => ({
+      ...prev,
+      images: prev.images.filter(
+        (item) =>
+          !(
+            item?.name === file?.name &&
+            item?.lastModified === file?.lastModified
+          ) || item?.publicId !== file?.publicId,
+      ),
+    }));
+  };
+
+  const handleDeleteReview = async (id) => {
+    try {
+      await delReview(slugId, id);
+    } catch (error) {
+      return error;
+    }
+  };
+
+  const handlePostReview = async () => {
+    const formData = getFormData(reviewDetails);
+    try {
+      await postReview(slugId, formData);
+      setOpen(false);
     } catch (error) {
       return error;
     }
@@ -97,15 +171,51 @@ const SingleProduct = () => {
         <ReviewHeader
           slugId={slugId}
           summary={reviewSummary}
-          postReview={postReview}
           user={user}
+          addLoading={addLoading}
+          openState={{
+            open,
+            setOpen,
+          }}
+          reviewDetailsState={{
+            reviewDetails,
+            setReviewDetails,
+          }}
+          handleChanges={{
+            postReview,
+            handleFileDelete,
+            handlePostReview,
+          }}
         />
         {reviewSummary?.averageRating > 0 && <ReviewerFilterCard />}
 
         {reviews?.length > 0 && (
           <div className="space-y-4">
             {reviews.map((review) => (
-              <ReviewerCard key={review._id} review={review} user={user} />
+              <ReviewerCard
+                key={review._id}
+                review={review}
+                user={user}
+                loadings={{
+                  deleteRevLoading,
+                  delReviewImgLoading: deleteReviewImageLoading,
+                  addLoading,
+                }}
+                openState={{
+                  open,
+                  setOpen,
+                }}
+                reviewDetailsState={{
+                  reviewDetails,
+                  setReviewDetails,
+                }}
+                handleChanges={{
+                  onPost: () => handleEditPost(review._id),
+                  handleFileDelete: (file) =>
+                    handleFileDelete(file, review._id),
+                  handleDeleteReview,
+                }}
+              />
             ))}
           </div>
         )}

@@ -21,12 +21,16 @@ const useCategory = () => {
   const fetchAllCategories = async () => {
     try {
       await dispatch(getAllCategories()).unwrap();
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   };
   const fetchAllSubCategories = async (id) => {
     try {
       await dispatch(getAllSubCategories(id)).unwrap();
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   };
 
   useEffect(() => {

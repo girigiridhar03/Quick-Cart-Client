@@ -16,6 +16,7 @@ const ReviewSummaryCard = ({ summary }) => {
             <div className="flex items-center justify-center lg:justify-start gap-1">
               {[1, 2, 3, 4, 5].map((i) => (
                 <Star
+                  key={i}
                   className={`${i <= Math.floor(summary?.averageRating) ? "fill-primary text-primary" : "text-gray-300"}  w-5 h-5 lg:w-6 lg:h-6`}
                 />
               ))}

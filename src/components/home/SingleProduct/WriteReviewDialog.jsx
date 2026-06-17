@@ -17,16 +17,19 @@ import {
   handleDrop,
   handleFileChange,
 } from "@/utils/utils";
-import { Camera, Star, X } from "lucide-react";
+import { Camera, Loader, Star, X } from "lucide-react";
 import React, { useEffect, useRef } from "react";
 
 const WriteReviewDialog = ({
   TriggerButton,
   TriggerJsx,
+  delReviewImgLoading = false,
+  addLoading,
   title,
   reviewDetails,
   setReviewDetails,
   onChange,
+  handleFileDelete,
   onPost,
   handleStar,
   open,
@@ -80,7 +83,7 @@ const WriteReviewDialog = ({
             </div>
             <div className="flex gap-3 lg:gap-4">
               {[1, 2, 3, 4, 5].map((star) => (
-                <button onClick={() => handleStar(star)}>
+                <button key={star} onClick={() => handleStar(star)}>
                   <Star
                     key={star}
                     className={` ${star <= reviewDetails.rating ? "fill-primary" : "text-gray-300"} cursor-pointer w-5 h-5 lg:w-9 lg:h-9  xl:w-10 xl:h-10 text-primary transition-transform duration-200 hover:scale-125`}
@@ -158,39 +161,29 @@ const WriteReviewDialog = ({
                 <div className="grid grid-cols-5 gap-3 mt-4">
                   {reviewDetails.images.map((file) => (
                     <div
-                      key={`${file.name}-${file.lastModified}`}
+                      key={`${file?.publicId ? file?.publicId : `${file.name}-${file.lastModified}`}`}
                       className="group h-20 w-20 rounded-xl overflow-hidden relative"
-                      onClick={() =>
-                        setReviewDetails((prev) => ({
-                          ...prev,
-                          images: prev.images.filter(
-                            (item) =>
-                              !(
-                                item.name === file.name &&
-                                item.lastModified === file.lastModified
-                              ),
-                          ),
-                        }))
-                      }
+                      onClick={() => handleFileDelete(file)}
                     >
-                      <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40 text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 cursor-pointer">
-                        <X size={18} />
-                      </div>
+                      {delReviewImgLoading ? (
+                        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40 text-white transition-opacity duration-200 opacity-100 cursor-pointer">
+                          <Loader size={18} className="animate-spin" />
+                        </div>
+                      ) : (
+                        <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40 text-white opacity-0 transition-opacity duration-200 group-hover:opacity-100 cursor-pointer">
+                          <X size={18} />
+                        </div>
+                      )}
 
                       <img
-                        src={URL.createObjectURL(file)}
-                        alt={file.name}
+                        src={file?.url ? file?.url : URL.createObjectURL(file)}
+                        alt={file?.url ? file?.url : file?.name}
                         className="h-full w-full object-cover border-2 border-primary/10 bg-black"
                       />
                     </div>
                   ))}
                 </div>
               )}
-              {/* {errors.images.length > 0 && (
-                <FieldError className="px-1 capitalize text-[12px]">
-                  {errors.images}
-                </FieldError>
-              )} */}
             </Field>
           </FieldGroup>
 
@@ -199,17 +192,21 @@ const WriteReviewDialog = ({
               className="flex-1 h-12 2xl:h-15 2xl:text-lg cursor-pointer rounded-xl"
               disabled={
                 reviewDetails.title.trim().length === 0 ||
-                reviewDetails.body.trim().length === 0 ||
-                reviewDetails.rating <= 0
+                reviewDetails.body.trim().length < 10 ||
+                reviewDetails.rating <= 0 ||
+                delReviewImgLoading
               }
               onClick={onPost}
             >
-              POST REVIEW
+              {addLoading ? (
+                <Loader className="animate-spin" />
+              ) : (
+                " POST REVIEW"
+              )}
             </Button>
             <DialogClose
               render={<Button variant="outline" />}
               className="flex-1 h-12 2xl:h-15 2xl:text-lg cursor-pointer rounded-xl"
-              // onClick={() => setState({ reason: "", description: "" })}
             >
               CANCEL
             </DialogClose>

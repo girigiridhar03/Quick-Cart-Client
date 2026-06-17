@@ -1,6 +1,7 @@
 import {
   addReview,
   deleteReview,
+  deleteReviewImage,
   editReview,
   getProductReviews,
   getReviewSummary,
@@ -12,6 +13,7 @@ const initialState = {
   deleteLoading: false,
   reviewsLoading: false,
   reviewSummaryLoading: false,
+  deleteReviewImageLoading: false,
   reviews: [],
   reviewSummary: [],
   selectedReview: null,
@@ -83,6 +85,27 @@ const reviewSlice = createSlice({
       })
       .addCase(deleteReview.rejected, (state, { payload }) => {
         state.deleteLoading = false;
+        state.error = payload;
+      })
+      .addCase(deleteReviewImage.pending, (state) => {
+        state.deleteReviewImageLoading = true;
+      })
+      .addCase(deleteReviewImage.fulfilled, (state, action) => {
+        const { reviewId, imageId } = action.meta.arg;
+        state.deleteReviewImageLoading = false;
+        state.reviews = state.reviews.map((review) => {
+          if (review._id === reviewId) {
+            return {
+              ...review,
+              images: review.images.filter((img) => img._id !== imageId) || [],
+            };
+          }
+
+          return review;
+        });
+      })
+      .addCase(deleteReviewImage.rejected, (state, { payload }) => {
+        state.deleteReviewImageLoading = false;
         state.error = payload;
       }),
 });

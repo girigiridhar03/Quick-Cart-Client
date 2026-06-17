@@ -4,23 +4,37 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import React, { useState } from "react";
+import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Edit, Flag, Star, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react";
+import {
+  Edit,
+  Flag,
+  Loader,
+  Star,
+  ThumbsDown,
+  ThumbsUp,
+  Trash2,
+} from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { ReviewButton } from "../commonComponents";
 import AdminReplyCard from "./AdminReplyCard";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import WriteReviewDialog from "./WriteReviewDialog";
-const ReviewerCard = ({ review, user }) => {
-  const [reviewDetails, setReviewDetails] = useState({
-    title: "",
-    body: "",
-    rating: 0,
-    images: [],
-  });
-  const [open, setOpen] = useState(false);
+import { handleChange, handleStar } from "@/utils/utils";
+const ReviewerCard = ({
+  review,
+  user,
+  loadings,
+  openState,
+  reviewDetailsState,
+  handleChanges,
+}) => {
+  const { open, setOpen } = openState;
+  const { deleteRevLoading, delReviewImgLoading, addLoading } = loadings;
+  const { reviewDetails, setReviewDetails } = reviewDetailsState;
+  const { onPost, handleFileDelete, handleDeleteReview } = handleChanges;
+
   return (
     <Card className="w-full rounded-3xl px-6 py-8 xl:px-10 gap-6 xl:gap-7">
       <CardHeader className="px-0 flex gap-4">
@@ -62,8 +76,7 @@ const ReviewerCard = ({ review, user }) => {
                     size="icon"
                     className="bg-red-50 text-red-500 border-2 border-red-100 rounded-full cursor-pointer hover:text-red-500"
                     onClick={() => {
-                      console.log("data")
-                      setOpen(true)
+                      setOpen(true);
                       setReviewDetails({
                         title: review?.title,
                         body: review?.body,
@@ -76,22 +89,31 @@ const ReviewerCard = ({ review, user }) => {
                   </Button>
                 )}
                 TriggerJsx={() => <Edit />}
+                delReviewImgLoading={delReviewImgLoading}
+                addLoading={addLoading}
                 title={"Edit Your Review"}
                 reviewDetails={reviewDetails}
                 open={open}
                 setOpen={setOpen}
                 setReviewDetails={setReviewDetails}
-                // onChange={handleChange}
-                // onPost={handlePostReview}
-                // handleStar={handleStar}
+                onChange={(e) => handleChange(e, setReviewDetails)}
+                handleFileDelete={handleFileDelete}
+                onPost={onPost}
+                handleStar={(star) => handleStar(star, setReviewDetails)}
               />
 
               <Button
                 variant="outline"
                 size="icon"
+                disabled={deleteRevLoading}
+                onClick={() => handleDeleteReview(review._id)}
                 className="bg-transparent shadow-none cursor-pointer border-none text-red-500 hover:shadow hover:border-2 hover:border-red-100 rounded-full hover:bg-red-50 hover:text-red-500"
               >
-                <Trash2 />
+                {deleteRevLoading ? (
+                  <Loader className="animate-spin" />
+                ) : (
+                  <Trash2 />
+                )}
               </Button>
             </div>
           )}

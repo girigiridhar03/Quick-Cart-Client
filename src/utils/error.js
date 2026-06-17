@@ -10,7 +10,7 @@ const flattenErrorValues = (value) => {
   }
 
   if (value && typeof value === "object") {
-    return Object.values(value).flatMap(flattenErrorValues);
+    return Object.entries(value).flatMap(flattenErrorValues);
   }
 
   return [];

@@ -37,7 +37,7 @@ const useProduct = () => {
     try {
       await dispatch(getAllProducts(obj)).unwrap();
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 
@@ -45,7 +45,7 @@ const useProduct = () => {
     try {
       await dispatch(getAllBrands({ category, subCategory })).unwrap();
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 
@@ -54,14 +54,14 @@ const useProduct = () => {
       await dispatch(getSingleProduct(slugId)).unwrap();
     } catch (error) {
       navigate("/", { replace: true });
-      return error;
+      throw error;
     }
   };
   const createProd = async (formData) => {
     try {
       await dispatch(createProduct(formData)).unwrap();
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 
@@ -69,7 +69,7 @@ const useProduct = () => {
     try {
       await dispatch(getRelatedProducts(slugId)).unwrap();
     } catch (error) {
-      return error;
+      throw error;
     }
   };
 
