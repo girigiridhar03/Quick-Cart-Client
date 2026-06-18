@@ -10,6 +10,7 @@ import useReview from "@/hooks/useReview";
 import { getFormData } from "@/utils/utils";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SingleProduct = () => {
   const { slugId } = useParams();
@@ -27,12 +28,14 @@ const SingleProduct = () => {
     deleteReviewImageLoading,
     addLoading,
     deleteLoading: deleteRevLoading,
+    reviewHelpfulLoading,
     postReview,
     updateReview,
     fetchReviews,
     fetchReviewSummary,
     delReviewImg,
     delReview,
+    postReviewHelpful,
   } = useReview();
 
   const { user } = useAuth();
@@ -52,6 +55,11 @@ const SingleProduct = () => {
     images: [],
   });
   const [open, setOpen] = useState(false);
+
+  const [selectedState, setSelectedState] = useState({
+    id: "",
+    action: "",
+  });
 
   useEffect(() => {
     if (!slugId) return;
@@ -152,6 +160,19 @@ const SingleProduct = () => {
     }
   };
 
+  const handleReviewHelpful = async (reviewId, action) => {
+    if (!user) {
+      toast.warn("login is required");
+      return;
+    }
+    try {
+      setSelectedState({ id: reviewId, action });
+      postReviewHelpful(slugId, reviewId, { action: action.toLowerCase() });
+    } catch (error) {
+      return error;
+    }
+  };
+
   return (
     <section className="mb-5">
       <SingleProductCard
@@ -182,7 +203,6 @@ const SingleProduct = () => {
             setReviewDetails,
           }}
           handleChanges={{
-            postReview,
             handleFileDelete,
             handlePostReview,
           }}
@@ -200,6 +220,7 @@ const SingleProduct = () => {
                   deleteRevLoading,
                   delReviewImgLoading: deleteReviewImageLoading,
                   addLoading,
+                  reviewHelpfulLoading,
                 }}
                 openState={{
                   open,
@@ -209,11 +230,15 @@ const SingleProduct = () => {
                   reviewDetails,
                   setReviewDetails,
                 }}
+                selectedStates={{
+                  selectedState,
+                }}
                 handleChanges={{
                   onPost: () => handleEditPost(review._id),
                   handleFileDelete: (file) =>
                     handleFileDelete(file, review._id),
                   handleDeleteReview,
+                  handleReviewHelpful,
                 }}
               />
             ))}

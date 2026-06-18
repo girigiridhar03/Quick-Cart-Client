@@ -12,7 +12,7 @@ import {
   Loader,
 } from "lucide-react";
 import { ProductHighlightCard } from "../commonComponents";
-import CustomDialog from "../CustomDialog";
+import CustomDialog from "../../CusomDialogs/CustomDialog";
 import { productReportReasons } from "@/utils/constants";
 
 const SingleProductCard = ({ loading, product, cart }) => {

@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ReviewSummaryCard from "./ReviewSummaryCard";
-import WriteReviewDialog from "./WriteReviewDialog";
+import WriteReviewDialog from "../../CusomDialogs/WriteReviewDialog";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { getFormData, handleChange, handleStar } from "@/utils/utils";
+import { handleChange, handleStar } from "@/utils/utils";
 
 const ReviewHeader = ({
-  slugId,
   summary,
   addLoading,
   openState,
@@ -16,7 +15,7 @@ const ReviewHeader = ({
   const { open, setOpen } = openState;
   const { reviewDetails, setReviewDetails } = reviewDetailsState;
 
-  const { postReview, handleFileDelete, handlePostReview } = handleChanges;
+  const { handleFileDelete, handlePostReview } = handleChanges;
 
   return (
     <div className="space-y-5">
@@ -44,7 +43,7 @@ const ReviewHeader = ({
                 <Plus className="h-20" />
                 WRITE A REVIEW
               </>
-            )}
+            )}  
             title={"Share Your Experience"}
             reviewDetails={reviewDetails}
             addLoading={addLoading}

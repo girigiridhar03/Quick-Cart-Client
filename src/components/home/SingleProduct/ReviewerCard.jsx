@@ -4,7 +4,7 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Edit,
@@ -20,30 +20,39 @@ import { ReviewButton } from "../commonComponents";
 import AdminReplyCard from "./AdminReplyCard";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
-import WriteReviewDialog from "./WriteReviewDialog";
+import WriteReviewDialog from "../../CusomDialogs/WriteReviewDialog";
 import { handleChange, handleStar } from "@/utils/utils";
+import ReviewImageDialog from "@/components/CusomDialogs/ReviewImageDialog";
 const ReviewerCard = ({
   review,
   user,
   loadings,
   openState,
   reviewDetailsState,
+  selectedStates,
   handleChanges,
 }) => {
   const { open, setOpen } = openState;
-  const { deleteRevLoading, delReviewImgLoading, addLoading } = loadings;
+  const {
+    deleteRevLoading,
+    delReviewImgLoading,
+    addLoading,
+    reviewHelpfulLoading,
+  } = loadings;
   const { reviewDetails, setReviewDetails } = reviewDetailsState;
-  const { onPost, handleFileDelete, handleDeleteReview } = handleChanges;
+  const { selectedState } = selectedStates;
+  const { onPost, handleFileDelete, handleDeleteReview, handleReviewHelpful } =
+    handleChanges;
 
   return (
     <Card className="w-full rounded-3xl px-6 py-8 xl:px-10 gap-6 xl:gap-7">
-      <CardHeader className="px-0 flex gap-4">
-        <Avatar className="w-13 h-13 rounded-2xl after:rounded-2xl">
+      <CardHeader className="px-0 flex items-center gap-4">
+        <Avatar className="w-11 h-11 rounded-xl after:rounded-2xl">
           <AvatarImage
             className="rounded-2xl"
             src={review?.userDetails?.profile?.url}
           />
-          <AvatarFallback className="rounded-2xl uppercase">
+          <AvatarFallback className="rounded-xl uppercase">
             {review?.userDetails?.username[0]}
           </AvatarFallback>
         </Avatar>
@@ -121,29 +130,66 @@ const ReviewerCard = ({
       </CardHeader>
       <CardContent className="px-0 space-y-2">
         <h5 className="text-[16px] xl:text-lg font-bold capitalize">
-          {review.title}
+          {review?.title}
         </h5>
         <p className="leading-relaxed text-[#444] font-medium text-[13px] xl:text-[16px]">
-          {review.body}
+          {review?.body}
         </p>
+
+        {review?.images?.length > 0 && (
+          <div className="flex items-center gap-3 ">
+            {review?.images?.map((img) => (
+              <ReviewImageDialog
+                key={img?._id}
+                Jsx={() => (
+                  <img
+                    src={img?.url}
+                    alt={review?.userDetails?.username}
+                    className="w-full h-full object-cover"
+                  />
+                )}
+                review={{
+                  title: review?.title,
+                  body: review?.body,
+                  img: img,
+                  userDetails: review?.userDetails,
+                  rating: review?.rating,
+                  createdAt: review?.createdAt,
+                }}
+              />
+            ))}
+          </div>
+        )}
       </CardContent>
       <Separator />
       <CardFooter className="px-0 flex-col justify-start items-start w-full gap-6">
         <div className="font-bold text-[11px] xl:text-[13px] text-[#8A8A8A] flex items-center gap-2 xl:gap-3">
           HELPFUL?
           <ReviewButton
-            text={"Yes"}
+            text={`Yes ${review?.helpfulYesCount > 0 ? `( ${review?.helpfulYesCount} )` : ""}`}
+            action="Yes"
             Icon={ThumbsUp}
-            handleClick={() => console.log("clicked")}
+            isActive={review?.isHelpYes}
+            disabled={reviewHelpfulLoading}
+            reviewId={review?._id}
+            selectedState={selectedState}
+            handleClick={() => handleReviewHelpful(review?._id, "Yes")}
           />
           <ReviewButton
-            text={"No"}
+            text={`No ${review?.helpfulNoCount > 0 ? `( ${review?.helpfulNoCount} )` : ""}`}
+            action="No"
             Icon={ThumbsDown}
-            handleClick={() => console.log("clicked")}
+            isActive={review?.isHelpNo}
+            disabled={reviewHelpfulLoading}
+            reviewId={review?._id}
+            selectedState={selectedState}
+            handleClick={() => handleReviewHelpful(review?._id, "No")}
           />
           <ReviewButton
             text={"Report"}
             Icon={Flag}
+            reviewId={review?._id}
+            disabled={reviewHelpfulLoading}
             handleClick={() => console.log("clicked")}
           />
         </div>

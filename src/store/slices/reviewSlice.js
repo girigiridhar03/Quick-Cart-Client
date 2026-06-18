@@ -5,6 +5,7 @@ import {
   editReview,
   getProductReviews,
   getReviewSummary,
+  reviewHelpful,
 } from "@/api/review.api";
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -14,6 +15,7 @@ const initialState = {
   reviewsLoading: false,
   reviewSummaryLoading: false,
   deleteReviewImageLoading: false,
+  reviewHelpfulLoading: false,
   reviews: [],
   reviewSummary: [],
   selectedReview: null,
@@ -26,6 +28,42 @@ const reviewSlice = createSlice({
   reducers: {
     setSelectedReview: (state, { payload }) => {
       state.selectedReview = payload;
+    },
+    updateReviewHelpful: (state, { payload }) => {
+      if (!payload?.id) return;
+
+      const review = state.reviews.find((item) => item._id === payload.id);
+      if (!review) return;
+
+      if (payload.action.toLowerCase() === "yes") {
+        if (review.isHelpYes) {
+          review.isHelpYes = false;
+          review.helpfulYesCount = Math.max(0, review.helpfulYesCount - 1);
+        } else {
+          review.isHelpYes = true;
+          review.helpfulYesCount += 1;
+
+          if (review.isHelpNo) {
+            review.isHelpNo = false;
+            review.helpfulNoCount = Math.max(0, review.helpfulNoCount - 1);
+          }
+        }
+      }
+
+      if (payload.action.toLowerCase() === "no") {
+        if (review.isHelpNo) {
+          review.isHelpNo = false;
+          review.helpfulNoCount = Math.max(0, review.helpfulNoCount - 1);
+        } else {
+          review.isHelpNo = true;
+          review.helpfulNoCount += 1;
+
+          if (review.isHelpYes) {
+            review.isHelpYes = false;
+            review.helpfulYesCount = Math.max(0, review.helpfulYesCount - 1);
+          }
+        }
+      }
     },
   },
   extraReducers: (builder) =>
@@ -107,9 +145,19 @@ const reviewSlice = createSlice({
       .addCase(deleteReviewImage.rejected, (state, { payload }) => {
         state.deleteReviewImageLoading = false;
         state.error = payload;
+      })
+      .addCase(reviewHelpful.pending, (state) => {
+        state.reviewHelpfulLoading = true;
+      })
+      .addCase(reviewHelpful.fulfilled, (state) => {
+        state.reviewHelpfulLoading = false;
+      })
+      .addCase(reviewHelpful.rejected, (state, { payload }) => {
+        state.reviewHelpfulLoading = false;
+        state.error = payload;
       }),
 });
 
-export const { setSelectedReview } = reviewSlice.actions;
+export const { setSelectedReview, updateReviewHelpful } = reviewSlice.actions;
 
 export default reviewSlice.reducer;

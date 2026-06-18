@@ -128,3 +128,21 @@ export const deleteReviewImage = createAsyncThunk(
     }
   },
 );
+
+export const reviewHelpful = createAsyncThunk(
+  "review/helpful",
+  async ({ slugId, id, body }, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await axiosInstance.patch(`/review/${id}/helpful`, body);
+      dispatch(getProductReviews(slugId));
+      return handleThunkSuccess(response?.data, { showToast: true });
+    } catch (error) {
+      const authError = handleUnauthorizedRedirect(error, rejectWithValue, {
+        message: "Please log in to manage your reviews.",
+      });
+      if (authError) return authError;
+
+      return handleThunkError(error, rejectWithValue, { showToast: true });
+    }
+  },
+);
