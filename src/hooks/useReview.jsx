@@ -7,7 +7,10 @@ import {
   getReviewSummary,
   reviewHelpful,
 } from "@/api/review.api";
-import { updateReviewHelpful } from "@/store/slices/reviewSlice";
+import {
+  selectedFilters,
+  updateReviewHelpful,
+} from "@/store/slices/reviewSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const useReview = () => {
@@ -20,13 +23,14 @@ const useReview = () => {
     reviews,
     selectedReview,
     reviewSummary,
+    reviewFilters,
     error,
   } = useSelector((state) => state.review);
   const dispatch = useDispatch();
 
-  const fetchReviews = async (slugId) => {
+  const fetchReviews = async (slugId, filter = {}) => {
     try {
-      await dispatch(getProductReviews(slugId)).unwrap();
+      await dispatch(getProductReviews({ slugId, filter })).unwrap();
     } catch (error) {
       throw error;
     }
@@ -82,6 +86,10 @@ const useReview = () => {
     }
   };
 
+  const setSelectedReviewFilters = (filters) => {
+    dispatch(selectedFilters(filters));
+  };
+
   return {
     addLoading,
     deleteLoading,
@@ -90,6 +98,7 @@ const useReview = () => {
     reviewHelpfulLoading,
     reviews,
     selectedReview,
+    reviewFilters,
     reviewSummary,
     error,
     fetchReviews,
@@ -99,6 +108,7 @@ const useReview = () => {
     delReview,
     delReviewImg,
     postReviewHelpful,
+    setSelectedReviewFilters,
   };
 };
 

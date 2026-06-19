@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/field";
 import { RadioGroupItem } from "@/components/ui/radio-group";
 import { Loader, Star } from "lucide-react";
+import { Button } from "../ui/button";
 
 export const ProductHighlightCard = ({ Icon, title, para }) => {
   return (
@@ -114,5 +115,32 @@ export const ReviewButton = ({
         </>
       )}
     </button>
+  );
+};
+
+export const FilterButton = ({
+  text,
+  reviewFilters,
+  onClick,
+  rating = null,
+  Icon = null,
+}) => {
+  console.log(reviewFilters)
+  return (
+    <Button
+      onClick={onClick}
+      className={`group ${reviewFilters?.rating === rating ? "bg-primary text-white" : "bg-[#F7F7F7] text-[#8A8A8A]"}  p-5 rounded-2xl cursor-pointer text-[14px] font-bold hover:bg-white hover:text-primary border-2 hover:border-primary`}
+    >
+      <span>{text}</span>
+      {Icon && (
+        <span>
+          {
+            <Icon
+              className={`${reviewFilters?.rating === rating ? "fill-primary" : "fill-[#8A8A8A]"} group-hover:fill-primary`}
+            />
+          }
+        </span>
+      )}
+    </Button>
   );
 };

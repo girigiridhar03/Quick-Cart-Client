@@ -6,12 +6,15 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Search } from "lucide-react";
 import React from "react";
+import { FilterButton } from "../commonComponents";
+import { FILTER_BUTTONS } from "@/utils/constants";
 
-const ReviewerFilterCard = () => {
+const ReviewerFilterCard = ({ reviewFilterStates }) => {
+  const { reviewFilters, setSelectedReviewFilters } = reviewFilterStates;
   return (
     <Card className="w-full rounded-3xl py-5 px-4 lg:p-8">
       <CardContent className="px-0">
-        <div className="flex flex-col gap-4 md:flex-row w-full items-center md:justify-between" >
+        <div className="flex flex-col gap-4 md:flex-row w-full items-center md:justify-between">
           <div
             className="
             w-full
@@ -44,25 +47,44 @@ const ReviewerFilterCard = () => {
       "
             />
           </div>
-          <div className="flex justify-between md:justify-normal w-full md:w-auto items-center gap-3.5 px-1" >
-            <p className="text-[#8A8A8A] font-bold text-[12px]" >SORT: </p>
-            <NativeSelect className="md:w-40 rounded-2xl" >
-              <NativeSelectOption value="most-recent">
+          <div className="flex justify-between md:justify-normal w-full md:w-auto items-center gap-3.5 px-1">
+            <p className="text-[#8A8A8A] font-bold text-[12px]">SORT: </p>
+            <NativeSelect
+              onChange={(e) =>
+                setSelectedReviewFilters({ sort: e.target.value })
+              }
+              className="md:w-40 rounded-2xl"
+            >
+              <NativeSelectOption value="latest">
                 Most Recent
               </NativeSelectOption>
-              <NativeSelectOption value="most-helpful">
+              <NativeSelectOption value="oldest">Oldest</NativeSelectOption>
+              <NativeSelectOption value="mostHelpful">
                 Most helpful
               </NativeSelectOption>
-              <NativeSelectOption value="higest-rated">
+              <NativeSelectOption value="highestRated">
                 Highest Rated
               </NativeSelectOption>
-              <NativeSelectOption value="lowest-rated">
+              <NativeSelectOption value="lowestRated">
                 Lowest Rated
               </NativeSelectOption>
             </NativeSelect>
           </div>
         </div>
         <Separator className="my-4" />
+
+        <div className="flex items-center gap-3">
+          {FILTER_BUTTONS.map((btn) => (
+            <FilterButton
+              key={btn.id}
+              text={btn.btnName}
+              Icon={btn.icon}
+              rating={btn.rating}
+              reviewFilters={reviewFilters}
+              onClick={() => setSelectedReviewFilters({ rating: btn.rating })}
+            />
+          ))}
+        </div>
       </CardContent>
     </Card>
   );

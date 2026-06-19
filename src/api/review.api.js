@@ -8,9 +8,27 @@ import {
 
 export const getProductReviews = createAsyncThunk(
   "review/productReviews",
-  async (slugId, { rejectWithValue }) => {
+  async ({ slugId, filter = {} }, { rejectWithValue }) => {
+    let endPoint = `/review/product/${slugId}`;
+
+    if (Object.keys(filter).length > 0) {
+      const urlObj = new URLSearchParams();
+      Object.keys(filter).forEach((key) => {
+        if (
+          filter[key] !== null &&
+          filter[key] !== undefined &&
+          filter[key] !== "" &&
+          filter[key] !== "All Review"
+        ) {
+          urlObj.append(key, filter[key].toString());
+        }
+      });
+
+      endPoint += `?${urlObj.toString()}`;
+    }
+
     try {
-      const response = await axiosInstance.get(`/review/product/${slugId}`);
+      const response = await axiosInstance.get(endPoint);
       return response?.data;
     } catch (error) {
       const authError = handleUnauthorizedRedirect(error, rejectWithValue, {
@@ -55,7 +73,7 @@ export const addReview = createAsyncThunk(
           },
         },
       );
-      dispatch(getProductReviews(slugId));
+      dispatch(getProductReviews({ slugId }));
       dispatch(getReviewSummary(slugId));
       return handleThunkSuccess(response?.data, { showToast: true });
     } catch (error) {
@@ -74,7 +92,7 @@ export const deleteReview = createAsyncThunk(
   async ({ slugId, id }, { rejectWithValue, dispatch }) => {
     try {
       const response = await axiosInstance.delete(`/review/${id}`);
-      dispatch(getProductReviews(slugId));
+      dispatch(getProductReviews({ slugId }));
       dispatch(getReviewSummary(slugId));
       return handleThunkSuccess(response?.data, { showToast: true });
     } catch (error) {
@@ -97,7 +115,7 @@ export const editReview = createAsyncThunk(
           "Content-Type": "multipart/form-data",
         },
       });
-      dispatch(getProductReviews(slugId));
+      dispatch(getProductReviews({ slugId }));
       return handleThunkSuccess(response?.data, { showToast: true });
     } catch (error) {
       const authError = handleUnauthorizedRedirect(error, rejectWithValue, {
@@ -134,7 +152,7 @@ export const reviewHelpful = createAsyncThunk(
   async ({ slugId, id, body }, { rejectWithValue, dispatch }) => {
     try {
       const response = await axiosInstance.patch(`/review/${id}/helpful`, body);
-      dispatch(getProductReviews(slugId));
+      dispatch(getProductReviews({ slugId }));
       return handleThunkSuccess(response?.data, { showToast: true });
     } catch (error) {
       const authError = handleUnauthorizedRedirect(error, rejectWithValue, {

@@ -29,6 +29,7 @@ const SingleProduct = () => {
     addLoading,
     deleteLoading: deleteRevLoading,
     reviewHelpfulLoading,
+    reviewFilters,
     postReview,
     updateReview,
     fetchReviews,
@@ -36,6 +37,7 @@ const SingleProduct = () => {
     delReviewImg,
     delReview,
     postReviewHelpful,
+    setSelectedReviewFilters,
   } = useReview();
 
   const { user } = useAuth();
@@ -68,7 +70,6 @@ const SingleProduct = () => {
         await Promise.allSettled([
           fetchSingleProductDetails(slugId),
           fetchRelatedProducts(slugId),
-          fetchReviews(slugId),
           fetchReviewSummary(slugId),
         ]);
       } catch (error) {
@@ -78,6 +79,11 @@ const SingleProduct = () => {
 
     fetchDetails();
   }, [slugId]);
+
+  useEffect(() => {
+    if (!slugId) return;
+    fetchReviews(slugId, reviewFilters);
+  }, [slugId, reviewFilters]);
 
   useEffect(() => {
     if (open) return;
@@ -207,7 +213,14 @@ const SingleProduct = () => {
             handlePostReview,
           }}
         />
-        {reviewSummary?.averageRating > 0 && <ReviewerFilterCard />}
+        {reviewSummary?.averageRating > 0 && (
+          <ReviewerFilterCard
+            reviewFilterStates={{
+              reviewFilters,
+              setSelectedReviewFilters,
+            }}
+          />
+        )}
 
         {reviews?.length > 0 && (
           <div className="space-y-4">

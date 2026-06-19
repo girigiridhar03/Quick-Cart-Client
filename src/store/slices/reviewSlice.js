@@ -18,6 +18,7 @@ const initialState = {
   reviewHelpfulLoading: false,
   reviews: [],
   reviewSummary: [],
+  reviewFilters: {},
   selectedReview: null,
   error: null,
 };
@@ -64,6 +65,10 @@ const reviewSlice = createSlice({
           }
         }
       }
+    },
+    selectedFilters: (state, { payload }) => {
+      if (!payload) return;
+      state.reviewFilters = payload;
     },
   },
   extraReducers: (builder) =>
@@ -158,6 +163,7 @@ const reviewSlice = createSlice({
       }),
 });
 
-export const { setSelectedReview, updateReviewHelpful } = reviewSlice.actions;
+export const { setSelectedReview, updateReviewHelpful, selectedFilters } =
+  reviewSlice.actions;
 
 export default reviewSlice.reducer;

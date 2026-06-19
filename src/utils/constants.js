@@ -1,3 +1,4 @@
+import { Star } from "lucide-react";
 import { z } from "zod";
 
 export const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -5,6 +6,33 @@ export const REFRESH_BEFORE_MS = 2 * 60 * 1000;
 export const ACCESS_EXPIRES_KEY = "accessTokenExpiresAt";
 export const REFRESH_EXPIRES_KEY = "refreshTokenExpiresAt";
 export const CSRF_TOKEN = "csrf_token";
+
+export const FILTER_BUTTONS = [
+  {
+    id: 1,
+    btnName: "All Reviews",
+    rating: null,
+    icon: null,
+  },
+  {
+    id: 2,
+    btnName: 5,
+    rating: 5,
+    icon: Star,
+  },
+  {
+    id: 3,
+    btnName: 4,
+    rating: 4,
+    icon: Star,
+  },
+  {
+    id: 4,
+    btnName: 3,
+    rating: 3,
+    icon: Star,
+  },
+];
 
 export const productReportReasons = [
   {
