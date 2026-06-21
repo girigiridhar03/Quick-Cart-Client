@@ -6,15 +6,17 @@ import { Button } from "@/components/ui/button";
 import { handleChange, handleStar } from "@/utils/utils";
 
 const ReviewHeader = ({
+  user,
   summary,
   addLoading,
   openState,
   reviewDetailsState,
+  reviewFilterStates,
   handleChanges,
 }) => {
   const { open, setOpen } = openState;
   const { reviewDetails, setReviewDetails } = reviewDetailsState;
-
+  const { reviewFilters, setSelectedReviewFilters } = reviewFilterStates;
   const { handleFileDelete, handlePostReview } = handleChanges;
 
   return (
@@ -43,7 +45,7 @@ const ReviewHeader = ({
                 <Plus className="h-20" />
                 WRITE A REVIEW
               </>
-            )}  
+            )}
             title={"Share Your Experience"}
             reviewDetails={reviewDetails}
             addLoading={addLoading}
@@ -57,7 +59,12 @@ const ReviewHeader = ({
           />
         )}
       </div>
-      <ReviewSummaryCard summary={summary} />
+      <ReviewSummaryCard
+        user={user}
+        summary={summary}
+        reviewFilters={reviewFilters}
+        setSelectedReviewFilters={setSelectedReviewFilters}
+      />
     </div>
   );
 };

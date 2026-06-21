@@ -3,7 +3,12 @@ import { CircleCheck, Star } from "lucide-react";
 import React from "react";
 import { ReviewProgress } from "../commonComponents";
 
-const ReviewSummaryCard = ({ summary }) => {
+const ReviewSummaryCard = ({
+  user,
+  summary,
+  reviewFilters,
+  setSelectedReviewFilters,
+}) => {
   return (
     <Card className="w-full rounded-3xl py-5 px-3 lg:p-8">
       <CardContent className="flex flex-col lg:flex-row  lg:items-stretch gap-10 px-0">
@@ -46,7 +51,13 @@ const ReviewSummaryCard = ({ summary }) => {
         {/* right */}
         <section className="flex-1 flex gap-4 flex-col">
           {summary?.ratings?.map((item) => (
-            <ReviewProgress key={item?.rating} item={item} />
+            <ReviewProgress
+              user={user}
+              key={item?.rating}
+              item={item}
+              reviewFilters={reviewFilters}
+              setSelectedReviewFilters={setSelectedReviewFilters}
+            />
           ))}
         </section>
       </CardContent>

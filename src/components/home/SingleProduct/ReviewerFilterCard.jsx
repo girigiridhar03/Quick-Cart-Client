@@ -9,8 +9,9 @@ import React from "react";
 import { FilterButton } from "../commonComponents";
 import { FILTER_BUTTONS } from "@/utils/constants";
 
-const ReviewerFilterCard = ({ reviewFilterStates }) => {
+const ReviewerFilterCard = ({ reviewFilterStates, handleChanges }) => {
   const { reviewFilters, setSelectedReviewFilters } = reviewFilterStates;
+  const { handleReviewSearch } = handleChanges;
   return (
     <Card className="w-full rounded-3xl py-5 px-4 lg:p-8">
       <CardContent className="px-0">
@@ -35,6 +36,7 @@ const ReviewerFilterCard = ({ reviewFilterStates }) => {
             <input
               type="text"
               placeholder="Search reviews by comments..."
+              onChange={handleReviewSearch}
               className="
         flex-1
         bg-transparent

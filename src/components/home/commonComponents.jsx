@@ -59,9 +59,22 @@ export const ReportCard = ({ emoji, title, desc, htmlFor, value }) => {
   );
 };
 
-export const ReviewProgress = ({ item }) => {
+export const ReviewProgress = ({
+  user,
+  item,
+  reviewFilters,
+  setSelectedReviewFilters,
+}) => {
   return (
-    <div className="grid grid-cols-[45px_1fr_70px] items-center gap-4 rounded-2xl hover:bg-primary/6 cursor-pointer py-2 px-2 transition-all">
+    <button
+      className={`grid grid-cols-[45px_1fr_70px] items-center gap-4 rounded-2xl hover:bg-primary/6 cursor-pointer py-2 px-2 transition-all ${reviewFilters?.rating === item.rating && "border-2 border-primary/15 shadow cursor-pointer"}`}
+      onClick={() => {
+        if (!user) return;
+        setSelectedReviewFilters({
+          rating: reviewFilters?.rating === item.rating ? null : item.rating,
+        });
+      }}
+    >
       <div className="flex items-center gap-1 font-bold text-[15px]">
         <span>{item.rating}</span>
         <Star className="fill-black w-4 h-4" />
@@ -78,11 +91,10 @@ export const ReviewProgress = ({ item }) => {
         <span className="font-bold text-[15px]">{item.percentage}%</span>
         {item.count > 0 && <span className="text-[14px]">({item.count})</span>}
       </div>
-    </div>
+    </button>
   );
 };
 
-//  border-2 border-primary/15 shadow cursor-pointer
 
 export const ReviewButton = ({
   text,
@@ -122,10 +134,9 @@ export const FilterButton = ({
   text,
   reviewFilters,
   onClick,
-  rating = null,
-  Icon = null,
+  rating = undefined,
+  Icon = undefined,
 }) => {
-  console.log(reviewFilters)
   return (
     <Button
       onClick={onClick}

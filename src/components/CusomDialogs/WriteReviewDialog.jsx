@@ -76,7 +76,7 @@ const WriteReviewDialog = ({
           </DialogTitle>
           <Separator className="mt-3" />
         </DialogHeader>
-        <div className="space-y-7 overflow-y-auto 2xl:overflow-hidden scrollbar-none flex-1 pb-2 px-1">
+        <div className="space-y-7 overflow-y-auto scrollbar-none flex-1 pb-2 px-1">
           <div className="flex flex-col items-center w-full gap-3 lg:gap-4">
             <div className="text-[17px] text-[#8A8A8A] font-semibold leading-relaxed uppercase">
               Rate this product

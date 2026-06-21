@@ -7,7 +7,7 @@ import useAuth from "@/hooks/useAuth";
 import useCart from "@/hooks/useCart";
 import useProduct from "@/hooks/useProduct";
 import useReview from "@/hooks/useReview";
-import { getFormData } from "@/utils/utils";
+import { debounceSearch, getFormData } from "@/utils/utils";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -179,6 +179,16 @@ const SingleProduct = () => {
     }
   };
 
+  const searchReview = (value) => {
+    setSelectedReviewFilters({ search: value });
+  };
+
+  const debounceFn = debounceSearch(searchReview, 500);
+
+  const handleReviewSearch = (e) => {
+    debounceFn(e.target.value);
+  };
+
   return (
     <section className="mb-5">
       <SingleProductCard
@@ -196,7 +206,6 @@ const SingleProduct = () => {
       />
       <div className="space-y-10">
         <ReviewHeader
-          slugId={slugId}
           summary={reviewSummary}
           user={user}
           addLoading={addLoading}
@@ -208,6 +217,10 @@ const SingleProduct = () => {
             reviewDetails,
             setReviewDetails,
           }}
+          reviewFilterStates={{
+            reviewFilters,
+            setSelectedReviewFilters,
+          }}
           handleChanges={{
             handleFileDelete,
             handlePostReview,
@@ -218,6 +231,9 @@ const SingleProduct = () => {
             reviewFilterStates={{
               reviewFilters,
               setSelectedReviewFilters,
+            }}
+            handleChanges={{
+              handleReviewSearch,
             }}
           />
         )}

@@ -67,3 +67,12 @@ export const getFormData = (obj) => {
   return formData;
 };
 
+export const debounceSearch = (fn, delay) => {
+  let timer;
+  return function (...arg) {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(this, arg);
+    }, delay);
+  };
+};

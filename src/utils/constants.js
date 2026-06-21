@@ -11,8 +11,8 @@ export const FILTER_BUTTONS = [
   {
     id: 1,
     btnName: "All Reviews",
-    rating: null,
-    icon: null,
+    rating: undefined,
+    icon: undefined,
   },
   {
     id: 2,
