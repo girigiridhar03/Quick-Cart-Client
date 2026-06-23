@@ -6,6 +6,7 @@ import SingleProductCard from "@/components/home/SingleProduct/SingleProductCard
 import useAuth from "@/hooks/useAuth";
 import useCart from "@/hooks/useCart";
 import useProduct from "@/hooks/useProduct";
+import useReport from "@/hooks/useReport";
 import useReview from "@/hooks/useReview";
 import { debounceSearch, getFormData } from "@/utils/utils";
 import React, { useEffect, useState } from "react";
@@ -40,8 +41,6 @@ const SingleProduct = () => {
     setSelectedReviewFilters,
   } = useReview();
 
-  const { user } = useAuth();
-
   const {
     quantityLoading,
     deleteLoading,
@@ -49,6 +48,10 @@ const SingleProduct = () => {
     deleteCartItem,
     descreaseQunatityCount,
   } = useCart();
+
+  const { reportLoading, postReport } = useReport();
+
+  const { user } = useAuth();
 
   const [reviewDetails, setReviewDetails] = useState({
     title: "",
@@ -189,6 +192,16 @@ const SingleProduct = () => {
     debounceFn(e.target.value);
   };
 
+  const handlePostReport = async (body, onSet) => {
+    try {
+      await postReport({ ...body, targetType: "Product" });
+      onSet(false);
+    } catch (error) {
+      return error;
+    } finally {
+    }
+  };
+
   return (
     <section className="mb-5">
       <SingleProductCard
@@ -198,6 +211,10 @@ const SingleProduct = () => {
           quantityLoading,
           deleteLoading,
           handleCart,
+        }}
+        report={{
+          reportLoading,
+          handlePostReport,
         }}
       />
       <ProductDetailsCard

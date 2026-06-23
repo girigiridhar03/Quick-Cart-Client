@@ -70,6 +70,12 @@ const reviewSlice = createSlice({
       if (!payload) return;
       state.reviewFilters = payload;
     },
+    updateisReported: (state, { payload }) => {
+      if (!payload?.id) return;
+      const review = state.reviews.find((item) => item._id === payload.id);
+      if (!review) return;
+      review.isReported = !review?.isReported;
+    },
   },
   extraReducers: (builder) =>
     builder
@@ -163,7 +169,11 @@ const reviewSlice = createSlice({
       }),
 });
 
-export const { setSelectedReview, updateReviewHelpful, selectedFilters } =
-  reviewSlice.actions;
+export const {
+  setSelectedReview,
+  updateReviewHelpful,
+  updateisReported,
+  selectedFilters,
+} = reviewSlice.actions;
 
 export default reviewSlice.reducer;

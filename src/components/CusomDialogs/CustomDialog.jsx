@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Separator } from "../ui/separator";
-import { Flag } from "lucide-react";
+import { Flag, Loader } from "lucide-react";
 import { ReportCard } from "../home/commonComponents";
 import { RadioGroup } from "../ui/radio-group";
 import { Textarea } from "../ui/textarea";
@@ -33,7 +33,7 @@ const CustomDialog = ({
     category = null,
     title: prevTitle,
   } = previewCard;
-  const { state, setState, handleSubmit } = formDetails;
+  const { state, setState, reportLoading, handleSubmit } = formDetails;
 
   const handleDetailsChange = (e) => {
     const value = e.target.value;
@@ -63,13 +63,13 @@ const CustomDialog = ({
 
         <DialogContent className="sm:max-w-sm md:max-w-lg px-5 md:px-10 max-h-175 2xl:max-h-250 overflow-hidden flex flex-col">
           {/* Header */}
-            <DialogHeader className="sticky top-0 bg-popover z-10 pt-2 pb-0">
-              <DialogTitle className="text-xl md:text-2xl font-bold">
-                {title}
-              </DialogTitle>
-              {para && <DialogDescription>{para}</DialogDescription>}
-              <Separator className="mt-3" />
-            </DialogHeader>
+          <DialogHeader className="sticky top-0 bg-popover z-10 pt-2 pb-0">
+            <DialogTitle className="text-xl md:text-2xl font-bold">
+              {title}
+            </DialogTitle>
+            {para && <DialogDescription>{para}</DialogDescription>}
+            <Separator className="mt-3" />
+          </DialogHeader>
 
           {/* Body */}
           <div className="space-y-7 overflow-y-auto 2xl:overflow-hidden scrollbar-none flex-1 pb-2">
@@ -144,12 +144,18 @@ const CustomDialog = ({
               <Button
                 className="flex-1 h-12 2xl:h-15 2xl:text-lg cursor-pointer rounded-xl"
                 disabled={
-                  state.reason.length === 0 &&
-                  (state.reason.length === 0 || state.description.length === 0)
+                  (state.reason.length === 0 &&
+                    (state.reason.length === 0 ||
+                      state.description.length === 0)) ||
+                  reportLoading
                 }
                 onClick={handleSubmit}
               >
-                SUBMIT REPORT
+                {reportLoading ? (
+                  <Loader className="animate-spin" />
+                ) : (
+                  "SUBMIT REPORT"
+                )}
               </Button>
               <DialogClose
                 render={<Button variant="outline" />}

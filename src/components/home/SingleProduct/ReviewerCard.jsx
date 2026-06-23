@@ -189,6 +189,7 @@ const ReviewerCard = ({
             text={"Report"}
             Icon={Flag}
             reviewId={review?._id}
+            isActive={review?.isReported}
             disabled={reviewHelpfulLoading}
             handleClick={() => console.log("clicked")}
           />

@@ -15,8 +15,9 @@ import { ProductHighlightCard } from "../commonComponents";
 import CustomDialog from "../../CusomDialogs/CustomDialog";
 import { productReportReasons } from "@/utils/constants";
 
-const SingleProductCard = ({ loading, product, cart }) => {
+const SingleProductCard = ({ loading, product, cart, report }) => {
   const { quantityLoading, deleteLoading, handleCart } = cart;
+  const { reportLoading, handlePostReport } = report;
   const [selectedImage, setSelectedImage] = useState({});
   const [open, setOpen] = useState(false);
   const [reportDetails, setReportDetails] = useState({
@@ -28,10 +29,6 @@ const SingleProductCard = ({ loading, product, cart }) => {
 
     setSelectedImage(product.productImages[0]);
   }, [product?.productImages]);
-
-  const handleFlagSubmit = () => {
-    console.log(reportDetails);
-  };
 
   useEffect(() => {
     if (open) return;
@@ -103,7 +100,15 @@ const SingleProductCard = ({ loading, product, cart }) => {
                 formDetails={{
                   state: reportDetails,
                   setState: setReportDetails,
-                  handleSubmit: handleFlagSubmit,
+                  reportLoading,
+                  handleSubmit: () =>
+                    handlePostReport(
+                      {
+                        ...reportDetails,
+                        targetedId: product?._id,
+                      },
+                      setOpen,
+                    ),
                 }}
                 previewCard={{
                   isProduct: true,
